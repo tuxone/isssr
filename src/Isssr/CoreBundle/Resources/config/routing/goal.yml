@@ -1,0 +1,30 @@
+goal:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Goal:index" }
+
+goal_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Goal:show" }
+
+goal_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:Goal:new" }
+
+goal_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:Goal:create" }
+    requirements: { _method: post }
+
+goal_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:Goal:edit" }
+
+goal_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:Goal:update" }
+    requirements: { _method: post }
+
+goal_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Goal:delete" }
+    requirements: { _method: post }

@@ -1,0 +1,11 @@
+isssr_core_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: "IsssrCoreBundle:Default:index" }
+
+IsssrCoreBundle_goal:
+        resource: "@IsssrCoreBundle/Resources/config/routing/goal.yml"
+        prefix:   /goal
+        
+IsssrCoreBundle_user:
+        resource: "@IsssrCoreBundle/Resources/config/routing/user.yml"
+        prefix:   /user
