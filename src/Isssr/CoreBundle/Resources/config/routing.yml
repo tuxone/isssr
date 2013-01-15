@@ -1,5 +1,5 @@
 isssr_core_homepage:
-    pattern:  /hello/{name}
+    pattern:  /
     defaults: { _controller: "IsssrCoreBundle:Default:index" }
 
 IsssrCoreBundle_goal:

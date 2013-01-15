@@ -1,1 +1,10 @@
-Hello {{ name }}!
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block title %}<title>HomePage</title>{% endblock %}
+
+{% block pagetitle %}HomePage{% endblock %}
+ 
+{% block content %}
+ Hello {{ name }}!
+
+{% endblock %}

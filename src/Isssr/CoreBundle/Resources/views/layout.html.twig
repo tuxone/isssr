@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+{% block title %}{% endblock %}
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/css/bootstrap.no-icons.min.css">
+{% block script%}{% endblock %}
+
+	
+    </head>
+    <body style="width:800px; margin:0 auto; text-align:center;">
+     {% block body %}
+    <div class="navbar top">
+        <div class="navbar-inner">
+          	<ul class="nav">
+			  <li><a href="#">Home</a></li>
+			  <li><a href="#">Goals</a></li>
+			  <li><a href="#">Profile</a></li>
+			</ul>
+        </div>
+    </div>
+    	<span class="label label-info">{% block pagetitle %}{% endblock %}</span>
+      
+
+ {% block content %}{% endblock %}
+    
+
+    	 
+      
+{% endblock %}
+ {% block javascripts %}
+   
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
+{% endblock %}   
+       
+
+    </body>
+</html>
