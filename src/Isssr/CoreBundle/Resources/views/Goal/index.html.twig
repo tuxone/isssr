@@ -1,4 +1,11 @@
-<h1>Goal list</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block title %}<title>Goals</title>{% endblock %}
+
+{% block pagetitle %}Goals{% endblock %}
+ 
+{% block content %}
+
 
 <table class="records_list">
     <thead>
@@ -39,3 +46,6 @@
         </a>
     </li>
 </ul>
+
+
+{% endblock %}
