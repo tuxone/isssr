@@ -6,29 +6,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class GoalType extends AbstractType
+class TagType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title')
-            ->add('description')
-            ->add('priority')
-            ->add('owner')
-            ->add('enactor')
-            ->add('tags')
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Isssr\CoreBundle\Entity\Goal'
+            'data_class' => 'Isssr\CoreBundle\Entity\Tag'
         ));
     }
 
     public function getName()
     {
-        return 'isssr_corebundle_goaltype';
+        return 'isssr_corebundle_tagtype';
     }
 }

@@ -41,15 +41,179 @@ class Goal {
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsEnactor")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="id")
+	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id")
 	 */
 	protected $enactor;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
+	 */
+	protected $tags;
 	
     /**
      * Constructor
      */
     public function __construct()
     {
+    	$this->tags = new ArrayCollection();
     }
     
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Goal
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Goal
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     * @return Goal
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer 
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \Isssr\CoreBundle\Entity\User $owner
+     * @return Goal
+     */
+    public function setOwner(\Isssr\CoreBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+    
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \Isssr\CoreBundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\User $enactor
+     * @return Goal
+     */
+    public function setEnactor(\Isssr\CoreBundle\Entity\User $enactor = null)
+    {
+        $this->enactor = $enactor;
+    
+        return $this;
+    }
+
+    /**
+     * Get enactor
+     *
+     * @return \Isssr\CoreBundle\Entity\User 
+     */
+    public function getEnactor()
+    {
+        return $this->enactor;
+    }
+
+    /**
+     * Add tags
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tags
+     * @return Goal
+     */
+    public function addTag(\Isssr\CoreBundle\Entity\Tag $tags)
+    {
+        $this->tags[] = $tags;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tags
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tags
+     */
+    public function removeTag(\Isssr\CoreBundle\Entity\Tag $tags)
+    {
+        $this->tags->removeElement($tags);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
 }

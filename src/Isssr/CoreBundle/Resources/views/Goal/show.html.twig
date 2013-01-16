@@ -18,6 +18,17 @@
             <th>Priority</th>
             <td>{{ entity.priority }}</td>
         </tr>
+        <tr>
+            <th>Tags</th>
+            	<td>
+            		<ul>
+					    {% for tag in entity.tags %}
+					        <li>{{ tag }}</li>
+					    {% endfor %}
+					</ul>
+            	</td>
+            
+        </tr>
     </tbody>
 </table>
 

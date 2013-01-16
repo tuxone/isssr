@@ -282,4 +282,9 @@ class User {
     {
         return $this->goalsAsEnactor;
     }
+    
+    public function __toString()
+    {
+    	return $this->username;
+    }
 }

@@ -45,11 +45,17 @@ class Goal {
 	 */
 	protected $enactor;
 	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
+	 */
+	protected $tags;
+	
     /**
      * Constructor
      */
     public function __construct()
     {
+    	$this->tags = new ArrayCollection();
     }
     
 
@@ -176,5 +182,38 @@ class Goal {
     public function getEnactor()
     {
         return $this->enactor;
+    }
+
+    /**
+     * Add tags
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tags
+     * @return Goal
+     */
+    public function addTag(\Isssr\CoreBundle\Entity\Tag $tags)
+    {
+        $this->tags[] = $tags;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tags
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tags
+     */
+    public function removeTag(\Isssr\CoreBundle\Entity\Tag $tags)
+    {
+        $this->tags->removeElement($tags);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

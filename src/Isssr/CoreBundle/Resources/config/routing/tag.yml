@@ -1,0 +1,30 @@
+tag:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Tag:index" }
+
+tag_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Tag:show" }
+
+tag_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:Tag:new" }
+
+tag_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:Tag:create" }
+    requirements: { _method: post }
+
+tag_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:Tag:edit" }
+
+tag_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:Tag:update" }
+    requirements: { _method: post }
+
+tag_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Tag:delete" }
+    requirements: { _method: post }

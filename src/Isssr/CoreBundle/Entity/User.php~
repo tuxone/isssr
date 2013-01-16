@@ -12,10 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class User {
 
-	public function __construct($username, $firstname, $lastname) {
-		$this->username = $username;
-		$this->firstname = $firstname;
-		$this->lastname = $lastname;
+	public function __construct() {
 		$this->goalsOwned = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
@@ -218,5 +215,71 @@ class User {
     public function getGoalsOwned()
     {
         return $this->goalsOwned;
+    }
+
+    /**
+     * Add goalsAsOwner
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsOwner
+     * @return User
+     */
+    public function addGoalsAsOwner(\Isssr\CoreBundle\Entity\Goal $goalsAsOwner)
+    {
+        $this->goalsAsOwner[] = $goalsAsOwner;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goalsAsOwner
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsOwner
+     */
+    public function removeGoalsAsOwner(\Isssr\CoreBundle\Entity\Goal $goalsAsOwner)
+    {
+        $this->goalsAsOwner->removeElement($goalsAsOwner);
+    }
+
+    /**
+     * Get goalsAsOwner
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoalsAsOwner()
+    {
+        return $this->goalsAsOwner;
+    }
+
+    /**
+     * Add goalsAsEnactor
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsEnactor
+     * @return User
+     */
+    public function addGoalsAsEnactor(\Isssr\CoreBundle\Entity\Goal $goalsAsEnactor)
+    {
+        $this->goalsAsEnactor[] = $goalsAsEnactor;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goalsAsEnactor
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsEnactor
+     */
+    public function removeGoalsAsEnactor(\Isssr\CoreBundle\Entity\Goal $goalsAsEnactor)
+    {
+        $this->goalsAsEnactor->removeElement($goalsAsEnactor);
+    }
+
+    /**
+     * Get goalsAsEnactor
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoalsAsEnactor()
+    {
+        return $this->goalsAsEnactor;
     }
 }
