@@ -1,6 +1,10 @@
-<h1>Goal</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<table class="record_properties">
+{% block pagetitle %}Goal{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
     <tbody>
         <tr>
             <th>Id</th>
@@ -50,3 +54,5 @@
         </form>
     </li>
 </ul>
+
+{% endblock %}

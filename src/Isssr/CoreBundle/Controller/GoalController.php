@@ -54,6 +54,8 @@ class GoalController extends Controller
      */
     public function showAction($id)
     {
+    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
@@ -66,7 +68,9 @@ class GoalController extends Controller
 
         return $this->render('IsssrCoreBundle:Goal:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+            'delete_form' => $deleteForm->createView(),
+        	'user' => $user
+        ));
     }
 
     /**

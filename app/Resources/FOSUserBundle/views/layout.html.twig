@@ -1,0 +1,18 @@
+{% extends 'IsssrCoreBundle::base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+ 
+{% block body %}
+
+        {% for key, message in app.session.flashbag.all() %}
+        <div class="{{ key }}">
+            {{ message|trans({}, 'FOSUserBundle') }}
+        </div>
+        {% endfor %}
+
+        <div class="container" style="width:200px;">
+            {% block fos_user_content %}
+            {% endblock fos_user_content %}
+        </div>
+
+{% endblock %}
