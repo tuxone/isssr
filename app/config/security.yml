@@ -19,6 +19,10 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        auth:
+            pattern:   (^/login$|^/register|^/resetting)
+            anonymous: true
+        
         secured_area:
             pattern:    ^/
             form_login:
@@ -29,7 +33,7 @@ security:
                 #default_target_path: /login
                 #always_use_default_target_path: true
             logout: true
-            anonymous:    true
+            anonymous:    false
                 #path:   /logout
                 #target: /login
             #anonymous: ~

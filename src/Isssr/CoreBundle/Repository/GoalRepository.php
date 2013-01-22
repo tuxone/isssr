@@ -12,5 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class GoalRepository extends EntityRepository
 {
-	
+	public function findByOwner($uid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT g FROM IsssrCoreBundle:Goal g '.
+				'WHERE g.owner = '.$uid)
+				->getResult();
+	}
 }

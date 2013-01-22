@@ -14,7 +14,6 @@ class GoalType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('priority')
-            ->add('owner')
             ->add('enactor')
             ->add('tags')
             ->add('focus')

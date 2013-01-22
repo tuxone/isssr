@@ -10,6 +10,8 @@ class DefaultController extends Controller
 {	
 	public function indexAction()
     {
-        return $this->render('IsssrCoreBundle:Default:index.html.twig', array('name' => "ciao"));
+    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	
+        return $this->render('IsssrCoreBundle:Default:index.html.twig', array('name' => "ciao", 'user' => $user));
     }
 }

@@ -18,17 +18,36 @@ class GoalController extends Controller
      * Lists all Goal entities.
      *
      */
-    public function indexAction()
+    public function indexOwnerAction()
     {
-        $em = $this->getDoctrine()->getManager();
+    	$user = $this->container->get('security.context')->getToken()->getUser();
 
-        $entities = $em->getRepository('IsssrCoreBundle:Goal')->findAll();
+    	$em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('IsssrCoreBundle:Goal')->findByOwner($user->getId());
 
         return $this->render('IsssrCoreBundle:Goal:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $entities, 'user' => $user
         ));
     }
 
+    /**
+     * Lists all Goal entities.
+     *
+     */
+    public function indexAction()
+    {
+    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	 
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$entities = $em->getRepository('IsssrCoreBundle:Goal')->findAll();
+    
+    	return $this->render('IsssrCoreBundle:Goal:index.html.twig', array(
+    			'entities' => $entities, 'user' => $user
+    	));
+    }
+    
     /**
      * Finds and displays a Goal entity.
      *
@@ -71,10 +90,14 @@ class GoalController extends Controller
      */
     public function createAction(Request $request)
     {
+    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	
         $entity  = new Goal();
         $form = $this->createForm(new GoalType(), $entity);
         $form->bind($request);
-
+        
+        $entity->setOwner($user);
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
