@@ -77,6 +77,8 @@ class UserController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setEnabled(true);
+            $entity->setPlainPassword($entity->getPassword());
             $em->persist($entity);
             $em->flush();
 

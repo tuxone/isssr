@@ -9,7 +9,7 @@ IsssrCoreBundle_goal:
 IsssrCoreBundle_user:
         resource: "@IsssrCoreBundle/Resources/config/routing/user.yml"
         prefix:   /user
-        
+ 
 IsssrCoreBundle_tag:
         resource: "@IsssrCoreBundle/Resources/config/routing/tag.yml"
         prefix:   /tag
