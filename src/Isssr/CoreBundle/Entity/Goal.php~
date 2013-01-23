@@ -50,6 +50,51 @@ class Goal {
 	 */
 	protected $tags;
 	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $focus;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $object;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $magnitude;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $timeframe;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $organizationalScope;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $constraints;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $relations;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $contest;
+	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $assumptions;
+	
     /**
      * Constructor
      */
@@ -215,5 +260,212 @@ class Goal {
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Set focus
+     *
+     * @param integer $focus
+     * @return Goal
+     */
+    public function setFocus($focus)
+    {
+        $this->focus = $focus;
+    
+        return $this;
+    }
+
+    /**
+     * Get focus
+     *
+     * @return integer 
+     */
+    public function getFocus()
+    {
+        return $this->focus;
+    }
+
+    /**
+     * Set object
+     *
+     * @param integer $object
+     * @return Goal
+     */
+    public function setObject($object)
+    {
+        $this->object = $object;
+    
+        return $this;
+    }
+
+    /**
+     * Get object
+     *
+     * @return integer 
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    /**
+     * Set magnitude
+     *
+     * @param integer $magnitude
+     * @return Goal
+     */
+    public function setMagnitude($magnitude)
+    {
+        $this->magnitude = $magnitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get magnitude
+     *
+     * @return integer 
+     */
+    public function getMagnitude()
+    {
+        return $this->magnitude;
+    }
+
+    /**
+     * Set timeframe
+     *
+     * @param integer $timeframe
+     * @return Goal
+     */
+    public function setTimeframe($timeframe)
+    {
+        $this->timeframe = $timeframe;
+    
+        return $this;
+    }
+
+    /**
+     * Get timeframe
+     *
+     * @return integer 
+     */
+    public function getTimeframe()
+    {
+        return $this->timeframe;
+    }
+
+    /**
+     * Set organizationalScope
+     *
+     * @param integer $organizationalScope
+     * @return Goal
+     */
+    public function setOrganizationalScope($organizationalScope)
+    {
+        $this->organizationalScope = $organizationalScope;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationalScope
+     *
+     * @return integer 
+     */
+    public function getOrganizationalScope()
+    {
+        return $this->organizationalScope;
+    }
+
+    /**
+     * Set constraints
+     *
+     * @param integer $constraints
+     * @return Goal
+     */
+    public function setConstraints($constraints)
+    {
+        $this->constraints = $constraints;
+    
+        return $this;
+    }
+
+    /**
+     * Get constraints
+     *
+     * @return integer 
+     */
+    public function getConstraints()
+    {
+        return $this->constraints;
+    }
+
+    /**
+     * Set relations
+     *
+     * @param integer $relations
+     * @return Goal
+     */
+    public function setRelations($relations)
+    {
+        $this->relations = $relations;
+    
+        return $this;
+    }
+
+    /**
+     * Get relations
+     *
+     * @return integer 
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * Set contest
+     *
+     * @param integer $contest
+     * @return Goal
+     */
+    public function setContest($contest)
+    {
+        $this->contest = $contest;
+    
+        return $this;
+    }
+
+    /**
+     * Get contest
+     *
+     * @return integer 
+     */
+    public function getContest()
+    {
+        return $this->contest;
+    }
+
+    /**
+     * Set assumptions
+     *
+     * @param integer $assumptions
+     * @return Goal
+     */
+    public function setAssumptions($assumptions)
+    {
+        $this->assumptions = $assumptions;
+    
+        return $this;
+    }
+
+    /**
+     * Get assumptions
+     *
+     * @return integer 
+     */
+    public function getAssumptions()
+    {
+        return $this->assumptions;
     }
 }

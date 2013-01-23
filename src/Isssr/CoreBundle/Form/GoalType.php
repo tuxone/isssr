@@ -17,6 +17,15 @@ class GoalType extends AbstractType
             ->add('owner')
             ->add('enactor')
             ->add('tags')
+            ->add('focus')
+            ->add('object')
+            ->add('magnitude')
+            ->add('timeframe')
+            ->add('organizationalScope')
+            ->add('constraints')
+            ->add('relations')
+            ->add('contest')
+            ->add('assumptions')
         ;
     }
 
