@@ -32,6 +32,12 @@
 	                        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">edit</a>
 	                    </li>
 	                {% endif %}
+                    <li>
+                        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
+                    </li>
                 </ul>
             </td>
         </tr>

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\SuperInGoal")
+ * @ORM\Entity()
  * @ORM\Table(name="SuperInGoal")
  */
 class SuperInGoal {
@@ -20,7 +20,7 @@ class SuperInGoal {
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsSuper")
-	 * @ORM\JoinColumn(name="super", referencedColumnName="id")
+	 * @ORM\JoinColumn(name="super", referencedColumnName="id", nullable=true)
 	 */
 	protected $super;
 	
