@@ -1,8 +1,14 @@
-<h1>SuperInGoal creation</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<form action="{{ path('superingoal_create', {'id': goalid}) }}" method="post" {{ form_enctype(form) }}>
+{% block pagetitle %}Add a super to {{ goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('superingoal_create', {'id': goal.id}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
     </p>
 </form>
+
+{% endblock %}

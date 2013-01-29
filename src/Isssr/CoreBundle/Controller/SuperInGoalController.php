@@ -2,11 +2,14 @@
 
 namespace Isssr\CoreBundle\Controller;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Isssr\CoreBundle\Entity\SuperInGoal;
 use Isssr\CoreBundle\Form\SuperInGoalType;
+use Isssr\CoreBundle\Entity\Goal;
 
 /**
  * SuperInGoal controller.
@@ -20,35 +23,25 @@ class SuperInGoalController extends Controller
      */
     public function indexAction($id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('IsssrCoreBundle:SuperInGoal')->findAll();
 
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        
+        if (!$goal) {
+        	throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+        
         return $this->render('IsssrCoreBundle:SuperInGoal:index.html.twig', array(
             'entities' => $entities,
-        	'goalid' => $id,
+        	'goal' => $goal,
+        	'user' => $user,
         ));
-    }
-
-    /**
-     * Finds and displays a SuperInGoal entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find SuperInGoal entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('IsssrCoreBundle:SuperInGoal:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
     }
 
     /**
@@ -57,13 +50,26 @@ class SuperInGoalController extends Controller
      */
     public function newAction($id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $entity = new SuperInGoal();
         $form   = $this->createForm(new SuperInGoalType(), $entity);
+		
+        $em = $this->getDoctrine()->getManager();
+        
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
 
+        if (!$goal) {
+        	throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+        
         return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        	'goalid' => $id,
+        	'goal' => $goal,
+        	'user' => $user,
         ));
     }
 
@@ -73,12 +79,28 @@ class SuperInGoalController extends Controller
      */
     public function createAction(Request $request, $id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $entity  = new SuperInGoal();
         $form = $this->createForm(new SuperInGoalType(), $entity);
         $form->bind($request);
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        
+        if (!$goal) {
+        	throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+        
+        if($goal->getOwner()->getId() != $user->getId())
+        	throw new HttpException(403);
+        
+        $entity->setGoal($goal);
+        
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -88,38 +110,27 @@ class SuperInGoalController extends Controller
         return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        	'user'   => $user,
         ));
     }
-
-    /**
-     * Displays a form to edit an existing SuperInGoal entity.
-     *
-     */
-    public function editAction($id)
+    
+    public function deleteAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find SuperInGoal entity.');
-        }
-
-        $editForm = $this->createForm(new SuperInGoalType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('IsssrCoreBundle:SuperInGoal:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+    	$em = $this->getDoctrine()->getManager();
+    	$entity = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find super entity.');
+    	}
+    
+    	// Ottengo il goal prima di eliminare il super
+    	$goal = $entity->getGoal();
+    	
+    	$em->remove($entity);
+    	$em->flush();
+    
+    	return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
     }
 
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
 }

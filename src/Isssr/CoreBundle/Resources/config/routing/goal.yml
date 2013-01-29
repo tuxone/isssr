@@ -1,11 +1,7 @@
 goal:
-    pattern:  /all
+    pattern:  /
     defaults: { _controller: "IsssrCoreBundle:Goal:index" }
-
-goal_owner:
-    pattern:  /my
-    defaults: { _controller: "IsssrCoreBundle:Goal:indexOwner" }
-    
+  
 goal_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Goal:show" }

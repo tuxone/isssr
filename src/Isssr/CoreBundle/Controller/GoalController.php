@@ -14,25 +14,6 @@ use Isssr\CoreBundle\Form\GoalType;
  */
 class GoalController extends Controller
 {
-    /**
-     * Lists all Goal entities.
-     *
-     */
-    public function indexOwnerAction()
-    {
-    	$scontext = $this->container->get('security.context');
-		$token = $scontext->getToken();
-		$user = $token->getUser();
-
-    	$em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('IsssrCoreBundle:Goal')->findByOwner($user->getId());
-
-        return $this->render('IsssrCoreBundle:Goal:index.html.twig', array(
-            'entities' => $entities,
-        	'user' => $user,
-        ));
-    }
 
     /**
      * Lists all Goal entities.

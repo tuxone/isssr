@@ -11,7 +11,9 @@ class SuperInGoalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('superEmail', 'email')
+            ->add('superEmail', 'email', array(
+    			'label'  => 'Super email address',
+				))
         ;
     }
 

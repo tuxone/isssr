@@ -1,34 +1,32 @@
-<h1>SuperInGoal list</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<table class="records_list">
+{% block pagetitle %}Super users of {{goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Superemail</th>
+            <th>Super e-mail</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('superingoal_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.superEmail }}</td>
             <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('superingoal_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                </ul>
+                <a href="{{ path('superingoal_delete', { 'id': entity.id }) }}">
+            	Remove
+            	</a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
 
-<ul>
-    <li>
-        <a href="{{ path('superingoal_new', {'id': goalid}) }}">
-            Create a new entry
+        <a href="{{ path('superingoal_new', {'id': goal.id}) }}">
+            Add a super
         </a>
-    </li>
-</ul>
+
+{% endblock %}

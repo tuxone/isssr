@@ -2,10 +2,6 @@ superingoal:
     pattern:  /goal/{id}
     defaults: { _controller: "IsssrCoreBundle:SuperInGoal:index" }
 
-superingoal_show:
-    pattern:  /{id}/show
-    defaults: { _controller: "IsssrCoreBundle:SuperInGoal:show" }
-
 superingoal_new:
     pattern:  /goal/new/{id}
     defaults: { _controller: "IsssrCoreBundle:SuperInGoal:new" }
@@ -18,4 +14,3 @@ superingoal_create:
 superingoal_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "IsssrCoreBundle:SuperInGoal:delete" }
-    requirements: { _method: post }
