@@ -16,7 +16,9 @@ class User extends BaseUser {
 
 	public function __construct() {
 		parent::__construct();
-		$this->goalsOwned = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->goalsAsEnactor = new ArrayCollection();
+		$this->goalsAsOwner = new ArrayCollection();
+		$this->goalsAsSuper = new ArrayCollection();
 	}
 
 	/**
@@ -131,39 +133,6 @@ class User extends BaseUser {
     }
 
     /**
-     * Add goalsOwned
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsOwned
-     * @return User
-     */
-    public function addGoalsOwned(\Isssr\CoreBundle\Entity\Goal $goalsOwned)
-    {
-        $this->goalsOwned[] = $goalsOwned;
-    
-        return $this;
-    }
-
-    /**
-     * Remove goalsOwned
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsOwned
-     */
-    public function removeGoalsOwned(\Isssr\CoreBundle\Entity\Goal $goalsOwned)
-    {
-        $this->goalsOwned->removeElement($goalsOwned);
-    }
-
-    /**
-     * Get goalsOwned
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGoalsOwned()
-    {
-        return $this->goalsOwned;
-    }
-
-    /**
      * Add goalsAsOwner
      *
      * @param \Isssr\CoreBundle\Entity\Goal $goalsAsOwner
@@ -232,5 +201,38 @@ class User extends BaseUser {
     public function __toString()
     {
     	return $this->username;
+    }
+
+    /**
+     * Add goalsAsSuper
+     *
+     * @param \Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper
+     * @return User
+     */
+    public function addGoalsAsSuper(\Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper)
+    {
+        $this->goalsAsSuper[] = $goalsAsSuper;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goalsAsSuper
+     *
+     * @param \Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper
+     */
+    public function removeGoalsAsSuper(\Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper)
+    {
+        $this->goalsAsSuper->removeElement($goalsAsSuper);
+    }
+
+    /**
+     * Get goalsAsSuper
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoalsAsSuper()
+    {
+        return $this->goalsAsSuper;
     }
 }

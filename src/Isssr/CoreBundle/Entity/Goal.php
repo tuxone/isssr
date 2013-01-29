@@ -506,4 +506,8 @@ class Goal {
     {
         return $this->supers;
     }
+    
+    public function __toString() {
+    	return $this->id . '_' . $this->title;
+    }
 }
