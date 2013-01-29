@@ -1,6 +1,8 @@
 <?php
 namespace Isssr\CoreBundle\Tests\Utility;
 
+use Symfony\Component\Serializer\Exception\Exception;
+
 use Isssr\CoreBundle\Entity\Tag;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -24,10 +26,10 @@ class TagTest extends WebTestCase
     public function testTag()
     {
     	$tag = new Tag();
-		$tag->setTitle($this->$TAGTITLE);
+		$tag->setTitle($this->TAGTITLE);
 		
 		// Test su metodi costruttore get & set
-        $this->assertEquals($this->$TAGTITLE, $tag->getTitle());
+        $this->assertEquals($this->TAGTITLE, $tag->getTitle());
         
         // Test add
         $this->em->persist($tag);
@@ -35,7 +37,7 @@ class TagTest extends WebTestCase
         $tmptag = $this->em->getRepository('IsssrCoreBundle:Tag')->find($tag->getId());
         $this->assertEquals($tmptag, $tag);
         
-        // Test Unique on 'title'
+		// TODO test sull'unicitˆ
         
         // Test remove
         $id = $tag->getId();
