@@ -1,0 +1,38 @@
+<?php
+
+namespace Isssr\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\SuperInGoal")
+ * @ORM\Table(name="SuperInGoal")
+ */
+class SuperInGoal {
+	
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsSuper")
+	 * @ORM\JoinColumn(name="super", referencedColumnName="id")
+	 */
+	protected $super;
+	
+	/**
+	 * @ORM\Column(type="string", length=96, nullable=false)
+	 */
+	protected $superEmail;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="Goal", inversedBy="supers")
+	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
+	 */
+	protected $goal;
+
+}

@@ -45,6 +45,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="Goal", mappedBy="enactor")
 	 */
 	protected $goalsAsEnactor;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="super")
+	 */
+	protected $goalsAsSuper;
 
     /**
      * Get id

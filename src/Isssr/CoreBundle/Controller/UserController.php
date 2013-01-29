@@ -39,7 +39,9 @@ class UserController extends Controller
      */
     public function showAction($id)
     {
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	
     	if( $user->getId() != $id)
     		throw new HttpException(401);
@@ -53,7 +55,9 @@ class UserController extends Controller
         }
 
         return $this->render('IsssrCoreBundle:User:show.html.twig', array(
-            'entity'      => $entity,   'user' => $user,  ));
+            'entity'      => $entity,
+        	'user' => $user,
+        ));
     }
 
     /**
@@ -63,7 +67,9 @@ class UserController extends Controller
     public function editAction($id)
     {
     	
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	 
     	if( $user->getId() != $id)
     		throw new HttpException(401);
@@ -81,6 +87,7 @@ class UserController extends Controller
         return $this->render('IsssrCoreBundle:User:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -91,7 +98,9 @@ class UserController extends Controller
     public function updateAction(Request $request, $id)
     {
     	
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	 
     	if( $user->getId() != $id)
     		throw new HttpException(401);
@@ -117,6 +126,7 @@ class UserController extends Controller
         return $this->render('IsssrCoreBundle:User:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
+        	'user' => $user,
         ));
     }
 

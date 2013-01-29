@@ -19,14 +19,6 @@
             <td>{{ entity.lastLogin|date('Y-m-d H:i:s') }}</td>
         </tr>
         <tr>
-            <th>Roles</th>
-            <td>{{ entity.roles }}</td>
-        </tr>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
             <th>Firstname</th>
             <td>{{ entity.firstname }}</td>
         </tr>
@@ -37,12 +29,9 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
         <a href="{{ path('user_edit', { 'id': entity.id }) }}">
-            Edit
+            <button>Edit</button>
         </a>
-    </li>
-</ul>
+
 
 {% endblock %}

@@ -46,6 +46,11 @@ class Goal {
 	protected $enactor;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="goal")
+	 */
+	protected $supers;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
 	 */
 	protected $tags;

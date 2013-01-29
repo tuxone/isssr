@@ -20,14 +20,17 @@ class GoalController extends Controller
      */
     public function indexOwnerAction()
     {
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
 
     	$em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('IsssrCoreBundle:Goal')->findByOwner($user->getId());
 
         return $this->render('IsssrCoreBundle:Goal:index.html.twig', array(
-            'entities' => $entities, 'user' => $user
+            'entities' => $entities,
+        	'user' => $user,
         ));
     }
 
@@ -37,14 +40,17 @@ class GoalController extends Controller
      */
     public function indexAction()
     {
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	 
     	$em = $this->getDoctrine()->getManager();
     
     	$entities = $em->getRepository('IsssrCoreBundle:Goal')->findAll();
     
     	return $this->render('IsssrCoreBundle:Goal:index.html.twig', array(
-    			'entities' => $entities, 'user' => $user
+    			'entities' => $entities,
+    			'user' => $user,
     	));
     }
     
@@ -54,7 +60,9 @@ class GoalController extends Controller
      */
     public function showAction($id)
     {
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	
         $em = $this->getDoctrine()->getManager();
 
@@ -69,7 +77,7 @@ class GoalController extends Controller
         return $this->render('IsssrCoreBundle:Goal:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-        	'user' => $user
+        	'user' => $user,
         ));
     }
 
@@ -79,12 +87,20 @@ class GoalController extends Controller
      */
     public function newAction()
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
+    	$hierarchymanager = $this->get('isssr_core.hierarchymanager');
+    	$supers = $hierarchymanager->getSupers($user);
+    	    	
         $entity = new Goal();
         $form   = $this->createForm(new GoalType(), $entity);
-
+        
         return $this->render('IsssrCoreBundle:Goal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -94,7 +110,9 @@ class GoalController extends Controller
      */
     public function createAction(Request $request)
     {
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
     	
         $entity  = new Goal();
         $form = $this->createForm(new GoalType(), $entity);
@@ -113,6 +131,7 @@ class GoalController extends Controller
         return $this->render('IsssrCoreBundle:Goal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -122,6 +141,10 @@ class GoalController extends Controller
      */
     public function editAction($id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
@@ -137,6 +160,7 @@ class GoalController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -146,6 +170,11 @@ class GoalController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+    	
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
@@ -169,6 +198,7 @@ class GoalController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -178,6 +208,10 @@ class GoalController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 

@@ -46,6 +46,11 @@ class Goal {
 	protected $enactor;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="goal")
+	 */
+	protected $supers;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
 	 */
 	protected $tags;
@@ -467,5 +472,38 @@ class Goal {
     public function getAssumptions()
     {
         return $this->assumptions;
+    }
+
+    /**
+     * Add supers
+     *
+     * @param \Isssr\CoreBundle\Entity\SuperInGoal $supers
+     * @return Goal
+     */
+    public function addSuper(\Isssr\CoreBundle\Entity\SuperInGoal $supers)
+    {
+        $this->supers[] = $supers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove supers
+     *
+     * @param \Isssr\CoreBundle\Entity\SuperInGoal $supers
+     */
+    public function removeSuper(\Isssr\CoreBundle\Entity\SuperInGoal $supers)
+    {
+        $this->supers->removeElement($supers);
+    }
+
+    /**
+     * Get supers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupers()
+    {
+        return $this->supers;
     }
 }
