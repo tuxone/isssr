@@ -46,17 +46,17 @@
 					    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 						<fieldset>
 							<div class="clearfix">
-					   			<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="Username"/>
+					   			<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}"/>
 					  		</div>
 							<div class="clearfix">
-								<input type="password" id="password" name="_password" required="required" placeholder="Password"/>
+								<input type="password" id="password" name="_password" required="required" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}"/>
 					  		</div>
 					  		<div class="clearfix">
 					    		<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-					    		Remember me
+					    		{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
 							</div>
 							<div class="clearfix">
-					    		<button class="btn btn-primary" type="submit">Login</button>
+					    		<button class="btn btn-primary" type="submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
 					    	</div>
 					    </fieldset>
 					</form>

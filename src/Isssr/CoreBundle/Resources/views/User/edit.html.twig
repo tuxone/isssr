@@ -1,4 +1,8 @@
-<h1>User edit</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Profile edit{% endblock %}
+ 
+{% block content %}
 
 <form action="{{ path('user_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
@@ -6,3 +10,5 @@
         <button type="submit">Edit</button>
     </p>
 </form>
+
+{% endblock content %}

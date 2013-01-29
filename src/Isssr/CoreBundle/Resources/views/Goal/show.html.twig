@@ -36,23 +36,25 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
+<table>
+	<tr>
+		<td>
         <a href="{{ path('goal') }}">
-            Back to the list
+            <button>Back</button>
         </a>
-    </li>
-    <li>
+		</td>
+		<td>
         <a href="{{ path('goal_edit', { 'id': entity.id }) }}">
-            Edit
+            <button>Edit</button>
         </a>
-    </li>
-    <li>
-        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post">
+		</td>
+		<td>
+        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>
-    </li>
-</ul>
+        </td>
+	</tr>
+</table>
 
 {% endblock %}
