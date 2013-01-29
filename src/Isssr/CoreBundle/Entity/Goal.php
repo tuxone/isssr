@@ -19,7 +19,7 @@ class Goal {
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="string", length=64, nullable=false)
+	 * @ORM\Column(type="string", length=64, nullable=false, unique=true)
 	 */
 	protected $title;
 

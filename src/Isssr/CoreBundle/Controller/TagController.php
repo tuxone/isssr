@@ -2,6 +2,8 @@
 
 namespace Isssr\CoreBundle\Controller;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -20,12 +22,17 @@ class TagController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
+    	$em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('IsssrCoreBundle:Tag')->findAll();
 
         return $this->render('IsssrCoreBundle:Tag:index.html.twig', array(
             'entities' => $entities,
+        	'user' => $user,
         ));
     }
 
@@ -35,6 +42,10 @@ class TagController extends Controller
      */
     public function showAction($id)
     {
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Tag')->find($id);
@@ -47,7 +58,9 @@ class TagController extends Controller
 
         return $this->render('IsssrCoreBundle:Tag:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+            'delete_form' => $deleteForm->createView(),   
+        	'user' => $user,
+         ));
     }
 
     /**
@@ -56,12 +69,17 @@ class TagController extends Controller
      */
     public function newAction()
     {
-        $entity = new Tag();
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
+    	$entity = new Tag();
         $form   = $this->createForm(new TagType(), $entity);
 
         return $this->render('IsssrCoreBundle:Tag:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -71,10 +89,16 @@ class TagController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Tag();
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
+    	$entity  = new Tag();
         $form = $this->createForm(new TagType(), $entity);
         $form->bind($request);
 
+        $entity->setCreator($user);
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -86,6 +110,8 @@ class TagController extends Controller
         return $this->render('IsssrCoreBundle:Tag:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        	'user' => $user,
+        		
         ));
     }
 
@@ -95,6 +121,11 @@ class TagController extends Controller
      */
     public function editAction($id)
     {
+    	
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Tag')->find($id);
@@ -102,7 +133,10 @@ class TagController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
-
+		
+        if ($entity->getCreator() != $user) {
+        	throw new HttpException(403);
+        }
         $editForm = $this->createForm(new TagType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -110,6 +144,7 @@ class TagController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'user' => $user,
         ));
     }
 
@@ -119,7 +154,11 @@ class TagController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    	
+    	$em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Tag')->find($id);
 
@@ -142,6 +181,7 @@ class TagController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'user' => $user,
         ));
     }
 

@@ -1,6 +1,9 @@
-<h1>Tag</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<table class="record_properties">
+{% block pagetitle %}Tag{% endblock %}
+ 
+{% block content %}
+<table class="table">
     <tbody>
         <tr>
             <th>Id</th>
@@ -13,21 +16,27 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
+<table>
+	<tr>
+		<td>
         <a href="{{ path('tag') }}">
-            Back to the list
+            <button>Back</button>
         </a>
-    </li>
-    <li>
-        <a href="{{ path('tag_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('tag_delete', { 'id': entity.id }) }}" method="post">
+		</td>
+		<td>
+        {% if entity.creator == user %}
+	        <a href="{{ path('tag_edit', { 'id': entity.id }) }}">
+	            <button>Edit</button>
+	        </a>
+		{% endif %}
+		</td>
+		<td>
+        <form action="{{ path('tag_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>
-    </li>
-</ul>
+        </td>
+	</tr>
+</table>
+
+{% endblock %}

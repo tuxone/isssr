@@ -1,4 +1,8 @@
-<h1>User creation</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}New User{% endblock %}
+ 
+{% block content %}
 
 <form action="{{ path('user_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
@@ -7,10 +11,4 @@
     </p>
 </form>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('user') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% endblock %}

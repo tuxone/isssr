@@ -1,4 +1,8 @@
-<h1>Tag creation</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}New Tag{% endblock %}
+ 
+{% block content %}
 
 <form action="{{ path('tag_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
@@ -7,10 +11,4 @@
     </p>
 </form>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('tag') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% endblock %}

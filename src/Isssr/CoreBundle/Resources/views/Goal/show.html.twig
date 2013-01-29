@@ -44,9 +44,11 @@
         </a>
 		</td>
 		<td>
-        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">
-            <button>Edit</button>
-        </a>
+        {% if entity.owner == user %}
+        	<a href="{{ path('goal_edit', { 'id': entity.id }) }}">
+            	<button>Edit</button>
+        	</a>
+        {% endif %}
 		</td>
 		<td>
         <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">

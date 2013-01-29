@@ -52,6 +52,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="super")
 	 */
 	protected $goalsAsSuper;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
+	 */
+	protected $tagsOwned;
 
     /**
      * Get id
@@ -234,5 +239,38 @@ class User extends BaseUser {
     public function getGoalsAsSuper()
     {
         return $this->goalsAsSuper;
+    }
+
+    /**
+     * Add tagsOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tagsOwned
+     * @return User
+     */
+    public function addTagsOwned(\Isssr\CoreBundle\Entity\Tag $tagsOwned)
+    {
+        $this->tagsOwned[] = $tagsOwned;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tagsOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Tag $tagsOwned
+     */
+    public function removeTagsOwned(\Isssr\CoreBundle\Entity\Tag $tagsOwned)
+    {
+        $this->tagsOwned->removeElement($tagsOwned);
+    }
+
+    /**
+     * Get tagsOwned
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTagsOwned()
+    {
+        return $this->tagsOwned;
     }
 }

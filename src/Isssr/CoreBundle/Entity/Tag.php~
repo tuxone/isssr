@@ -27,6 +27,12 @@ class Tag {
 	 * @ORM\ManyToMany(targetEntity="Goal", mappedBy="tags")
 	 */
 	protected $goals;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="tagsOwned")
+	 * @ORM\JoinColumn(name="username", referencedColumnName="id")
+	 */
+	protected $creator;
 
 	/**
      * Constructor
@@ -106,5 +112,28 @@ class Tag {
     public function __toString()
     {
     	return $this->title;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \Isssr\CoreBundle\Entity\User $creator
+     * @return Tag
+     */
+    public function setCreator(\Isssr\CoreBundle\Entity\User $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \Isssr\CoreBundle\Entity\User 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
     }
 }
