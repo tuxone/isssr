@@ -165,6 +165,10 @@ class TagController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
+        
+        if ($entity->getCreator() != $user) {
+        	throw new HttpException(403);
+        }
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new TagType(), $entity);
@@ -193,7 +197,8 @@ class TagController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
-
+	
+           
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('IsssrCoreBundle:Tag')->find($id);
@@ -201,7 +206,7 @@ class TagController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Tag entity.');
             }
-
+            
             $em->remove($entity);
             $em->flush();
         }

@@ -152,7 +152,9 @@ class GoalController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Goal entity.');
         }
-
+        if ($entity->getOwner() != $user) {
+        	throw new HttpException(403);
+        }
         $editForm = $this->createForm(new GoalType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
