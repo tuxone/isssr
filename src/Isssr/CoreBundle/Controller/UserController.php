@@ -120,7 +120,7 @@ class UserController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('user_show', array('id' => $id)));
         }
 
         return $this->render('IsssrCoreBundle:User:edit.html.twig', array(

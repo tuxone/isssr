@@ -178,7 +178,7 @@ class TagController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('tag_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('tag_show', array('id' => $id)));
         }
 
         return $this->render('IsssrCoreBundle:Tag:edit.html.twig', array(
