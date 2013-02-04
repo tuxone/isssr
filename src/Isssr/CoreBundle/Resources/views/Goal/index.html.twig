@@ -26,13 +26,23 @@
                         <a href="{{ path('goal_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     {% if entity.owner == user %}
-	                    <li>
-	                        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">edit</a>
-	                    </li>
-	                
-	                    <li>
-	                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
-	                    </li>
+                    	{% if entity.editable() %}
+		                    <li>
+		                        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">edit</a>
+		                    </li>
+		                
+		                    <li>
+		                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
+		                    </li>
+	                    {% else %}
+		                    <li>
+		                        edit
+		                    </li>
+		                
+		                    <li>
+		                        supers
+		                    </li>
+	                    {% endif %}
 	                {% endif %}
                 </ul>
             </td>

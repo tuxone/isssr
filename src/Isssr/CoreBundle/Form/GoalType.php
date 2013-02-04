@@ -11,11 +11,11 @@ class GoalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('description')
+            ->add('title', null, array('label' => 'Title *'))
+            ->add('description', null, array('label' => 'Description *'))
             ->add('priority')
-            ->add('enactor')
-            ->add('tags')
+            ->add('enactor', null, array('label' => 'Enactor *'))
+            ->add('tags', null, array('label' => 'Tags *'))
             ->add('focus')
             ->add('object')
             ->add('magnitude')

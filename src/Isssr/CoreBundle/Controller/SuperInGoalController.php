@@ -29,7 +29,7 @@ class SuperInGoalController extends Controller
     	
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('IsssrCoreBundle:SuperInGoal')->findAll();
+        $entities = $em->getRepository('IsssrCoreBundle:SuperInGoal')->findByGoal($id);
 
         $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
         
@@ -99,6 +99,7 @@ class SuperInGoalController extends Controller
         	throw new HttpException(403);
         
         $entity->setGoal($goal);
+        $entity->setStatus(SuperInGoal::STATUS_NOTSENT);
         
         if ($form->isValid()) {
             $em->persist($entity);

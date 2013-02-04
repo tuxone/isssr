@@ -10,6 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="SuperInGoal")
  */
 class SuperInGoal {
+	const STATUS_INIT = 0;
+	const STATUS_SENT = 1;
+	const STATUS_REJECTED = 2;
+	const STATUS_ACCEPTED = 3;
 	
 	/**
 	 * @ORM\Id
@@ -35,6 +39,10 @@ class SuperInGoal {
 	 */
 	protected $goal;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $status;
 
     /**
      * Get id
