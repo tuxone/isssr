@@ -18,6 +18,8 @@ class UserTest extends WebTestCase
 	private $USER_GOALSASOWNER = null;
 	private $USER_GOALSASENACTOR = null;
 	
+	private $user = null;
+	
 	public function setUp()
 	{
 		static::$kernel = static::createKernel();
@@ -28,53 +30,80 @@ class UserTest extends WebTestCase
 		;		
 	}
 	
-    public function testTag()
-    {
-    	
-    	$this->USER_GOALSASOWNER = new Goal();
-    	$this->USER_GOALSASOWNER->setTitle('USER_GOALTITLE_OWNER');
-    	$this->USER_GOALSASOWNER->setDescription('USER_GOALDESCRIPTION_OWNER');
-    	
-    	$this->USER_GOALSASENACTOR = new Goal();
-    	$this->USER_GOALSASENACTOR->setTitle('USER_GOALTITLE_ENACTOR');
-    	$this->USER_GOALSASENACTOR->setDescription('USER_GOALDESCRIPTION_ENACTOR');
-    	
-    	$user = new User();
-		$user->setUsername($this->USER_USERNAME);
-		$user->setPlainPassword($this->USER_PASSWORD);
-		$user->setEmail($this->USER_EMAIL);
-		$user->setFirstname($this->USER_FIRSTNAME);
-		$user->setLastname($this->USER_LASTNAME);
-		$user->addGoalsAsOwner($this->USER_GOALSASOWNER);
-		$user->addGoalsAsEnactor($this->USER_GOALSASENACTOR);
-		
+	public function inizialize()
+	{
+		$this->USER_GOALSASOWNER = new Goal();
+		$this->USER_GOALSASOWNER->setTitle('USER_GOALTITLE_OWNER');
+		$this->USER_GOALSASOWNER->setDescription('USER_GOALDESCRIPTION_OWNER');
+		 
+		$this->USER_GOALSASENACTOR = new Goal();
+		$this->USER_GOALSASENACTOR->setTitle('USER_GOALTITLE_ENACTOR');
+		$this->USER_GOALSASENACTOR->setDescription('USER_GOALDESCRIPTION_ENACTOR');
+		 
+		$this->user = new User();
+		$this->user->setUsername($this->USER_USERNAME);
+		$this->user->setPlainPassword($this->USER_PASSWORD);
+		$this->user->setEmail($this->USER_EMAIL);
+		$this->user->setFirstname($this->USER_FIRSTNAME);
+		$this->user->setLastname($this->USER_LASTNAME);
+		$this->user->addGoalsAsOwner($this->USER_GOALSASOWNER);
+		$this->user->addGoalsAsEnactor($this->USER_GOALSASENACTOR);
+	}
+
+	public function assertGetSet()
+	{
 		// Test su metodi costruttore get & set
-        $this->assertEquals($this->USER_USERNAME, $user->getUsername());
-        $this->assertEquals($this->USER_PASSWORD, $user->getPlainPassword());
-        $this->assertEquals($this->USER_EMAIL, $user->getEmail());
-        $this->assertEquals($this->USER_FIRSTNAME, $user->getFirstname());
-        $this->assertEquals($this->USER_LASTNAME, $user->getLastname());
-        $this->assertEquals($this->USER_GOALSASOWNER, $user->getGoalsAsOwner()->first());
-        $this->assertEquals($this->USER_GOALSASENACTOR, $user->getGoalsAsEnactor()->first());
-        
-        // Test add
-        $this->em->persist($this->USER_GOALSASOWNER);
-        $this->em->persist($this->USER_GOALSASENACTOR);
-        $this->em->persist($user);
-        $this->em->flush();
-        $tmpuser = $this->em->getRepository('IsssrCoreBundle:User')->find($user->getId());
-        $this->assertEquals($tmpuser, $user);
-        
-        // TODO test sull'unicitˆ
+		$this->assertEquals($this->USER_USERNAME, $this->user->getUsername());
+		$this->assertEquals($this->USER_PASSWORD, $this->user->getPlainPassword());
+		$this->assertEquals($this->USER_EMAIL, $this->user->getEmail());
+		$this->assertEquals($this->USER_FIRSTNAME, $this->user->getFirstname());
+		$this->assertEquals($this->USER_LASTNAME, $this->user->getLastname());
+		$this->assertEquals($this->USER_GOALSASOWNER, $this->user->getGoalsAsOwner()->first());
+		$this->assertEquals($this->USER_GOALSASENACTOR, $this->user->getGoalsAsEnactor()->first());
+	}
+	
+	public function assertDbInsert()
+	{
+		// Test add
+		$this->em->persist($this->USER_GOALSASOWNER);
+		$this->em->persist($this->USER_GOALSASENACTOR);
+		$this->em->persist($this->user);
+		$this->em->flush();
+		$tmpuser = $this->em->getRepository('IsssrCoreBundle:User')->find($this->user->getId());
+		$this->assertEquals($tmpuser, $this->user);
+	}
+	
+	public function assertDbRemove()
+	{
+		// Test remove
+		$id = $this->user->getId();
+		$this->em->remove($this->user);
+		$this->em->flush();
+		$tmpuser = $this->em->getRepository('IsssrCoreBundle:User')->find($id);
+		$this->assertNull($tmpuser);
+	}
+	
+	public function clean()
+	{
+		$this->em->remove($this->USER_GOALSASOWNER);
+		$this->em->remove($this->USER_GOALSASENACTOR);
+		$this->em->flush();
+	}
+	
+    public function testUser()
+    {
+    	echo "\n";
+    	
+    	echo "User Test"."\n";
+    	
+    	$this->inizialize();
+    	
+    	$this->assertGetSet();
+    	$this->assertDbInsert();
+    	$this->assertDbRemove();
+    	
+    	$this->clean();	
        
-        // Test remove
-        $id = $user->getId();
-        $this->em->remove($user);
-        $this->em->remove($this->USER_GOALSASOWNER);
-        $this->em->remove($this->USER_GOALSASENACTOR);
-        $this->em->flush();
-        $tmpuser = $this->em->getRepository('IsssrCoreBundle:User')->find($id);
-        $this->assertNull($tmpuser);
     }
     
     protected function tearDown()

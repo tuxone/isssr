@@ -134,7 +134,7 @@ class TagController extends Controller
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
 		
-        if ($entity->getCreator() != $user) {
+        if ($entity->getCreator()->getId() != $user->getId()) {
         	throw new HttpException(403);
         }
         $editForm = $this->createForm(new TagType(), $entity);
@@ -197,7 +197,10 @@ class TagController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
-	
+		
+        if ($entity->getCreator()->getId() != $user->getId()) {
+        	throw new HttpException(403);
+        }
            
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

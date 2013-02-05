@@ -28,6 +28,8 @@ class GoalTest extends WebTestCase
 	private $GOALRELATIONS = "GOAL_RELATIONS_TEST";
 	private $GOALCONTEST = "GOAL_CONTEST_TEST";
 	private $GOALASSUMPTIONS = "GOAL_ASSUMPTIONS_TEST";
+	
+	private $goal = null;
 
 	public function setUp()
 	{
@@ -38,8 +40,8 @@ class GoalTest extends WebTestCase
 		->getEntityManager()
 		;
 	}
-
-	public function testTag()
+	
+	public function inizialize()
 	{
 		$this->GOALOWNER = new User();
 		$this->GOALOWNER->setUsername('OWNER_USERNAME');
@@ -58,66 +60,91 @@ class GoalTest extends WebTestCase
 		$this->GOALTAG = new Tag();
 		$this->GOALTAG->setTitle('TAG_TITLE');
 		
-		
-		$goal = new Goal();
-		$goal->setTitle($this->GOALTITLE);
-		$goal->setDescription($this->GOALDESCRIPTION);
-		$goal->setPriority($this->GOALPRIORITY);
-		$goal->setOwner($this->GOALOWNER);
-		$goal->setEnactor($this->GOALENACTOR);
-		$goal->addTag($this->GOALTAG);
-		$goal->setFocus($this->GOALFOCUS);
-		$goal->setObject($this->GOALOBJECT);
-		$goal->setMagnitude($this->GOALMAGNITUDE);
-		$goal->setTimeframe($this->GOALTIMEFRAME);
-		$goal->setOrganizationalScope($this->GOALORGANIZATIONALSCOPE);
-		$goal->setConstraints($this->GOALCONSTRAINTS);
-		$goal->setRelations($this->GOALRELATIONS);
-		$goal->setContest($this->GOALCONTEST);
-		$goal->setAssumptions($this->GOALASSUMPTIONS);
-		
-		// Test su metodi costruttore get & set
-		$this->assertEquals($this->GOALTITLE, $goal->getTitle());
-		$this->assertEquals($this->GOALDESCRIPTION, $goal->getDescription());
-		$this->assertEquals($this->GOALPRIORITY, $goal->getPriority());
-		$this->assertEquals($this->GOALOWNER, $goal->getOwner());
-		$this->assertEquals($this->GOALENACTOR, $goal->getEnactor());
-		$this->assertEquals($this->GOALTAG, $goal->getTags()->first());
-		$this->assertEquals($this->GOALFOCUS, $goal->getFocus());
-		$this->assertEquals($this->GOALOBJECT, $goal->getObject());
-		$this->assertEquals($this->GOALMAGNITUDE, $goal->getMagnitude());
-		$this->assertEquals($this->GOALTIMEFRAME, $goal->getTimeframe());
-		$this->assertEquals($this->GOALORGANIZATIONALSCOPE, $goal->getOrganizationalScope());
-		$this->assertEquals($this->GOALCONSTRAINTS, $goal->getConstraints());
-		$this->assertEquals($this->GOALRELATIONS, $goal->getRelations());
-		$this->assertEquals($this->GOALCONTEST, $goal->getContest());
-		$this->assertEquals($this->GOALASSUMPTIONS, $goal->getAssumptions());
+		$this->goal = new Goal();
+		$this->goal->setTitle($this->GOALTITLE);
+		$this->goal->setDescription($this->GOALDESCRIPTION);
+		$this->goal->setPriority($this->GOALPRIORITY);
+		$this->goal->setOwner($this->GOALOWNER);
+		$this->goal->setEnactor($this->GOALENACTOR);
+		$this->goal->addTag($this->GOALTAG);
+		$this->goal->setFocus($this->GOALFOCUS);
+		$this->goal->setObject($this->GOALOBJECT);
+		$this->goal->setMagnitude($this->GOALMAGNITUDE);
+		$this->goal->setTimeframe($this->GOALTIMEFRAME);
+		$this->goal->setOrganizationalScope($this->GOALORGANIZATIONALSCOPE);
+		$this->goal->setConstraints($this->GOALCONSTRAINTS);
+		$this->goal->setRelations($this->GOALRELATIONS);
+		$this->goal->setContest($this->GOALCONTEST);
+		$this->goal->setAssumptions($this->GOALASSUMPTIONS);
+	}
 
+	public function assertGetSet()
+	{
+		// Test su metodi costruttore get & set
+		$this->assertEquals($this->GOALTITLE, $this->goal->getTitle());
+		$this->assertEquals($this->GOALDESCRIPTION, $this->goal->getDescription());
+		$this->assertEquals($this->GOALPRIORITY, $this->goal->getPriority());
+		$this->assertEquals($this->GOALOWNER, $this->goal->getOwner());
+		$this->assertEquals($this->GOALENACTOR, $this->goal->getEnactor());
+		$this->assertEquals($this->GOALTAG, $this->goal->getTags()->first());
+		$this->assertEquals($this->GOALFOCUS, $this->goal->getFocus());
+		$this->assertEquals($this->GOALOBJECT, $this->goal->getObject());
+		$this->assertEquals($this->GOALMAGNITUDE, $this->goal->getMagnitude());
+		$this->assertEquals($this->GOALTIMEFRAME, $this->goal->getTimeframe());
+		$this->assertEquals($this->GOALORGANIZATIONALSCOPE, $this->goal->getOrganizationalScope());
+		$this->assertEquals($this->GOALCONSTRAINTS, $this->goal->getConstraints());
+		$this->assertEquals($this->GOALRELATIONS, $this->goal->getRelations());
+		$this->assertEquals($this->GOALCONTEST, $this->goal->getContest());
+		$this->assertEquals($this->GOALASSUMPTIONS, $this->goal->getAssumptions());
+	}
+	
+	public function assertDbInsert()
+	{
 		// Test add
 		$this->em->persist($this->GOALOWNER);
 		$this->em->persist($this->GOALENACTOR);
 		$this->em->persist($this->GOALTAG);
-		$this->em->persist($goal);
+		$this->em->persist($this->goal);
 		$this->em->flush();
-		$tmpgoal = $this->em->getRepository('IsssrCoreBundle:Goal')->find($goal->getId());
-		$this->assertEquals($tmpgoal, $goal);
-
-		// TODO test sull'unicitˆ
-
-
+		$tmpgoal = $this->em->getRepository('IsssrCoreBundle:Goal')->find($this->goal->getId());
+		$this->assertEquals($tmpgoal, $this->goal);
+	}
+	
+	public function assertDbRemove()
+	{
 		// Test remove
-		$id = $goal->getId();
-		$this->em->remove($goal);
+		$id = $this->goal->getId();
+		$this->em->remove($this->goal);
 		$this->em->flush();
-		$tmpgoal = $this->em->getRepository('IsssrCoreBundle:Tag')->find($id);
+		$tmpgoal = $this->em->getRepository('IsssrCoreBundle:Goal')->find($id);
 		$this->assertNull($tmpgoal);
-		
+	}
+
+	public function clean()
+	{
 		// Removing Owner, Enactor and Tag
 		
 		$this->em->remove($this->GOALOWNER);
 		$this->em->remove($this->GOALENACTOR);
 		$this->em->remove($this->GOALTAG);
 		$this->em->flush();
+		
+	}
+	
+	public function testGoal()
+	{
+		
+		echo "\n";
+
+		echo "Goal Test"."\n";
+		
+		$this->inizialize();
+
+		$this->assertGetSet();
+		$this->assertDbInsert();
+		$this->assertDbRemove();
+		
+		$this->clean();
 		
 	}
 

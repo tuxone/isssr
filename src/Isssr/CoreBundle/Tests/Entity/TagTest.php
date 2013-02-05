@@ -13,6 +13,8 @@ class TagTest extends WebTestCase
 	private $em;	
 	private $TAGTITLE = "TAG_TITLE_TEST";
 	
+	private $tag = null;
+	
 	public function setUp()
 	{
 		static::$kernel = static::createKernel();
@@ -23,28 +25,55 @@ class TagTest extends WebTestCase
 		;		
 	}
 	
+	public function inizialize()
+	{
+		$this->tag = new Tag();
+		$this->tag->setTitle($this->TAGTITLE);
+	}
+	
+	public function assertGetSet()
+	{
+		// Test su metodi costruttore get & set
+		$this->assertEquals($this->TAGTITLE, $this->tag->getTitle());
+	}
+	
+	public function assertDbInsert()
+	{
+		// Test add
+		$this->em->persist($this->tag);
+		$this->em->flush();
+		$tmptag = $this->em->getRepository('IsssrCoreBundle:Tag')->find($this->tag->getId());
+		$this->assertEquals($tmptag, $this->tag);
+	}
+	
+	public function assertDbRemove()
+	{
+		// Test remove
+		$id = $this->tag->getId();
+		$this->em->remove($this->tag);
+		$this->em->flush();
+		$tmptag = $this->em->getRepository('IsssrCoreBundle:Tag')->find($id);
+		$this->assertNull($tmptag);
+	}
+	
+	public function clean()
+	{
+		
+	}
+	
     public function testTag()
     {
-    	$tag = new Tag();
-		$tag->setTitle($this->TAGTITLE);
-		
-		// Test su metodi costruttore get & set
-        $this->assertEquals($this->TAGTITLE, $tag->getTitle());
-        
-        // Test add
-        $this->em->persist($tag);
-        $this->em->flush();
-        $tmptag = $this->em->getRepository('IsssrCoreBundle:Tag')->find($tag->getId());
-        $this->assertEquals($tmptag, $tag);
-        
-		// TODO test sull'unicitˆ
-        
-        // Test remove
-        $id = $tag->getId();
-        $this->em->remove($tag);
-        $this->em->flush();
-        $tmptag = $this->em->getRepository('IsssrCoreBundle:Tag')->find($id);
-        $this->assertNull($tmptag);
+    	echo "\n";
+    	
+    	echo "Tag Test"."\n";
+    	
+    	$this->inizialize();
+
+    	$this->assertGetSet();
+    	$this->assertDbInsert();
+    	$this->assertDbRemove();
+    	
+    	$this->clean();
     }
     
     protected function tearDown()
