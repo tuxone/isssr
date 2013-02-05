@@ -12,8 +12,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Goal {
 	
 	const STATUS_NOTEDITABLE = 0;
-	const STATUS_EDITABLE = 0;
-	const STATUS_ACCEPTED = 1;
+	const STATUS_EDITABLE = 1;
+	const STATUS_ACCEPTED = 2;
+	const STATUS_SOFTEDITABLE = 3;
 	
 	/**
 	 * @ORM\Id
@@ -541,7 +542,7 @@ class Goal {
     		return Goal::STATUS_EDITABLE;
     	
     	if($rejected > 0)
-    		return Goal::STATUS_EDITABLE;
+    		return Goal::STATUS_SOFTEDITABLE;
     	
     	if($sent > 0)
     		return Goal::STATUS_NOTEDITABLE;
@@ -554,5 +555,9 @@ class Goal {
     
     public function editable() {
     	return $this->getStatus() == Goal::STATUS_EDITABLE;
+    }
+    
+    public function softEditable() {
+    	return $this->getStatus() == Goal::STATUS_SOFTEDITABLE;
     }
 }
