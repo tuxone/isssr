@@ -11,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Goal {
 	
+	const STATUS_NOTEDITABLE = 0;
+	const STATUS_EDITABLE = 0;
+	const STATUS_ACCEPTED = 1;
+	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -106,6 +110,7 @@ class Goal {
     public function __construct()
     {
     	$this->tags = new ArrayCollection();
+    	$this->supers = new ArrayCollection();
     }
     
 
@@ -509,5 +514,45 @@ class Goal {
     
     public function __toString() {
     	return $this->id . '_' . $this->title;
+    }
+    
+    public function getStatus() {
+    	
+    	if($this->supers->count() == 0)
+    		return Goal::STATUS_EDITABLE;
+    	
+    	$accepted = 0;
+    	$rejected = 0;
+    	$sent = 0;
+    	$notsent = 0;
+    	
+    	foreach($this->supers as $super) {
+    		if($super->rejected())
+    			$rejected++;
+    		if($super->sent())
+    			$sent++;
+    		if($super->accepted())
+    			$accepted++;
+    		if($super->notSent())
+    			$notsent++;
+    	}
+    	
+    	if($notsent > 0)
+    		return Goal::STATUS_EDITABLE;
+    	
+    	if($rejected > 0)
+    		return Goal::STATUS_EDITABLE;
+    	
+    	if($sent > 0)
+    		return Goal::STATUS_NOTEDITABLE;
+    	
+    	if($accepted == $this->supers->count())
+    		return Goal::STATUS_ACCEPTED;
+    	
+    	return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
+    }
+    
+    public function editable() {
+    	return $this->getStatus() == Goal::STATUS_EDITABLE;
     }
 }

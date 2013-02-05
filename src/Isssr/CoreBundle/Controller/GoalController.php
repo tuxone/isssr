@@ -174,7 +174,7 @@ class GoalController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('goal_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('goal_show', array('id' => $id)));
         }
 
         return $this->render('IsssrCoreBundle:Goal:edit.html.twig', array(

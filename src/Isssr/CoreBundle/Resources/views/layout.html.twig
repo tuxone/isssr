@@ -18,20 +18,30 @@
           	<ul class="nav">
 			  <li><a href="{{ path('isssr_core_homepage') }}">Home</a></li>
 			  <li><a href="{{ path('goal') }}">Goals</a></li>
-			  <li><a href="{{ path('user_show', { 'id': user.id}) }}">Profile</a></li>
 			  <li><a href="{{ path('tag') }}">Tags</a></li>
+			  <li><a href="{{ path('user_show', { 'id': user.id}) }}">Profile</a></li>
 			  <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
 			</ul>
         </div>
     </div>
-   	<span class="label label-info">{% block pagetitle %}{% endblock %}</span>
-      
-
-		{% block content %}{% endblock %}
     
+    <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3" style="background-color: #bbd8e9;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; padding-top:4px;">
+      <!--Sidebar content-->
+      <span class="label label-info">
+   		{% block pagetitle %}{% endblock %}
+   	</span>
+   	<br>
+      {% block sidebar %}{% endblock %}
+    </div>
+    <div class="span9" style="background-color: #ffffff;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;">
+      <!--Body content-->
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
 
-    	 
-      
-	{% endblock %}
+{% endblock %}
 	  
 

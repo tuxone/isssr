@@ -10,6 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="SuperInGoal")
  */
 class SuperInGoal {
+	const STATUS_NOTSENT = 0;
+	const STATUS_SENT = 1;
+	const STATUS_REJECTED = 2;
+	const STATUS_ACCEPTED = 3;
 	
 	/**
 	 * @ORM\Id
@@ -35,6 +39,10 @@ class SuperInGoal {
 	 */
 	protected $goal;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $status;
 
     /**
      * Get id
@@ -113,5 +121,44 @@ class SuperInGoal {
     public function getGoal()
     {
         return $this->goal;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return SuperInGoal
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function accepted() {
+    	return $this->status == SuperInGoal::STATUS_ACCEPTED;
+    }
+    
+    public function rejected() {
+    	return $this->status == SuperInGoal::STATUS_REJECTED;
+    }
+
+    public function sent() {
+    	return $this->status == SuperInGoal::STATUS_SENT;
+    }
+    
+    public function notSent() {
+    	return $this->status == SuperInGoal::STATUS_NOTSENT;
     }
 }
