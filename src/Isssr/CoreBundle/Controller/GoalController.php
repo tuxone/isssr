@@ -198,9 +198,7 @@ class GoalController extends Controller
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
-        if ($entity->getOwner()->getId() != $user->getId()) {
-        	throw new HttpException(403);
-        }
+        
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -208,8 +206,13 @@ class GoalController extends Controller
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Goal entity.');
+                
             }
-
+            
+            if ($entity->getOwner()->getId() != $user->getId()) {
+            	throw new HttpException(403);
+            }
+            
             $em->remove($entity);
             $em->flush();
         }

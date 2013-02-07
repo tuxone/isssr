@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Isssr\CoreBundle\Entity\Tag;
 use Isssr\CoreBundle\Form\TagType;
+use Isssr\CoreBundle\Form\TagTypeSoft;
 
 /**
  * Tag controller.
@@ -60,6 +61,7 @@ class TagController extends Controller
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),   
         	'user' => $user,
+        	'status' => $entity->getStatus(),
          ));
     }
 
@@ -137,7 +139,9 @@ class TagController extends Controller
         if ($entity->getCreator()->getId() != $user->getId()) {
         	throw new HttpException(403);
         }
-        $editForm = $this->createForm(new TagType(), $entity);
+        
+        if ($entity->getStatus() == Tag::STATUS_USED) $editForm =$this->createForm(new TagTypeSoft(), $entity);
+        else $editForm = $this->createForm(new TagType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('IsssrCoreBundle:Tag:edit.html.twig', array(
@@ -169,9 +173,10 @@ class TagController extends Controller
         if ($entity->getCreator() != $user) {
         	throw new HttpException(403);
         }
-
+		
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new TagType(), $entity);
+        if ($entity->getStatus() < 0) $editForm =$this->createForm(new TagTypeSoft(), $entity);
+        else $editForm = $this->createForm(new TagType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -197,17 +202,23 @@ class TagController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
-		
-        if ($entity->getCreator()->getId() != $user->getId()) {
-        	throw new HttpException(403);
-        }
-           
+
+        $scontext = $this->container->get('security.context');
+        $token = $scontext->getToken();
+        $user = $token->getUser();
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('IsssrCoreBundle:Tag')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Tag entity.');
+            }
+            if ($entity->getCreator()->getId() != $user->getId()) {
+            	throw new HttpException(403);
+            }
+            if ($entity->getStatus() < 0){
+            	throw new HttpException(403);
             }
             
             $em->remove($entity);
