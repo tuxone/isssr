@@ -1,5 +1,5 @@
 parameters:
-    twitter_plus_core.class: Isssr\CoreBundle\HierarchyManager\HierarchyManager
+    twitter_plus_core.class: Isssr\CoreBundle\Services\HierarchyManager
 
 services:
 
