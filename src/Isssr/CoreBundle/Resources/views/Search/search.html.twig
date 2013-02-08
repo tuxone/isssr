@@ -1,0 +1,14 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Search Goal{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Search</button>
+    </p>
+</form>
+
+{% endblock %}

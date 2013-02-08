@@ -1,0 +1,7 @@
+search:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Search:search" }
+    
+search_result:
+    pattern:  /result
+    defaults: { _controller: "IsssrCoreBundle:Search:result" }

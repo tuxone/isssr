@@ -11,6 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Tag {
 	
+	const STATUS_USED = -1;
+	const STATUS_UNUSED = 1;
+		
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -24,6 +27,11 @@ class Tag {
 	protected $title;
 	
 	/**
+	 * @ORM\Column(type="string", length=200)
+	 */
+	protected $description;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Goal", mappedBy="tags")
 	 */
 	protected $goals;
@@ -33,6 +41,11 @@ class Tag {
 	 * @ORM\JoinColumn(name="username", referencedColumnName="id")
 	 */
 	protected $creator;
+	
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $status;
 
 	/**
      * Constructor
@@ -40,6 +53,7 @@ class Tag {
     public function __construct()
     {
     	$this->goals = new ArrayCollection();
+    	$this->status = Tag::STATUS_UNUSED;
     }
     
 
@@ -135,5 +149,54 @@ class Tag {
     public function getCreator()
     {
         return $this->creator;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Tag
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Tag
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+    	if ($this->getGoals()->count() > 0)
+    		$this->status = Tag::STATUS_USED;
+    	else $this->status = Tag::STATUS_UNUSED;
+        return $this->status;
     }
 }
