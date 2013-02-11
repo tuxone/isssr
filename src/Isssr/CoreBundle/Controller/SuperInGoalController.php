@@ -54,8 +54,11 @@ class SuperInGoalController extends Controller
     	$token = $scontext->getToken();
     	$user = $token->getUser();
     	
+    	$hm = $this->get('isssr_core.hierarchymanager');
+    	$supers = $hm->getSupers($user);
+    	
         $entity = new SuperInGoal();
-        $form   = $this->createForm(new SuperInGoalType(), $entity);
+        $form   = $this->createForm(new SuperInGoalType($supers), $entity);
 		
         $em = $this->getDoctrine()->getManager();
         
@@ -64,10 +67,6 @@ class SuperInGoalController extends Controller
         if (!$goal) {
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
-        
-        $hm = $this->get('isssr_core.hierarchymanager');
-        
-        $supers = $hm->getSupers($user);
         
         return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
             'entity' => $entity,

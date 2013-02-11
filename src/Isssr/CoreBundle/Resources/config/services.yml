@@ -5,3 +5,4 @@ services:
 
     isssr_core.hierarchymanager:
         class: "%twitter_plus_core.class%"
+        arguments: ["@doctrine.orm.entity_manager"]
