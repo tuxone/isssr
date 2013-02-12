@@ -166,7 +166,7 @@ class GoalController extends Controller
     	$supers = $hierarchymanager->getSupers($user);
     	    	
         $entity = new Goal();
-        $form   = $this->createForm(new GoalType(), $entity);
+        $form   = $this->createForm(new GoalType(false), $entity);
         
         return $this->render('IsssrCoreBundle:Goal:new.html.twig', array(
             'entity' => $entity,
@@ -186,7 +186,7 @@ class GoalController extends Controller
 		$user = $token->getUser();
     	
         $entity  = new Goal();
-        $form = $this->createForm(new GoalType(), $entity);
+        $form = $this->createForm(new GoalType(false), $entity);
         $form->bind($request);
         
         $entity->setOwner($user);

@@ -4,6 +4,28 @@
  
 {% block content %}
 
+{% if entity.rejections.count() > 0 %}
+<h3>Rejections</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Text</th>
+            <th>Datetime</th>
+            <th>Super</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for rej in entity.rejections %}
+        <tr>
+            <td>{{ rej.text }}</td>
+            <td>{% if rej.datetime %}{{ rej.datetime|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ rej.creator }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 <form action="{{ path('goal_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>

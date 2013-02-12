@@ -18,6 +18,9 @@ class GoalType extends AbstractType
 	
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+    	if(!$this->softedit)
+    		$builder->add('title', null, array('label' => 'Title *'));
+    	
         $builder
             ->add('description', null, array('label' => 'Description *'))
             ->add('priority')
@@ -34,8 +37,6 @@ class GoalType extends AbstractType
             ->add('assumptions')
         ;
         
-        if(!$this->softedit)
-        	$builder->add('title', null, array('label' => 'Title *'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
