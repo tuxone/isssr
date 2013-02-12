@@ -40,7 +40,8 @@
     {% endfor %}
     </tbody>
 </table>
-		{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') %}
+		{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') or 
+			goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_SOFTEDITABLE') %}
         <a class="btn" href="{{ path('superingoal_new', {'id': goal.id}) }}">
             Add a super
         </a>

@@ -54,20 +54,18 @@ class SuperInGoalController extends Controller
     	$token = $scontext->getToken();
     	$user = $token->getUser();
     	
+    	$em = $this->getDoctrine()->getManager();
+    	$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+    	if (!$goal) {
+    		throw $this->createNotFoundException('Unable to find Goal entity.');
+    	}
+    	
     	$hm = $this->get('isssr_core.hierarchymanager');
     	$tmpsupers = $hm->getSupers($user);
     	$supers = $this->filterSupersInGoal($tmpsupers, $goal); 
     	
         $entity = new SuperInGoal();
         $form   = $this->createForm(new SuperInGoalType($supers), $entity);
-		
-        $em = $this->getDoctrine()->getManager();
-        
-        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
-
-        if (!$goal) {
-        	throw $this->createNotFoundException('Unable to find Goal entity.');
-        }
         
         return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
             'entity' => $entity,
@@ -162,9 +160,27 @@ class SuperInGoalController extends Controller
     	return $postdata;
     }
     
-    private function filterSupersInGoal($supers, Goal $goal) {
-    	$supers = array('ciao');
+    private function filterSupersInGoal($list, Goal $goal) {
     	
-    	return supers;
+    	$oldsupers = array();
+    	$supersingoal = $goal->getSupers();
+    	foreach ($supersingoal as $super) {
+    		$oldsupers[] = $super->getSuper()->getUsername();
+    	}
+    	
+    	//die(var_dump($oldsupers));
+    	
+    	$newsupers = array();
+    	$debug="";
+    	foreach ($list as $super) {
+    		$debug.=$super. " ";
+    		if(!in_array($super, $oldsupers)) {
+    			$id = array_search($super, $list);
+    			$newsupers[$id] = $super;
+    		}
+    	}
+    	//die($debug);
+    	//die(sizeof($list).' '.sizeof($oldsupers).' '.sizeof($newsupers));
+    	return $newsupers;
     }
 }
