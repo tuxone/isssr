@@ -4,11 +4,94 @@
  
 {% block content %}
 
-<form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Search</button>
-    </p>
-</form>
+<!-- Button to trigger modal -->
+<a href="#id" role="button" class="btn" data-toggle="modal">Search id</a>
+ 
+<!-- Modal -->
+<div id="id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+  <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form.id) }}>
+    {{ form_widget(form.id) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+<BR>
+<BR>
+<!-- Button to trigger modal -->
+<a href="#title" role="button" class="btn" data-toggle="modal">Search title</a>
+ 
+<!-- Modal -->
+<div id="title" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.title) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+<BR>
+<BR>
+<!-- Button to trigger modal -->
+<a href="#description" role="button" class="btn" data-toggle="modal">Search description</a>
+ 
+<!-- Modal -->
+<div id="description" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.description) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+<BR>
+<BR>
+<!-- Button to trigger modal -->
+<a href="#tags" role="button" class="btn" data-toggle="modal">Search tags</a>
+ 
+<!-- Modal -->
+<div id="tags" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.tags) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+<BR>
+<BR>
+<!-- Button to trigger modal -->
+<a href="#goalOwner" role="button" class="btn" data-toggle="modal">Search owner</a>
+ 
+<!-- Modal -->
+<div id="goalOwner" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.goalOwner) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+<BR>
+<BR>
+<!-- Button to trigger modal -->
+<a href="#goalEnactor" role="button" class="btn" data-toggle="modal">Search enactor</a>
+ 
+<!-- Modal -->
+<div id="goalEnactor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.goalEnactor) }}
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  </div>
+</div>
+
 
 {% endblock %}

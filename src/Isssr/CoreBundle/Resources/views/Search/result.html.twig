@@ -4,31 +4,35 @@
  
 {% block content %}
 
-
-<table class="table">
-    <thead>
-        <tr>
-        	<th>Id</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Tags</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for goal in goals %}
-        <tr>
-        	<td>{{ goal.id }}</td>
-            <td>{{ goal.title }}</td>
-            <td>{{ goal.description }}</td>
-            <td>
-				{% for tag in goal.tags %}
-					<ul>{{ tag }}</ul>
-				{% endfor %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+ {% if length > 0 %}
+	<table class="table">
+	    <thead>
+	        <tr>
+	        	<th>Id</th>
+	            <th>Title</th>
+	            <th>Description</th>
+	            <th>Tags</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	   
+		    {% for goal in goals %}
+		        <tr>
+		        	<td>{{ goal.id }}</td>
+		            <td>{{ goal.title }}</td>
+		            <td>{{ goal.description }}</td>
+		            <td>
+						{% for tag in goal.tags %}
+							<ul>{{ tag }}</ul>
+						{% endfor %}
+		            </td>
+		        </tr>
+		    {% endfor %}
+		</tbody>
+	</table>
+{% else %}
+		No Goals Found
+{% endif %}
 
 
 {% endblock %}

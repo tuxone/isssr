@@ -20,4 +20,31 @@ class GoalRepository extends EntityRepository
 				'WHERE g.owner = '.$uid)
 				->getResult();
 	}
+	
+	public function findByEnactor($uid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT g FROM IsssrCoreBundle:Goal g '.
+				'WHERE g.enactor = '.$uid)
+				->getResult();
+	}
+ 	
+	public function queryTitle($title)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT g FROM IsssrCoreBundle:Goal g '.
+				'WHERE g.title LIKE '."'%".$title."%'")
+				->getResult();
+	}
+	
+	public function queryDescription($description)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT g FROM IsssrCoreBundle:Goal g '.
+				'WHERE g.description LIKE '."'%".$description."%'")
+				->getResult();
+	}
 }

@@ -14,9 +14,9 @@ class Search {
 	
 	protected $tags;
 	
-	//protected $goalOwners;
+	protected $goalOwner;
 	
-	//protected $goalEnactors;
+	protected $goalEnactor;
 	
 	public function setId($id){
 		$this->id = $id;
@@ -59,33 +59,25 @@ class Search {
 	}
 	
 	
-// 	public function addGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner){
-// 		$this->goalOwner[] = $goalOwner;
-// 		return $this;
-// 	}
+public function setGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner)
+	{
+		$this->goalOwner = $goalOwner;
+	}
 	
-// 	public function removeGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner){
-// 		$this->goalOwner->removeElement($goalOwner);
-// 	}
+	public function getGoalOwner(){
+		return $this->goalOwner;
+	}
 	
-// 	public function getGoalOwners(){
-// 		return $this->goalOwner;
-// 	}
+	public function setGoalEnactor(\Isssr\CoreBundle\Entity\User $goalEnactor)
+	{
+		$this->goalEnactor = $goalEnactor;
+	}
 	
-// 	public function addGoalEnactor(\Isssr\CoreBundle\Entity\User $goalEnactor){
-// 		$this->goalEnactor[] = $goalEnactor;
-// 		return $this;
-// 	}
-	
-// 	public function removeGoalEnactor(\Isssr\CoreBundle\Entity\User $goalEnactor){
-// 		$this->goalEnactor->removeElement($goalEnactor);
-// 	}
-	
-// 	public function getGoalEnactors(){
-// 		return $this->goalEnactor;
-// 	}
+	public function getGoalEnactor(){
+		return $this->goalEnactor;
+	}
 	
 	public function __construct(){
-		$this->tag = new ArrayCollection();
+		$this->tags = new ArrayCollection();
 	}
 }
