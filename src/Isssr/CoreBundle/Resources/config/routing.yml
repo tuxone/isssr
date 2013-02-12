@@ -21,3 +21,8 @@ IsssrCoreBundle_superingoal:
 IsssrCoreBundle_search:
         resource: "@IsssrCoreBundle/Resources/config/routing/search.yml"
         prefix:   /search
+        
+IsssrCoreBundle_rejectjust:
+        resource: "@IsssrCoreBundle/Resources/config/routing/rejectjust.yml"
+        prefix:   /rejectjust
+        

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\SuperInGoalRepository")
  * @ORM\Table(name="SuperInGoal")
  */
 class SuperInGoal {
@@ -29,11 +29,6 @@ class SuperInGoal {
 	protected $super;
 	
 	/**
-	 * @ORM\Column(type="string", length=96, nullable=false)
-	 */
-	protected $superEmail;
-	
-	/**
 	 * @ORM\ManyToOne(targetEntity="Goal", inversedBy="supers")
 	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
 	 */
@@ -52,29 +47,6 @@ class SuperInGoal {
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set superEmail
-     *
-     * @param string $superEmail
-     * @return SuperInGoal
-     */
-    public function setSuperEmail($superEmail)
-    {
-        $this->superEmail = $superEmail;
-    
-        return $this;
-    }
-
-    /**
-     * Get superEmail
-     *
-     * @return string 
-     */
-    public function getSuperEmail()
-    {
-        return $this->superEmail;
     }
 
     /**

@@ -22,7 +22,7 @@ class SuperInGoalType extends AbstractType
     		//	'label'  => 'Super email address',
 				//))
 			->add('super', 'choice', array(
-			    'label' => 'select some colors',
+			    'label' => 'Select a Super Goal Owner',
 			    'multiple' => false,
 			    //'choices' => array(1 => 'red', 2 => 'blue', 3 => 'green'),
 				'choices' => $this->supers,

@@ -57,6 +57,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
 	 */
 	protected $tagsOwned;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="id")
+	 */
+	protected $rejections;
 
     /**
      * Get id
@@ -112,29 +117,6 @@ class User extends BaseUser {
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set mail
-     *
-     * @param string $mail
-     * @return User
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-    
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return string 
-     */
-    public function getMail()
-    {
-        return $this->mail;
     }
 
     /**

@@ -1,0 +1,30 @@
+rejectjust:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:index" }
+
+rejectjust_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:show" }
+
+rejectjust_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:new" }
+
+rejectjust_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:create" }
+    requirements: { _method: post }
+
+rejectjust_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:edit" }
+
+rejectjust_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:update" }
+    requirements: { _method: post }
+
+rejectjust_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:RejectJust:delete" }
+    requirements: { _method: post }

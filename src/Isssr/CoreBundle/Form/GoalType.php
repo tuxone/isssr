@@ -8,10 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class GoalType extends AbstractType
 {
+	
+	protected $softedit;
+	
+	public function __construct ($s)
+	{
+		$this->softedit = $s;
+	}
+	
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null, array('label' => 'Title *'))
             ->add('description', null, array('label' => 'Description *'))
             ->add('priority')
             ->add('enactor', null, array('label' => 'Enactor *'))
@@ -26,6 +33,9 @@ class GoalType extends AbstractType
             ->add('contest')
             ->add('assumptions')
         ;
+        
+        if(!$this->softedit)
+        	$builder->add('title', null, array('label' => 'Title *'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

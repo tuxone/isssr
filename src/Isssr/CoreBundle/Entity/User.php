@@ -57,6 +57,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
 	 */
 	protected $tagsOwned;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="id")
+	 */
+	protected $rejections;
 
     /**
      * Get id
@@ -112,29 +117,6 @@ class User extends BaseUser {
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set mail
-     *
-     * @param string $mail
-     * @return User
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-    
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return string 
-     */
-    public function getMail()
-    {
-        return $this->mail;
     }
 
     /**
@@ -272,5 +254,38 @@ class User extends BaseUser {
     public function getTagsOwned()
     {
         return $this->tagsOwned;
+    }
+
+    /**
+     * Add rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     * @return User
+     */
+    public function addRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections[] = $rejections;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     */
+    public function removeRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections->removeElement($rejections);
+    }
+
+    /**
+     * Get rejections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRejections()
+    {
+        return $this->rejections;
     }
 }

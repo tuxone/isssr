@@ -56,6 +56,11 @@ class Goal {
 	protected $supers;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
+	 */
+	protected $rejections;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
 	 */
 	protected $tags;
@@ -559,5 +564,38 @@ class Goal {
     
     public function softEditable() {
     	return $this->getStatus() == Goal::STATUS_SOFTEDITABLE;
+    }
+
+    /**
+     * Add rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     * @return Goal
+     */
+    public function addRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections[] = $rejections;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     */
+    public function removeRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections->removeElement($rejections);
+    }
+
+    /**
+     * Get rejections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRejections()
+    {
+        return $this->rejections;
     }
 }

@@ -86,11 +86,20 @@ class SuperInGoalController extends Controller
     	$token = $scontext->getToken();
     	$user = $token->getUser();
     	
+    	$hm = $this->get('isssr_core.hierarchymanager');
+    	$supers = $hm->getSupers($user);
+    	
         $entity  = new SuperInGoal();
-        $form = $this->createForm(new SuperInGoalType(), $entity);
-        $form->bind($request);
+        //$form = $this->createForm(new SuperInGoalType($supers), $entity);
+        
+        //$form->bind($request);
 
+        $postdata = $this->getPostArray($request);        
+        $superid = $supers[$postdata[0]];
+        
         $em = $this->getDoctrine()->getManager();
+        
+        $super = $em->getRepository('IsssrCoreBundle:User')->find($superid);
         
         $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
         
@@ -103,13 +112,14 @@ class SuperInGoalController extends Controller
         
         $entity->setGoal($goal);
         $entity->setStatus(SuperInGoal::STATUS_NOTSENT);
+        $entity->setSuper($super);
         
-        if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('superingoal_show', array('id' => $entity->getId())));
-        }
+            return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
+        
+        // @todo da fare refactor
 
         return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
             'entity' => $entity,
@@ -137,4 +147,17 @@ class SuperInGoalController extends Controller
     	return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
     }
 
+    private function getPostArray($request) {
+    	$rawfields = explode("&", $request->getContent());
+    	$postdata = array();
+    	$i = 0;
+    	foreach ( $rawfields as $id=>$block )
+    	{
+    		$keyval = explode("=", $block);
+    		if(count($keyval) == 2)
+    			$postdata[$i] = urldecode($keyval[1]);
+    		$i++;
+    	}
+    	return $postdata;
+    }
 }

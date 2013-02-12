@@ -1,0 +1,43 @@
+<?php
+
+namespace Isssr\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity()
+ * @ORM\Table(name="Tag")
+ */
+class RejectJust {
+		
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\Column(type="string", length=300, nullable=false)
+	 */
+	protected $text;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="Goal", inversedBy="tags")
+	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
+	 */
+	protected $goal;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="rejections")
+	 * @ORM\JoinColumn(name="username", referencedColumnName="id")
+	 */
+	protected $creator;
+	
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $datetime;
+
+}

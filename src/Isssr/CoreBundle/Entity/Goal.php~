@@ -56,6 +56,11 @@ class Goal {
 	protected $supers;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
+	 */
+	protected $rejections;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="goals")
 	 */
 	protected $tags;

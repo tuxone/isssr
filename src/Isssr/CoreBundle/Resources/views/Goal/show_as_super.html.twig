@@ -1,0 +1,92 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Goal{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ entity.title }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+            <th>Priority</th>
+            <td>{{ entity.priority }}</td>
+        </tr>
+        <tr>
+            <th>Tags</th>
+            	<td>
+            		<ul>
+					    {% for tag in entity.tags %}
+					        <li>{{ tag }}</li>
+					    {% endfor %}
+					</ul>
+            	</td>
+            
+        </tr>
+        <tr>
+            <th>Your Status</th>
+            <td>
+            	{% if relation.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_SENT') %}
+            		<p class="text-warning">Received</p>
+            	{% endif %}
+            	{% if relation.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_ACCEPTED') %}
+            		<p class="text-success">Accepted</p>
+            	{% endif %}
+            	{% if relation.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_REJECTED') %}
+            		<p class="text-error">Rejected</p>
+            	{% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+	<tr>
+		<td>
+        <a href="{{ path('goal_as_super') }}">
+            <button class="btn">Back</button>
+        </a>
+		</td>
+		
+	    {% if relation.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_SENT') %} 
+	    	<td>
+	    	<form action="{{ path('goal_super_accept', { 'id': relation.id }) }}" method="post" style="display: inline">
+	            {{ form_widget(accept_form) }}
+	            <button class="btn" type="submit">Accept</button>
+	        </form>
+	           
+	          </td>
+	         
+	         <td>
+	         	<a href="#myModal" role="button" class="btn" data-toggle="modal">Reject</a>
+	         </td>
+	    {% endif %}
+       
+	</tr>
+</table>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+    <h3 id="myModalLabel">Reject justification</h3>
+  </div>
+  <div class="modal-body">
+    <form action="{{ path('goal_super_reject', { 'id': relation.id }) }}" method="post" style="display: inline">
+	            {{ form_widget(reject_form) }}
+	            <button class="btn" type="submit">Reject</button>
+	        </form>
+  </div>
+</div>
+
+{% endblock %}

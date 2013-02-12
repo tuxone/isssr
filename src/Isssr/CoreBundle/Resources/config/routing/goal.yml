@@ -1,10 +1,22 @@
 goal:
     pattern:  /
     defaults: { _controller: "IsssrCoreBundle:Goal:index" }
-  
+
+goal_as_super:
+    pattern:  /assuper
+    defaults: { _controller: "IsssrCoreBundle:Goal:indexAsSuper" }
+
+goal_as_enactor:
+    pattern:  /asenactor
+    defaults: { _controller: "IsssrCoreBundle:Goal:indexAsEnactor" }
+      
 goal_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Goal:show" }
+    
+goal_show_as_super:
+    pattern:  /{id}/show_as_super
+    defaults: { _controller: "IsssrCoreBundle:Goal:showAsSuper" }
 
 goal_new:
     pattern:  /new
@@ -19,6 +31,10 @@ goal_edit:
     pattern:  /{id}/edit
     defaults: { _controller: "IsssrCoreBundle:Goal:edit" }
 
+goal_send_to_supers:
+    pattern:  /{id}/sendtosupers
+    defaults: { _controller: "IsssrCoreBundle:Goal:sendToSupers" }
+    
 goal_update:
     pattern:  /{id}/update
     defaults: { _controller: "IsssrCoreBundle:Goal:update" }
@@ -27,4 +43,14 @@ goal_update:
 goal_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "IsssrCoreBundle:Goal:delete" }
+    requirements: { _method: post }
+    
+goal_super_accept:
+    pattern:  /{id}/super_accept
+    defaults: { _controller: "IsssrCoreBundle:Goal:superAccept" }
+    requirements: { _method: post }
+    
+goal_super_reject:
+    pattern:  /{id}/super_reject
+    defaults: { _controller: "IsssrCoreBundle:Goal:superReject" }
     requirements: { _method: post }

@@ -7,26 +7,49 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Super e-mail</th>
+        	<th>Super username</th>
+        	<th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{{ entity.superEmail }}</td>
+            <td>{{ entity.super }}</td>
             <td>
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_NOTSENT') %}
+            		<p class="text-warning">Not sent</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_SENT') %}
+            		<p class="text-warning">Sent</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_ACCEPTED') %}
+            		<p class="text-success">Accepted</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\SuperInGoal::STATUS_REJECTED') %}
+            		<p class="text-error">Rejected</p>
+            	{% endif %}
+            <td>
+            	{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') %}
                 <a href="{{ path('superingoal_delete', { 'id': entity.id }) }}">
             	Remove
             	</a>
+            	{% endif %}
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-
-        <a href="{{ path('superingoal_new', {'id': goal.id}) }}">
+		{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') %}
+        <a class="btn" href="{{ path('superingoal_new', {'id': goal.id}) }}">
             Add a super
         </a>
+        {% endif %}
+        {% if goal.supers.count()>0 %}
+        <a class="btn" href="{{ path('goal_send_to_supers', {'id': goal.id}) }}">
+            Send mail to supers
+        </a>
+	    {% endif %}
+
 
 {% endblock %}
