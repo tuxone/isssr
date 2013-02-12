@@ -11,9 +11,9 @@
 <div id="id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-footer">
   <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form.id) }}>
-    {{ form_widget(form.id) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <input type="number" {{ form_widget(form.id) }}
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
@@ -27,8 +27,8 @@
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form.title) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
@@ -42,8 +42,8 @@
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form.description) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
@@ -57,8 +57,8 @@
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form.tag) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
@@ -72,8 +72,8 @@
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form.goalOwner) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
@@ -87,8 +87,8 @@
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form.goalEnactor) }}
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
   </form>
   </div>
 </div>
