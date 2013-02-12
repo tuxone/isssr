@@ -13,8 +13,9 @@ class Goal {
 	
 	const STATUS_NOTEDITABLE = 0;
 	const STATUS_EDITABLE = 1;
-	const STATUS_ACCEPTED = 2;
+	const STATUS_ACCEPTED = 2; // accepted by Goal Super Owners
 	const STATUS_SOFTEDITABLE = 3;
+	const STATUS_APPROVED = 4;
 	
 	/**
 	 * @ORM\Id

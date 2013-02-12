@@ -167,9 +167,7 @@ class SuperInGoalController extends Controller
     	foreach ($supersingoal as $super) {
     		$oldsupers[] = $super->getSuper()->getUsername();
     	}
-    	
-    	//die(var_dump($oldsupers));
-    	
+    	    	
     	$newsupers = array();
     	$debug="";
     	foreach ($list as $super) {
@@ -179,8 +177,7 @@ class SuperInGoalController extends Controller
     			$newsupers[$id] = $super;
     		}
     	}
-    	//die($debug);
-    	//die(sizeof($list).' '.sizeof($oldsupers).' '.sizeof($newsupers));
+
     	return $newsupers;
     }
 }

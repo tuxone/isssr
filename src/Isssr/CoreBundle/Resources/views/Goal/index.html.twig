@@ -28,7 +28,7 @@
             		<p class="text-warning">Editable</p>
             	{% endif %}
             	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}
-            		<p class="text-success">Accepted</p>
+            		<p class="text-success">Accepted by GSOs</p>
             	{% endif %}
             	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_SOFTEDITABLE') %}
             		<p class="text-error">Rejected, need new version</p>
