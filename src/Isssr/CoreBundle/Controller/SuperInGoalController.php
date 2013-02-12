@@ -55,7 +55,8 @@ class SuperInGoalController extends Controller
     	$user = $token->getUser();
     	
     	$hm = $this->get('isssr_core.hierarchymanager');
-    	$supers = $hm->getSupers($user);
+    	$tmpsupers = $hm->getSupers($user);
+    	$supers = $this->filterSupersInGoal($tmpsupers, $goal); 
     	
         $entity = new SuperInGoal();
         $form   = $this->createForm(new SuperInGoalType($supers), $entity);
@@ -159,5 +160,11 @@ class SuperInGoalController extends Controller
     		$i++;
     	}
     	return $postdata;
+    }
+    
+    private function filterSupersInGoal($supers, Goal $goal) {
+    	$supers = array('ciao');
+    	
+    	return supers;
     }
 }
