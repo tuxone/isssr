@@ -10,35 +10,16 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class SearchType extends AbstractType
 {
-	protected $tags;
-	protected $users;
 	
-	public function __construct ($tags, $users)
-	{
-		$this->tags[] = $tags;
-		$this->users[] = $users;
-	}
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
         	->add('id')
             ->add('title')
             ->add('description')
-            ->add('tags', 'choice', array(
-            		'label' => 'Tags',
-            		'multiple' => true,
-            		'choices' => $this->tags,
-            ))
-            ->add('goalOwner', 'choice', array(
-            		'label' => 'Owner',
-            		'multiple' => false,
-            		'choices' => $this->users,
-            ))
-            ->add('goalEnactor', 'choice', array(
-            		'label' => 'Enactor',
-            		'multiple' => false,
-            		'choices' => $this->users,
-            ))
+            ->add('tag')
+            ->add('goalOwner')
+            ->add('goalEnactor')
         ;
     }
     

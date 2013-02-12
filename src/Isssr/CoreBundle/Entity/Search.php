@@ -2,7 +2,6 @@
 
 namespace Isssr\CoreBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 
 class Search {
 	
@@ -12,7 +11,7 @@ class Search {
 	
 	protected $description;
 	
-	protected $tags;
+	protected $tag;
 	
 	protected $goalOwner;
 	
@@ -41,25 +40,16 @@ class Search {
 	public function getDescription(){
 		return $this->description;
 	}
-	public function addTag(\Isssr\CoreBundle\Entity\Tag $tag){
-		$this->tags[] = $tag;
-		return $this;
+	
+	public function setTag($tag){
+		$this->tag = $tag;
 	}
 	
-	public function removeTag(\Isssr\CoreBundle\Entity\Tag $tag){
-		$this->tags->removeElement($tag);
+	public function getTag(){
+		return $this->tag;
 	}
 	
-	public function getTags(){
-		return $this->tags;
-	}
-	
-	public function setTags($tags){
-		$this->tags = $tags;
-	}
-	
-	
-public function setGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner)
+	public function setGoalOwner($goalOwner)
 	{
 		$this->goalOwner = $goalOwner;
 	}
@@ -68,7 +58,7 @@ public function setGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner)
 		return $this->goalOwner;
 	}
 	
-	public function setGoalEnactor(\Isssr\CoreBundle\Entity\User $goalEnactor)
+	public function setGoalEnactor($goalEnactor)
 	{
 		$this->goalEnactor = $goalEnactor;
 	}
@@ -78,6 +68,6 @@ public function setGoalOwner(\Isssr\CoreBundle\Entity\User $goalOwner)
 	}
 	
 	public function __construct(){
-		$this->tags = new ArrayCollection();
+
 	}
 }

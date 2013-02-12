@@ -50,13 +50,13 @@
 <BR>
 <BR>
 <!-- Button to trigger modal -->
-<a href="#tags" role="button" class="btn" data-toggle="modal">Search tags</a>
+<a href="#tag" role="button" class="btn" data-toggle="modal">Search tag</a>
  
 <!-- Modal -->
-<div id="tags" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="tag" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-footer">
     <form action="{{ path('search_result') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form.tags) }}
+    {{ form_widget(form.tag) }}
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" type="submit">Search</button>
   </form>
