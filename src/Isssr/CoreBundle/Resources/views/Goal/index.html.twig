@@ -56,6 +56,11 @@
 		                    <li>
 		                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
 		                    </li>
+		                    {% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}		    
+			                    <li>
+			                    	<a href="{{ path('enactoringoal', { 'id': entity.id }) }}">enactor</a>
+			                    </li>
+			                {% endif %}
 	                {% endif %}
                 </ul>
             </td>

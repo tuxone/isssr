@@ -24,7 +24,7 @@ class GoalType extends AbstractType
         $builder
             ->add('description', null, array('label' => 'Description *'))
             ->add('priority')
-            ->add('enactor', null, array('label' => 'Enactor *'))
+            //->add('enactor', null, array('label' => 'Enactor *'))
             ->add('tags', null, array('label' => 'Tags *'))
             ->add('focus')
             ->add('object')

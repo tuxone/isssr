@@ -44,7 +44,7 @@ class User extends BaseUser {
 	protected $goalsAsOwner;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Goal", mappedBy="enactor")
+	 * @ORM\OneToMany(targetEntity="EnactorInGoal", mappedBy="enactor")
 	 */
 	protected $goalsAsEnactor;
 	

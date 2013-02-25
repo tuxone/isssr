@@ -1,0 +1,16 @@
+enactoringoal:
+    pattern:  /goal/{id}
+    defaults: { _controller: "IsssrCoreBundle:EnactorInGoal:index" }
+
+enactoringoal_new:
+    pattern:  /goal/new/{id}
+    defaults: { _controller: "IsssrCoreBundle:EnactorInGoal:new" }
+
+enactoringoal_create:
+    pattern:  /goal/create/{id}
+    defaults: { _controller: "IsssrCoreBundle:EnactorInGoal:create" }
+    requirements: { _method: post }
+
+enactoringoal_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:EnactorInGoal:delete" }

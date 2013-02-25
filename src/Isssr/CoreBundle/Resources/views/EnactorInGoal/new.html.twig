@@ -1,0 +1,14 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Add an enactor to {{ goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('enactoringoal_create', {'id': goal.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
+
+{% endblock %}

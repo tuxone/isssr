@@ -1,0 +1,171 @@
+<?php
+
+namespace Isssr\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\EnactorInGoalRepository")
+ * @ORM\Table(name="EnactorInGoal")
+ */
+class EnactorInGoal {
+	const STATUS_NOTSENT = 0;
+	const STATUS_SENT = 1;
+	const STATUS_REJECTED = 2;
+	const STATUS_ACCEPTED = 3;
+	
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="User", inversedBy="goalsAsEnactor")
+	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id", nullable=true)
+	 */
+	protected $enactor;
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="Goal", inversedBy="enactor")
+	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
+	 */
+	protected $goal;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $status;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return EnactorInGoal
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\User $enactor
+     * @return EnactorInGoal
+     */
+    public function setEnactor(\Isssr\CoreBundle\Entity\User $enactor = null)
+    {
+        $this->enactor = $enactor;
+    
+        return $this;
+    }
+
+    /**
+     * Get enactor
+     *
+     * @return \Isssr\CoreBundle\Entity\User 
+     */
+    public function getEnactor()
+    {
+        return $this->enactor;
+    }
+
+    /**
+     * Set goal
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goal
+     * @return EnactorInGoal
+     */
+    public function setGoal(\Isssr\CoreBundle\Entity\Goal $goal = null)
+    {
+        $this->goal = $goal;
+    
+        return $this;
+    }
+
+    /**
+     * Get goal
+     *
+     * @return \Isssr\CoreBundle\Entity\Goal 
+     */
+    public function getGoal()
+    {
+        return $this->goal;
+    }
+    
+    public function __construct()
+    {
+    	
+    }
+
+    /**
+     * Add enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\User $enactor
+     * @return EnactorInGoal
+     */
+    public function addEnactor(\Isssr\CoreBundle\Entity\User $enactor)
+    {
+        $this->enactor[] = $enactor;
+    
+        return $this;
+    }
+
+    /**
+     * Remove enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\User $enactor
+     */
+    public function removeEnactor(\Isssr\CoreBundle\Entity\User $enactor)
+    {
+        $this->enactor->removeElement($enactor);
+    }
+
+    /**
+     * Add goal
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goal
+     * @return EnactorInGoal
+     */
+    public function addGoal(\Isssr\CoreBundle\Entity\Goal $goal)
+    {
+        $this->goal[] = $goal;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goal
+     *
+     * @param \Isssr\CoreBundle\Entity\Goal $goal
+     */
+    public function removeGoal(\Isssr\CoreBundle\Entity\Goal $goal)
+    {
+        $this->goal->removeElement($goal);
+    }
+}

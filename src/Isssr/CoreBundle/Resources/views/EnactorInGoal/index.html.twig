@@ -1,0 +1,52 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Enactor of {{goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+        	<th>Enactor username</th>
+        	<th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.enactor }}</td>
+            <td>
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_NOTSENT') %}
+            		<p class="text-warning">Not sent</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_SENT') %}
+            		<p class="text-warning">Sent</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_ACCEPTED') %}
+            		<p class="text-success">Accepted</p>
+            	{% endif %}
+            	{% if entity.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_REJECTED') %}
+            		<p class="text-error">Rejected</p>
+            	{% endif %}
+            
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+		{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}
+			{% if not(goal.hasEnactor()) %}
+	        <a class="btn" href="{{ path('enactoringoal_new', {'id': goal.id}) }}">
+	            Choose an Enactor
+	        </a>
+	        {% endif %}
+        {% endif %}
+
+        {% if goal.hasEnactor() %}
+        <a class="btn" href="{{ path('goal_send_to_enactor', {'id': goal.id}) }}">
+            Send mail to enactor
+        </a>
+        
+	    {% endif %}
+
+{% endblock %}

@@ -44,7 +44,7 @@ class User extends BaseUser {
 	protected $goalsAsOwner;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Goal", mappedBy="enactor")
+	 * @ORM\OneToMany(targetEntity="EnactorInGoal", mappedBy="enactor")
 	 */
 	protected $goalsAsEnactor;
 	
@@ -254,5 +254,38 @@ class User extends BaseUser {
     public function getTagsOwned()
     {
         return $this->tagsOwned;
+    }
+
+    /**
+     * Add rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     * @return User
+     */
+    public function addRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections[] = $rejections;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rejections
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectJust $rejections
+     */
+    public function removeRejection(\Isssr\CoreBundle\Entity\RejectJust $rejections)
+    {
+        $this->rejections->removeElement($rejections);
+    }
+
+    /**
+     * Get rejections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRejections()
+    {
+        return $this->rejections;
     }
 }
