@@ -23,13 +23,13 @@ class EnactorInGoal {
 	protected $id;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="User", mappedBy="goalsAsEnactor")
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsEnactor")
 	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id", nullable=true)
 	 */
 	protected $enactor;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Goal", mappedBy="enactor")
+	 * @ORM\OneToOne(targetEntity="Goal", inversedBy="enactor")
 	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
 	 */
 	protected $goal;

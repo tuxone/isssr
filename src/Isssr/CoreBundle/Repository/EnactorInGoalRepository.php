@@ -16,4 +16,13 @@ class EnactorInGoalRepository extends EntityRepository
 				'WHERE s.enactor = '.$uid.' and s.goal = '.$gid)
 				->getResult();
 	}
+	
+	public function getGoal($gid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT s FROM IsssrCoreBundle:EnactorInGoal s '.
+				'WHERE s.goal = '.$gid)
+				->getResult();
+	}
 }

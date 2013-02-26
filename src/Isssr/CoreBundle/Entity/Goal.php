@@ -45,7 +45,7 @@ class Goal {
 	protected $owner;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="EnactorInGoal", inversedBy="goal")
+	 * @ORM\ManyToOne(targetEntity="EnactorInGoal", inversedBy="goal")
 	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id")
 	 */
 	protected $enactor;
@@ -495,6 +495,8 @@ class Goal {
 				&& $this->enactor->getStatus()
 						== EnactorInGoal::STATUS_ACCEPTED)
 			return Goal::STATUS_APPROVED;
+		
+		
 		$accepted = 0;
 		$rejected = 0;
 		$sent = 0;
@@ -521,7 +523,15 @@ class Goal {
 			return Goal::STATUS_NOTEDITABLE;
 
 		if ($accepted == $this->supers->count())
-			return Goal::STATUS_ACCEPTED;
+		{
+			if (!$this->enactor) return Goal::STATUS_ACCEPTED;
+			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
+				return Goal::STATUS_ACCEPTED;
+			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+				return Goal::STATUS_SOFTEDITABLE;
+					
+		}
+					
 
 		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
 	}
@@ -569,4 +579,27 @@ class Goal {
 	public function hasEnactor() {
 		return $this->enactor != null;
 	}
+
+    /**
+     * Add enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     * @return Goal
+     */
+    public function addEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    {
+        $this->enactor[] = $enactor;
+    
+        return $this;
+    }
+
+    /**
+     * Remove enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     */
+    public function removeEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    {
+        $this->enactor->removeElement($enactor);
+    }
 }

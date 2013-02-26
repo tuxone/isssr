@@ -44,14 +44,14 @@
         </a>
 		</td>
 		<td>
-        {% if entity.owner == user %}
+        {% if entity.owner == user and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED')  and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED')%}
         	<a href="{{ path('goal_edit', { 'id': entity.id }) }}">
             	<button>Edit</button>
         	</a>
         {% endif %}
 		</td>
 		<td>
-	    {% if entity.owner == user %}    
+	    {% if entity.owner == user and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED')  and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED')%}    
 	        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
 	            {{ form_widget(delete_form) }}
 	            <button type="submit">Delete</button>

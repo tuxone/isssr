@@ -15,6 +15,7 @@ class EnactorInGoal {
 	const STATUS_REJECTED = 2;
 	const STATUS_ACCEPTED = 3;
 	
+	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -23,7 +24,7 @@ class EnactorInGoal {
 	protected $id;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="User", inversedBy="goalsAsEnactor")
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsEnactor")
 	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id", nullable=true)
 	 */
 	protected $enactor;

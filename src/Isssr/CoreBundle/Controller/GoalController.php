@@ -318,6 +318,12 @@ class GoalController extends Controller
 	    	$super->setStatus(SuperInGoal::STATUS_SENT);
 			$em->persist($super);
 		}
+		
+		$enactor = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->getGoal($entity->getId());
+		if ($enactor[0]) {
+			$enactor[0]->setStatus(EnactorInGoal::STATUS_NOTSENT);
+			$em->persist($enactor[0]);
+		}
     
     	$em->flush();
     	
@@ -598,7 +604,59 @@ class GoalController extends Controller
     }
     
     public function enactorRejectAction(Request $request, $id){
-    	die('todo');
+    	$scontext = $this->container->get('security.context');
+    	$token = $scontext->getToken();
+    	$user = $token->getUser();
+    
+    	$em = $this->getDoctrine()->getManager();
+    	
+    	$relation = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->find($id);
+    	
+    	if (!$relation) {
+    		throw $this->createNotFoundException('Unable to find Goal entity.');
+    	}
+    	
+    	$goal = $relation->getGoal();
+    	$goalOwner = $goal->getOwner();
+    	$enactor = $relation->getEnactor();
+    	
+    	$entity  = new RejectJust();
+    	$form = $this->createForm(new RejectJustType(), $entity);
+    	$form->bind($request);
+    	
+    	$entity->setCreator($enactor);
+    	$entity->setDatetime(new \DateTime('now'));
+    	$entity->setGoal($goal);
+    	
+    	if($form->isValid()) {
+    		
+    		// Aggiungo la nota di rifiuto
+
+    		$em->persist($entity);
+    		$em->flush();
+    	
+    		// Aggiorno lo stato
+    		
+    		$relation->setStatus(EnactorInGoal::STATUS_REJECTED);
+    
+    		$em->persist($relation);
+    		$em->flush();
+    		
+    		$message = \Swift_Message::newInstance()
+    		->setSubject('ISSSR Notifier')
+    		->setFrom('isssr@isssr.org')
+    		->setTo($goalOwner->getEmail())
+    		->setBody(
+    				'The proposed Goal Enactor '.$enactor->getUsername().' for the Goal '.$goal->getTitle().' did accept your proposal.'
+    		);
+    		$this->get('mailer')->send($message);
+    	}
+    
+    	return $this->redirect(
+    			$this->generateUrl('goal_show_as_enactor',
+    			array('id' => $relation->getGoal()->getId()))
+    		);
+    	
     }
 
     private function createDeleteForm($id)

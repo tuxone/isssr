@@ -32,7 +32,7 @@ class EnactorInGoalController extends Controller
         if (!$goal) {
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
-        $entities = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->findAll();
+        $entities = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->getGoal($goal->getId());
 
         return $this->render('IsssrCoreBundle:EnactorInGoal:index.html.twig', array(
             'entities' => $entities,

@@ -42,14 +42,15 @@
 </table>
 		{% if goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') or 
 			goal.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_SOFTEDITABLE') %}
-        <a class="btn" href="{{ path('superingoal_new', {'id': goal.id}) }}">
-            Add a super
-        </a>
-        {% endif %}
-        {% if goal.supers.count()>0 %}
-        <a class="btn" href="{{ path('goal_send_to_supers', {'id': goal.id}) }}">
-            Send mail to supers
-        </a>
+	        <a class="btn" href="{{ path('superingoal_new', {'id': goal.id}) }}">
+	            Add a super
+	        </a>
+	        
+	        {% if goal.supers.count()>0 %}
+	        <a class="btn" href="{{ path('goal_send_to_supers', {'id': goal.id}) }}">
+	            Send mail to supers
+	        </a>
+		    {% endif %}
 	    {% endif %}
 
 

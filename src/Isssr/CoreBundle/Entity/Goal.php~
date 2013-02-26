@@ -492,7 +492,7 @@ class Goal {
 			return Goal::STATUS_EDITABLE;
 
 		if ($this->enactor
-				&& $this->enactor->getStatus()
+				&& $this->enactor[0]->getStatus()
 						== EnactorInGoal::STATUS_ACCEPTED)
 			return Goal::STATUS_APPROVED;
 		$accepted = 0;
@@ -569,4 +569,27 @@ class Goal {
 	public function hasEnactor() {
 		return $this->enactor != null;
 	}
+
+    /**
+     * Add enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     * @return Goal
+     */
+    public function addEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    {
+        $this->enactor[] = $enactor;
+    
+        return $this;
+    }
+
+    /**
+     * Remove enactor
+     *
+     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     */
+    public function removeEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    {
+        $this->enactor->removeElement($enactor);
+    }
 }

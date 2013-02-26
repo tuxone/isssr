@@ -33,6 +33,9 @@
             	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_SOFTEDITABLE') %}
             		<p class="text-error">Rejected, need new version</p>
             	{% endif %}
+            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED') %}
+            		<p class="text-error">Goal Approved by Enactor</p>
+            	{% endif %}
             
             </td>
             <td>{{ entity.priority }}</td>
@@ -53,9 +56,11 @@
 		                    </li>
 		                
 	                    {% endif %}
-		                    <li>
-		                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
-		                    </li>
+		                    {% if entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED')  and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED')%}
+			                    <li>
+			                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
+			                    </li>
+		                    {% endif %}
 		                    {% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}		    
 			                    <li>
 			                    	<a href="{{ path('enactoringoal', { 'id': entity.id }) }}">enactor</a>

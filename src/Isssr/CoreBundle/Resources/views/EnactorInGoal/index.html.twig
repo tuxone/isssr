@@ -40,13 +40,15 @@
 	            Choose an Enactor
 	        </a>
 	        {% endif %}
-        {% endif %}
-
-        {% if goal.hasEnactor() %}
-        <a class="btn" href="{{ path('goal_send_to_enactor', {'id': goal.id}) }}">
-            Send mail to enactor
-        </a>
-        
+	        
+	
+	        {% if goal.hasEnactor() %}
+	        <a class="btn" href="{{ path('goal_send_to_enactor', {'id': goal.id}) }}">
+	            Send mail to enactor
+	        </a>
+	        
+		    {% endif %}
+		    
 	    {% endif %}
 
 {% endblock %}
