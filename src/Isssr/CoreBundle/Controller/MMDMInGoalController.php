@@ -126,7 +126,7 @@ class MMDMInGoalController extends Controller
         		$message = \Swift_Message::newInstance()
         		->setSubject('ISSSR Notifier')
         		->setFrom('isssr@isssr.org')
-        		->setTo($goal->getEnactor()->getEnactor()->getEmail())
+        		->setTo($goal->getMmdm()->getMmdm()->getEmail())
         		->setBody(
         				$body
         		);

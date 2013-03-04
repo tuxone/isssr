@@ -320,7 +320,7 @@ class GoalController extends Controller
 		}
 		
 		$enactor = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->getGoal($entity->getId());
-		if ($enactor[0]) {
+		if ($enactor) {
 			$enactor[0]->setStatus(EnactorInGoal::STATUS_NOTSENT);
 			$em->persist($enactor[0]);
 		}
@@ -647,7 +647,7 @@ class GoalController extends Controller
     		->setFrom('isssr@isssr.org')
     		->setTo($goalOwner->getEmail())
     		->setBody(
-    				'The proposed Goal Enactor '.$enactor->getUsername().' for the Goal '.$goal->getTitle().' did accept your proposal.'
+    				'The proposed Goal Enactor '.$enactor->getUsername().' for the Goal '.$goal->getTitle().' did reject your proposal.'
     		);
     		$this->get('mailer')->send($message);
     	}

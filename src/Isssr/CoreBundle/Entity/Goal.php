@@ -3,6 +3,7 @@
 namespace Isssr\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Isssr\CoreBundle\Entity\EnactorInGoal;
 
 /**
  * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\GoalRepository")
@@ -501,6 +502,9 @@ class Goal {
 				&& $this->enactor->getStatus()
 						== EnactorInGoal::STATUS_ACCEPTED)
 			return Goal::STATUS_APPROVED;
+		
+		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_NOTSENT)
+			return Goal::STATUS_ACCEPTED;
 		
 		
 		$accepted = 0;

@@ -14,6 +14,7 @@ class EnactorInGoal {
 	const STATUS_SENT = 1;
 	const STATUS_REJECTED = 2;
 	const STATUS_ACCEPTED = 3;
+	const STATUS_WAITING = 4;
 	
 	
 	/**
