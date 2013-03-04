@@ -54,6 +54,12 @@ class Goal {
 	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="goal")
 	 */
 	protected $supers;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="MMDMInGoal", inversedBy="goal")
+	 * @ORM\JoinColumn(name="mmdm", referencedColumnName="id")
+	 */
+	protected $mmdm;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
@@ -492,9 +498,11 @@ class Goal {
 			return Goal::STATUS_EDITABLE;
 
 		if ($this->enactor
-				&& $this->enactor[0]->getStatus()
+				&& $this->enactor->getStatus()
 						== EnactorInGoal::STATUS_ACCEPTED)
 			return Goal::STATUS_APPROVED;
+		
+		
 		$accepted = 0;
 		$rejected = 0;
 		$sent = 0;
@@ -521,7 +529,15 @@ class Goal {
 			return Goal::STATUS_NOTEDITABLE;
 
 		if ($accepted == $this->supers->count())
-			return Goal::STATUS_ACCEPTED;
+		{
+			if (!$this->enactor) return Goal::STATUS_ACCEPTED;
+			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
+				return Goal::STATUS_ACCEPTED;
+			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+				return Goal::STATUS_SOFTEDITABLE;
+					
+		}
+					
 
 		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
 	}

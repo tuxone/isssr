@@ -1,0 +1,22 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}MMDM of {{goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+        	<th>MMDM username</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.mmdm }}</td>
+                       
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

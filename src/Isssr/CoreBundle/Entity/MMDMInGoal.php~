@@ -1,0 +1,33 @@
+<?php
+
+namespace Isssr\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\MMDMInGoalRepository")
+ * @ORM\Table(name="MMDMInGoal")
+ */
+class MMDMInGoal {
+	
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsMMDM")
+	 * @ORM\JoinColumn(name="mmdm", referencedColumnName="id", nullable=true)
+	 */
+	protected $mmdm;
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="Goal", inversedBy="mmdm")
+	 * @ORM\JoinColumn(name="goal", referencedColumnName="id")
+	 */
+	protected $goal;
+
+}

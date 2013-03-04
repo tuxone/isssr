@@ -1,0 +1,16 @@
+mmdmingoal:
+    pattern:  /goal/{id}
+    defaults: { _controller: "IsssrCoreBundle:MMDMInGoal:index" }
+
+mmdmingoal_new:
+    pattern:  /goal/new/{id}
+    defaults: { _controller: "IsssrCoreBundle:MMDMInGoal:new" }
+
+mmdmingoal_create:
+    pattern:  /goal/create/{id}
+    defaults: { _controller: "IsssrCoreBundle:MMDMInGoal:create" }
+    requirements: { _method: post }
+
+mmdmingoal_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:MMDMInGoal:delete" }

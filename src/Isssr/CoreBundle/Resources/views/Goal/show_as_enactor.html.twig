@@ -41,6 +41,13 @@
             	{% endif %}
             	{% if relation.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_ACCEPTED') %}
             		<p class="text-success">Accepted</p>
+            		<p>
+			    		Choose QSs
+			        </p>
+            		<p>
+			    		<a href="{{ path('mmdmingoal_new', { 'id': entity.id }) }}">Choose MMDM</a>
+			        </p>
+			        
             	{% endif %}
             	{% if relation.status == constant('Isssr\\CoreBundle\\Entity\\EnactorInGoal::STATUS_REJECTED') %}
             		<p class="text-error">Rejected</p>
@@ -65,12 +72,13 @@
 	            <button class="btn" type="submit">Accept</button>
 	        </form>
 	           
-	          </td>
+	        </td>
 	         
 	         <td>
 	         	<a href="#myModal" role="button" class="btn" data-toggle="modal">Reject</a>
 	         </td>
 	    {% endif %}
+	    
        
 	</tr>
 </table>

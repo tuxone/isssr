@@ -54,6 +54,11 @@ class User extends BaseUser {
 	protected $goalsAsSuper;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="MMDMInGoal", mappedBy="mmdm")
+	 */
+	protected $goalsAsMMDM;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
 	 */
 	protected $tagsOwned;
@@ -287,5 +292,38 @@ class User extends BaseUser {
     public function getRejections()
     {
         return $this->rejections;
+    }
+
+    /**
+     * Add goalsAsMMDM
+     *
+     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM
+     * @return User
+     */
+    public function addGoalsAsMMDM(\Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM)
+    {
+        $this->goalsAsMMDM[] = $goalsAsMMDM;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goalsAsMMDM
+     *
+     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM
+     */
+    public function removeGoalsAsMMDM(\Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM)
+    {
+        $this->goalsAsMMDM->removeElement($goalsAsMMDM);
+    }
+
+    /**
+     * Get goalsAsMMDM
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoalsAsMMDM()
+    {
+        return $this->goalsAsMMDM;
     }
 }

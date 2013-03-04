@@ -54,6 +54,12 @@ class Goal {
 	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="goal")
 	 */
 	protected $supers;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="MMDMInGoal", inversedBy="goal")
+	 * @ORM\JoinColumn(name="mmdm", referencedColumnName="id")
+	 */
+	protected $mmdm;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
@@ -601,5 +607,28 @@ class Goal {
     public function removeEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
     {
         $this->enactor->removeElement($enactor);
+    }
+
+    /**
+     * Set mmdm
+     *
+     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $mmdm
+     * @return Goal
+     */
+    public function setMmdm(\Isssr\CoreBundle\Entity\MMDMInGoal $mmdm = null)
+    {
+        $this->mmdm = $mmdm;
+    
+        return $this;
+    }
+
+    /**
+     * Get mmdm
+     *
+     * @return \Isssr\CoreBundle\Entity\MMDMInGoal 
+     */
+    public function getMmdm()
+    {
+        return $this->mmdm;
     }
 }

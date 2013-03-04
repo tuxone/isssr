@@ -54,6 +54,11 @@ class User extends BaseUser {
 	protected $goalsAsSuper;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="MMDMInGoal", mappedBy="mmdm")
+	 */
+	protected $goalsAsMMDM;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
 	 */
 	protected $tagsOwned;
