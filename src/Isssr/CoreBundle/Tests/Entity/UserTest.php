@@ -3,6 +3,7 @@ namespace Isssr\CoreBundle\Tests\Utility;
 
 use Isssr\CoreBundle\Entity\User;
 use Isssr\CoreBundle\Entity\Goal;
+use Isssr\CoreBundle\Entity\EnactorInGoal;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -36,9 +37,9 @@ class UserTest extends WebTestCase
 		$this->USER_GOALSASOWNER->setTitle('USER_GOALTITLE_OWNER');
 		$this->USER_GOALSASOWNER->setDescription('USER_GOALDESCRIPTION_OWNER');
 		 
-		$this->USER_GOALSASENACTOR = new Goal();
-		$this->USER_GOALSASENACTOR->setTitle('USER_GOALTITLE_ENACTOR');
-		$this->USER_GOALSASENACTOR->setDescription('USER_GOALDESCRIPTION_ENACTOR');
+// 		$this->USER_GOALSASENACTOR = new EnactorInGoal();
+// 		$this->USER_GOALSASENACTOR->setTitle('USER_GOALTITLE_ENACTOR');
+// 		$this->USER_GOALSASENACTOR->setDescription('USER_GOALDESCRIPTION_ENACTOR');
 		 
 		$this->user = new User();
 		$this->user->setUsername($this->USER_USERNAME);
@@ -47,7 +48,7 @@ class UserTest extends WebTestCase
 		$this->user->setFirstname($this->USER_FIRSTNAME);
 		$this->user->setLastname($this->USER_LASTNAME);
 		$this->user->addGoalsAsOwner($this->USER_GOALSASOWNER);
-		$this->user->addGoalsAsEnactor($this->USER_GOALSASENACTOR);
+// 		$this->user->addGoalsAsEnactor($this->USER_GOALSASENACTOR);
 	}
 
 	public function assertGetSet()
@@ -59,14 +60,14 @@ class UserTest extends WebTestCase
 		$this->assertEquals($this->USER_FIRSTNAME, $this->user->getFirstname());
 		$this->assertEquals($this->USER_LASTNAME, $this->user->getLastname());
 		$this->assertEquals($this->USER_GOALSASOWNER, $this->user->getGoalsAsOwner()->first());
-		$this->assertEquals($this->USER_GOALSASENACTOR, $this->user->getGoalsAsEnactor()->first());
+// 		$this->assertEquals($this->USER_GOALSASENACTOR, $this->user->getGoalsAsEnactor()->first());
 	}
 	
 	public function assertDbInsert()
 	{
 		// Test add
 		$this->em->persist($this->USER_GOALSASOWNER);
-		$this->em->persist($this->USER_GOALSASENACTOR);
+// 		$this->em->persist($this->USER_GOALSASENACTOR);
 		$this->em->persist($this->user);
 		$this->em->flush();
 		$tmpuser = $this->em->getRepository('IsssrCoreBundle:User')->find($this->user->getId());
@@ -86,7 +87,7 @@ class UserTest extends WebTestCase
 	public function clean()
 	{
 		$this->em->remove($this->USER_GOALSASOWNER);
-		$this->em->remove($this->USER_GOALSASENACTOR);
+// 		$this->em->remove($this->USER_GOALSASENACTOR);
 		$this->em->flush();
 	}
 	

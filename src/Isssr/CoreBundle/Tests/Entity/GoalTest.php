@@ -50,22 +50,23 @@ class GoalTest extends WebTestCase
 		$this->GOALOWNER->setFirstname('OWNER_FIRSTNAME');
 		$this->GOALOWNER->setLastname('OWNER_LASTNAME');
 		
-		$this->GOALENACTOR = new User();
-		$this->GOALENACTOR->setUsername('ENACTOR_USERNAME');
-		$this->GOALENACTOR->setPlainPassword('ENACTOR_PASSWORD');
-		$this->GOALENACTOR->setEmail('ENACTOR_EMAIL');
-		$this->GOALENACTOR->setFirstname('ENACTOR_FIRSTNAME');
-		$this->GOALENACTOR->setLastname('ENACTOR_LASTNAME');
+// 		$this->GOALENACTOR = new EnactorInGoal();
+// 		$this->GOALENACTOR->setUsername('ENACTOR_USERNAME');
+// 		$this->GOALENACTOR->setPlainPassword('ENACTOR_PASSWORD');
+// 		$this->GOALENACTOR->setEmail('ENACTOR_EMAIL');
+// 		$this->GOALENACTOR->setFirstname('ENACTOR_FIRSTNAME');
+// 		$this->GOALENACTOR->setLastname('ENACTOR_LASTNAME');
 		
 		$this->GOALTAG = new Tag();
 		$this->GOALTAG->setTitle('TAG_TITLE');
+		$this->GOALTAG->setDescription('TAG_DESC');
 		
 		$this->goal = new Goal();
 		$this->goal->setTitle($this->GOALTITLE);
 		$this->goal->setDescription($this->GOALDESCRIPTION);
 		$this->goal->setPriority($this->GOALPRIORITY);
 		$this->goal->setOwner($this->GOALOWNER);
-		$this->goal->setEnactor($this->GOALENACTOR);
+// 		$this->goal->setEnactor($this->GOALENACTOR);
 		$this->goal->addTag($this->GOALTAG);
 		$this->goal->setFocus($this->GOALFOCUS);
 		$this->goal->setObject($this->GOALOBJECT);
@@ -85,7 +86,7 @@ class GoalTest extends WebTestCase
 		$this->assertEquals($this->GOALDESCRIPTION, $this->goal->getDescription());
 		$this->assertEquals($this->GOALPRIORITY, $this->goal->getPriority());
 		$this->assertEquals($this->GOALOWNER, $this->goal->getOwner());
-		$this->assertEquals($this->GOALENACTOR, $this->goal->getEnactor());
+// 		$this->assertEquals($this->GOALENACTOR, $this->goal->getEnactor());
 		$this->assertEquals($this->GOALTAG, $this->goal->getTags()->first());
 		$this->assertEquals($this->GOALFOCUS, $this->goal->getFocus());
 		$this->assertEquals($this->GOALOBJECT, $this->goal->getObject());
@@ -102,7 +103,7 @@ class GoalTest extends WebTestCase
 	{
 		// Test add
 		$this->em->persist($this->GOALOWNER);
-		$this->em->persist($this->GOALENACTOR);
+// 		$this->em->persist($this->GOALENACTOR);
 		$this->em->persist($this->GOALTAG);
 		$this->em->persist($this->goal);
 		$this->em->flush();
@@ -125,7 +126,7 @@ class GoalTest extends WebTestCase
 		// Removing Owner, Enactor and Tag
 		
 		$this->em->remove($this->GOALOWNER);
-		$this->em->remove($this->GOALENACTOR);
+// 		$this->em->remove($this->GOALENACTOR);
 		$this->em->remove($this->GOALTAG);
 		$this->em->flush();
 		

@@ -12,6 +12,7 @@ class TagTest extends WebTestCase
 
 	private $em;	
 	private $TAGTITLE = "TAG_TITLE_TEST";
+	private $TAGDESC = "TAG_DESC_DEST";
 	
 	private $tag = null;
 	
@@ -29,12 +30,14 @@ class TagTest extends WebTestCase
 	{
 		$this->tag = new Tag();
 		$this->tag->setTitle($this->TAGTITLE);
+		$this->tag->setDescription($this->TAGDESC);
 	}
 	
 	public function assertGetSet()
 	{
 		// Test su metodi costruttore get & set
 		$this->assertEquals($this->TAGTITLE, $this->tag->getTitle());
+		$this->assertEquals($this->TAGDESC, $this->tag->getDescription());
 	}
 	
 	public function assertDbInsert()
