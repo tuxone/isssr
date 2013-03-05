@@ -638,8 +638,14 @@ class GoalController extends Controller
     		// Aggiorno lo stato
     		
     		$relation->setStatus(EnactorInGoal::STATUS_REJECTED);
-    
     		$em->persist($relation);
+    		
+    		$supers = $goal->getSupers();
+    		foreach ($supers as $super){
+    			$super->setStatus(SuperInGoal::STATUS_NOTSENT);
+    			$em->persist($super);
+    		}
+    		
     		$em->flush();
     		
     		$message = \Swift_Message::newInstance()
@@ -651,6 +657,8 @@ class GoalController extends Controller
     		);
     		$this->get('mailer')->send($message);
     	}
+    	
+    	
     
     	return $this->redirect(
     			$this->generateUrl('goal_show_as_enactor',

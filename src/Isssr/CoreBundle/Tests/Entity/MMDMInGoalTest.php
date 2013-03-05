@@ -3,11 +3,11 @@ namespace Isssr\CoreBundle\Tests\Utility;
 
 use Isssr\CoreBundle\Entity\User;
 use Isssr\CoreBundle\Entity\Goal;
-use Isssr\CoreBundle\Entity\EnactorInGoal;
+use Isssr\CoreBundle\Entity\MMDMInGoal;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class EnactorInGoalTest extends WebTestCase
+class MMDMInGoalTest extends WebTestCase
 {
 
 	private $em;	
@@ -15,7 +15,7 @@ class EnactorInGoalTest extends WebTestCase
 	private $user = null;
 	private $goal = null;
 	
-	private $enactorInGoal = null;
+	private $mmdmInGoal = null;
 	
 	public function setUp()
 	{
@@ -41,10 +41,9 @@ class EnactorInGoalTest extends WebTestCase
 		$this->user->setLastname('USER_LASTNAME');
 		
 		
-		$this->enactorInGoal = new EnactorInGoal();
-		$this->enactorInGoal->setEnactor($this->user);
-		$this->enactorInGoal->setGoal($this->goal);
-		$this->enactorInGoal->setStatus(0);
+		$this->mmdmInGoal = new MMDMInGoal();
+		$this->mmdmInGoal->setMmdm($this->user);
+		$this->mmdmInGoal->setGoal($this->goal);
 		
 		
 	}
@@ -52,9 +51,9 @@ class EnactorInGoalTest extends WebTestCase
 	public function assertGetSet()
 	{
 		// Test su metodi costruttore get & set
-		$this->assertEquals($this->goal, $this->enactorInGoal->getGoal());
-		$this->assertEquals($this->user, $this->enactorInGoal->getEnactor());
-		$this->assertEquals(0, $this->enactorInGoal->getStatus());
+		$this->assertEquals($this->goal, $this->mmdmInGoal->getGoal());
+		$this->assertEquals($this->user, $this->mmdmInGoal->getMmdm());
+		
 	}
 	
 	public function assertDbInsert()
@@ -62,20 +61,20 @@ class EnactorInGoalTest extends WebTestCase
 		// Test add
 		$this->em->persist($this->user);
 		$this->em->persist($this->goal);
-		$this->em->persist($this->enactorInGoal);
+		$this->em->persist($this->mmdmInGoal);
 		$this->em->flush();
-		$tmpeig = $this->em->getRepository('IsssrCoreBundle:EnactorInGoal')->find($this->enactorInGoal->getId());
-		$this->assertEquals($tmpeig, $this->enactorInGoal);
+		$tmpmmdm = $this->em->getRepository('IsssrCoreBundle:MMDMInGoal')->find($this->mmdmInGoal->getId());
+		$this->assertEquals($tmpmmdm, $this->mmdmInGoal);
 	}
 	
 	public function assertDbRemove()
 	{
 		// Test remove
-		$id = $this->enactorInGoal->getId();
-		$this->em->remove($this->enactorInGoal);
+		$id = $this->mmdmInGoal->getId();
+		$this->em->remove($this->mmdmInGoal);
 		$this->em->flush();
-		$tmpeig = $this->em->getRepository('IsssrCoreBundle:EnactorInGoal')->find($id);
-		$this->assertNull($tmpeig);
+		$tmpmmdm = $this->em->getRepository('IsssrCoreBundle:MMDMInGoal')->find($id);
+		$this->assertNull($tmpmmdm);
 	}
 	
 	public function clean()
@@ -85,11 +84,11 @@ class EnactorInGoalTest extends WebTestCase
 		$this->em->flush();
 	}
 	
-    public function testEnactorInGoal()
+    public function testMMDMInGoal()
     {
     	echo "\n";
     	
-    	echo "EnactorInGoal Test"."\n";
+    	echo "MMDMInGoal Test"."\n";
     	
     	$this->inizialize();
     	
