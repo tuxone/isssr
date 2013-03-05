@@ -321,7 +321,7 @@ class GoalController extends Controller
 		
 		$enactor = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->getGoal($entity->getId());
 		if ($enactor) {
-			$enactor[0]->setStatus(EnactorInGoal::STATUS_NOTSENT);
+			$enactor[0]->setStatus(EnactorInGoal::STATUS_WAITING);
 			$em->persist($enactor[0]);
 		}
     

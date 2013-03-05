@@ -503,8 +503,8 @@ class Goal {
 						== EnactorInGoal::STATUS_ACCEPTED)
 			return Goal::STATUS_APPROVED;
 		
-		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_NOTSENT)
-			return Goal::STATUS_ACCEPTED;
+// 		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_NOTSENT)
+// 			return Goal::STATUS_ACCEPTED;
 		
 		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
 			return Goal::STATUS_SOFTEDITABLE;
