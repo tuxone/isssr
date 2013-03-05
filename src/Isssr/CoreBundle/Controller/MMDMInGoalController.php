@@ -116,7 +116,7 @@ class MMDMInGoalController extends Controller
         $form->bind($request);
         
         $mmdm = $entity->getMmdm();
-        $goal->setMmdm($mmdm);
+        $goal->setMmdm($entity);
 
         if ($form->isValid()) {
             
@@ -127,7 +127,7 @@ class MMDMInGoalController extends Controller
         		$message = \Swift_Message::newInstance()
         		->setSubject('ISSSR Notifier')
         		->setFrom('isssr@isssr.org')
-        		->setTo($mmdm->getMmdm()->getEmail())
+        		->setTo($mmdm->getEmail())
         		->setBody(
         				$body
         		);
