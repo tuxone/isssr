@@ -2,6 +2,8 @@
 
 namespace Isssr\CoreBundle\Controller;
 
+use Isssr\CoreBundle\Form\RoleType;
+
 use Isssr\CoreBundle\Entity\UserInGoal;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -21,49 +23,25 @@ class RolesController extends Controller
 {
 
     /**
-     * Displays a form to create a new SuperInGoal entity.
-     *
-     */
-    public function newAction($id)
-    {
-
-    	
-    	$hm = $this->get('isssr_core.hierarchymanager');
-    	$tmpsupers = $hm->getSupers($user);
-    	$supers = $this->filterSupersInGoal($tmpsupers, $goal); 
-    	
-        $role = new UserInGoal();
-        $role->setRole(UserInGoal::ROLE_SUPER);
-        $form   = $this->createForm(new UserInGoalType($supers), $role);
-        
-        return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        	'goal' => $goal,
-        	'user' => $user,
-        ));
-    }
-
-    /**
      * Creates a new SuperInGoal entity.
      *
      */
     public function createAction(Request $request, $id)
     {
-    	$scontext = $this->container->get('security.context');
-    	$token = $scontext->getToken();
-    	$user = $token->getUser();
+    	$user = $this->getUser();
     	
     	$hm = $this->get('isssr_core.hierarchymanager');
     	$supers = $hm->getSupers($user);
     	
-        $entity  = new SuperInGoal();
-        //$form = $this->createForm(new SuperInGoalType($supers), $entity);
+        $role  = new UserInGoal();
+        $form = $this->createForm(new RoleType($supers), $role);
         
-        //$form->bind($request);
+        $form->bind($request);
 
-        $postdata = $this->getPostArray($request);        
-        $superid = $supers[$postdata[0]];
+        die($role->getUser());
+        
+        //$postdata = $this->getPostArray($request);        
+        //$superid = $supers[$postdata[0]];
         
         $em = $this->getDoctrine()->getManager();
         

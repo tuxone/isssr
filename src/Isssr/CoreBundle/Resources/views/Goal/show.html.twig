@@ -37,38 +37,42 @@
             <th>Owner</th>
             <td>{{ entity.getOwner() }}</td>
         </tr>
+        <tr>
+            <th>Enactor</th>
+            <td>{{ entity.getEnactor() }}</td>
+        </tr>
+        <tr>
+            <th>Supers</th>
+            	<td>
+            		<ul>
+					    {% for super in entity.getSupers() %}
+					        <li>{{ super }}</li>
+					    {% endfor %}
+					</ul>
+            	</td>
+            
+        </tr>
     </tbody>
 </table>
 
-<table>
-	<tr>
-		<td>
-        <a href="{{ path('goal') }}">
-            <button>Back</button>
-        </a>
-		</td>
-		<td>
        
-        	<a href="{{ path('goal_edit', { 'id': entity.id }) }}">
-            	<button>Edit</button>
-        	</a>
-       
-		</td>
-		<td>
+        	
 	       
 	        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
 	            {{ form_widget(delete_form) }}
-	            <button type="submit">Delete</button>
+	            <button class="btn btn-danger" type="submit">Delete</button>
 	        </form>
-	   
-        </td>
-        
-	</tr>
-</table>
+
+	        <a class="btn" href="{{ path('goal_edit', { 'id': entity.id }) }}">
+            	Edit
+        	</a>
+        	
+        	<a href="#addSuper" role="button" class="btn" data-toggle="modal">Add Super</a>
+
 
 <div id="addSuper" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-footer">
-    <form action="{{ path('roles_crealte') }}" method="post" {{ form_enctype(add_super_form) }}>
+    <form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_super_form) }}>
     {{ form_widget(add_super_form) }}
     <button class="btn btn-primary" type="submit">Add</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

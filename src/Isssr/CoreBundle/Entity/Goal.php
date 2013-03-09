@@ -121,7 +121,9 @@ class Goal {
 	public function __construct() {
 		$this->tags = new ArrayCollection();
 		$this->users = new ArrayCollection();
-		
+	}
+	
+	public function initPreRendering() {
 		$this->supers = new ArrayCollection();
 		$this->qss = new ArrayCollection();
 	}

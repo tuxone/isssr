@@ -1,6 +1,8 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+use Isssr\CoreBundle\Form\RoleType;
+
 use Isssr\CoreBundle\Entity\UserInGoal;
 
 use Isssr\CoreBundle\Entity\RejectJust;
@@ -82,7 +84,7 @@ class GoalController extends Controller {
 
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
-		
+				
 		$deleteForm = $this->createDeleteForm($id);
 
 		
@@ -93,7 +95,7 @@ class GoalController extends Controller {
 		 
 		$role = new UserInGoal();
 		$role->setRole(UserInGoal::ROLE_SUPER);
-		$addSuperForm   = $this->createForm(new UserInGoalType($supers), $role);
+		$addSuperForm   = $this->createForm(new RoleType($supers), $role);
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
@@ -701,10 +703,11 @@ class GoalController extends Controller {
 	//     }
 	
 	private function filterSupersInGoal($list, Goal $goal) {
-		 
+		$em = $this->getDoctrine()->getManager();
+				
 		$oldsupers = array();
 		$supersingoal = $goal->getSupers();
-		$supersingoal = $supersingoal->getArray();
+		//$supersingoal = $supersingoal->getArray();
 		foreach ($supersingoal as $super) {
 			$oldsupers[] = $super->getUsername();
 		}
@@ -713,7 +716,7 @@ class GoalController extends Controller {
 		foreach ($list as $super) {
 			if(!in_array($super, $oldsupers)) {
 				$id = array_search($super, $list);
-				$newsupers[$id] = $super;
+				$newsupers[] = $em->getRepository('IsssrCoreBundle:User')->find($super);
 			}
 		}
 	

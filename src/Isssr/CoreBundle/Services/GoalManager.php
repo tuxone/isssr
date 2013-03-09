@@ -34,6 +34,8 @@ class GoalManager
 	}
 	
 	public function preRendering(Goal $goal){
+		$goal->initPreRendering();
+		
 		$roles = $goal->getRoles();
 
 		foreach($roles as $role){
