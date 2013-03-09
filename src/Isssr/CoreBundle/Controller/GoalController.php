@@ -80,16 +80,29 @@ class GoalController extends Controller {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
 
-		$deleteForm = $this->createDeleteForm($id);
-
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
+		
+		$deleteForm = $this->createDeleteForm($id);
+
+		
+		// da generare se owner+ controlli 
+		$hm = $this->get('isssr_core.hierarchymanager');
+		$tmpsupers = $hm->getSupers($user);
+		$supers = $this->filterSupersInGoal($tmpsupers, $goal);
+		 
+		$role = new UserInGoal();
+		$role->setRole(UserInGoal::ROLE_SUPER);
+		$addSuperForm   = $this->createForm(new UserInGoalType($supers), $role);
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
-						array('entity' => $goal,
+						array(
+								'entity' => $goal,
 								'delete_form' => $deleteForm->createView(),
-								'user' => $user,));
+								'add_super_form' => $addSuperForm->createView(),
+								'user' => $user,
+						));
 	}
 	
 	public function showAsAction($role, $id){
@@ -686,4 +699,24 @@ class GoalController extends Controller {
 	//     	->getForm()
 	//     	;
 	//     }
+	
+	private function filterSupersInGoal($list, Goal $goal) {
+		 
+		$oldsupers = array();
+		$supersingoal = $goal->getSupers();
+		$supersingoal = $supersingoal->getArray();
+		foreach ($supersingoal as $super) {
+			$oldsupers[] = $super->getUsername();
+		}
+	
+		$newsupers = array();
+		foreach ($list as $super) {
+			if(!in_array($super, $oldsupers)) {
+				$id = array_search($super, $list);
+				$newsupers[$id] = $super;
+			}
+		}
+	
+		return $newsupers;
+	}
 }

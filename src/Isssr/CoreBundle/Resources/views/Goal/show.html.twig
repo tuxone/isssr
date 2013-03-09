@@ -62,7 +62,18 @@
 	        </form>
 	   
         </td>
+        
 	</tr>
 </table>
+
+<div id="addSuper" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-footer">
+    <form action="{{ path('roles_crealte') }}" method="post" {{ form_enctype(add_super_form) }}>
+    {{ form_widget(add_super_form) }}
+    <button class="btn btn-primary" type="submit">Add</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </form>
+  </div>
+</div>
 
 {% endblock %}

@@ -14,9 +14,9 @@ IsssrCoreBundle_tag:
         resource: "@IsssrCoreBundle/Resources/config/routing/tag.yml"
         prefix:   /tag
 
-IsssrCoreBundle_superingoal:
-        resource: "@IsssrCoreBundle/Resources/config/routing/superingoal.yml"
-        prefix:   /superingoal
+IsssrCoreBundle_roles:
+        resource: "@IsssrCoreBundle/Resources/config/routing/roles.yml"
+        prefix:   /roles
         
 IsssrCoreBundle_search:
         resource: "@IsssrCoreBundle/Resources/config/routing/search.yml"

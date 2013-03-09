@@ -1,0 +1,12 @@
+roles_new:
+    pattern:  /new/{id}
+    defaults: { _controller: "IsssrCoreBundle:Roles:new" }
+
+roles_crealte:
+    pattern:  /create/{id}
+    defaults: { _controller: "IsssrCoreBundle:Roles:create" }
+    requirements: { _method: post }
+
+roles_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Roles:delete" }

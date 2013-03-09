@@ -9,10 +9,6 @@ goal_as:
 goal_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Goal:show" }
-
-goal_show_as:
-    pattern:  /{id}/show/as/{role}
-    defaults: { _controller: "IsssrCoreBundle:Goal:showAs" }
     
 goal_new:
     pattern:  /new

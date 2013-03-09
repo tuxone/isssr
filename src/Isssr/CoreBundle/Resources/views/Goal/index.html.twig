@@ -40,34 +40,7 @@
             </td>
             <td>{{ entity.priority }}</td>
             <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('goal_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    {% if entity.owner == user %}
-                    	{% if entity.editable() or entity.softEditable() %}
-		                    <li>
-		                        <a href="{{ path('goal_edit', { 'id': entity.id }) }}">edit</a>
-		                    </li>
-		                    
-	                    {% else %}
-		                    <li>
-		                        edit
-		                    </li>
-		                
-	                    {% endif %}
-		                    {% if entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED')  and entity.getStatus() != constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED')%}
-			                    <li>
-			                        <a href="{{ path('superingoal', { 'id': entity.id }) }}">supers</a>
-			                    </li>
-		                    {% endif %}
-		                    {% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}		    
-			                    <li>
-			                    	<a href="{{ path('enactoringoal', { 'id': entity.id }) }}">enactor</a>
-			                    </li>
-			                {% endif %}
-	                {% endif %}
-                </ul>
+				<a class="btn btn-small btn-primary" href="{{ path('goal_show', { 'id': entity.id }) }}">show</a>
             </td>
         </tr>
     {% endfor %}
