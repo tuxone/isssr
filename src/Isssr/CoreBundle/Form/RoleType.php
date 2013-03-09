@@ -9,24 +9,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class RoleType extends AbstractType
 {
 	protected $candidates;
+	protected $role;
 	
-	public function __construct ($candidates)
+	public function __construct ($candidates, $role)
 	{
 		$this->candidates = $candidates;
+		$this->role = $role;
 	}
 	
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           // ->add('superEmail', 'email', array(
-    		//	'label'  => 'Super email address',
-				//))
-			->add('user', 'choice', array(
+			->add('user', 'entity', array(
+				'class' => 'IsssrCoreBundle:User',
 			    'label' => 'Select a User',
 			    'multiple' => false,
-			    //'choices' => array(1 => 'red', 2 => 'blue', 3 => 'green'),
 				'choices' => $this->candidates,
-			));
+			))
+        	->add('role', 'hidden', array(
+     			'data' => $this->role,
+			)
+       	);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

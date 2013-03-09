@@ -94,8 +94,7 @@ class GoalController extends Controller {
 		$supers = $this->filterSupersInGoal($tmpsupers, $goal);
 		 
 		$role = new UserInGoal();
-		$role->setRole(UserInGoal::ROLE_SUPER);
-		$addSuperForm   = $this->createForm(new RoleType($supers), $role);
+		$addSuperForm   = $this->createForm(new RoleType($supers, UserInGoal::ROLE_SUPER), $role);
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',

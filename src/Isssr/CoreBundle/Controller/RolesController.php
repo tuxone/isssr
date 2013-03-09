@@ -34,18 +34,10 @@ class RolesController extends Controller
     	$supers = $hm->getSupers($user);
     	
         $role  = new UserInGoal();
-        $form = $this->createForm(new RoleType($supers), $role);
-        
+        $form = $this->createForm(new RoleType($supers, -1), $role);
         $form->bind($request);
-
-        die($role->getUser());
-        
-        //$postdata = $this->getPostArray($request);        
-        //$superid = $supers[$postdata[0]];
         
         $em = $this->getDoctrine()->getManager();
-        
-        $super = $em->getRepository('IsssrCoreBundle:User')->find($superid);
         
         $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
         
@@ -53,25 +45,17 @@ class RolesController extends Controller
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
         
-        if($goal->getOwner()->getId() != $user->getId())
-        	throw new HttpException(403);
+        // @todo verifica ----
+        //if($goal->getOwner()->getId() != $user->getId())
+        	//throw new HttpException(403);
         
-        $entity->setGoal($goal);
-        $entity->setStatus(SuperInGoal::STATUS_NOTSENT);
-        $entity->setSuper($super);
+        $role->setGoal($goal);
+        $role->setStatus(SuperInGoal::STATUS_NOTSENT);
         
-            $em->persist($entity);
-            $em->flush();
+		$em->persist($role);
+        $em->flush();
 
-            return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
-        
-        // @todo da fare refactor
-
-        return $this->render('IsssrCoreBundle:SuperInGoal:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        	'user'   => $user,
-        ));
+        return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
     }
     
     public function deleteAction($id)
@@ -91,20 +75,6 @@ class RolesController extends Controller
     	$em->flush();
     
     	return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
-    }
-
-    private function getPostArray($request) {
-    	$rawfields = explode("&", $request->getContent());
-    	$postdata = array();
-    	$i = 0;
-    	foreach ( $rawfields as $id=>$block )
-    	{
-    		$keyval = explode("=", $block);
-    		if(count($keyval) == 2)
-    			$postdata[$i] = urldecode($keyval[1]);
-    		$i++;
-    	}
-    	return $postdata;
     }
 
 }
