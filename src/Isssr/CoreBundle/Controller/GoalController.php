@@ -250,29 +250,26 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function editAction($id) {
-		$scontext = $this->container->get('security.context');
-		$token = $scontext->getToken();
-		$user = $token->getUser();
+		$user = $this->getUser();
 
 		$em = $this->getDoctrine()->getManager();
 
-		$entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
 
-		if (!$entity) {
+		if (!$goal) {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
-		if ($entity->getOwner()->getId() != $user->getId()) {
-			throw new HttpException(403);
-		}
+		
+		$gm = $this->get('isssr_core.goalmanager');
+		$gm->preRendering($goal);
+		//@todo controllo sull'owner del goal
 
-		$softeditable = $entity->softEditable();
-
-		$editForm = $this->createForm(new GoalType($softeditable), $entity);
+		$editForm = $this->createForm(new GoalType(false), $goal);
 		$deleteForm = $this->createDeleteForm($id);
 
 		return $this
 				->render('IsssrCoreBundle:Goal:edit.html.twig',
-						array('entity' => $entity,
+						array('entity' => $goal,
 								'edit_form' => $editForm->createView(),
 								'delete_form' => $deleteForm->createView(),
 								'user' => $user,));
