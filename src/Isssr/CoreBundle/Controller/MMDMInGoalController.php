@@ -133,7 +133,7 @@ class MMDMInGoalController extends Controller
         		);
         		$this->get('mailer')->send($message);
         		 
-        		$em->persist($entity);
+        		
         	}
         	
         	else {
@@ -141,7 +141,6 @@ class MMDMInGoalController extends Controller
         		$em->persist($enactor);
         	}
         	
-        	$em->flush();
             $em->persist($entity);
             $em->flush();
 

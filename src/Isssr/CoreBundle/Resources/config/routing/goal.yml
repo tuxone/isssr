@@ -2,26 +2,18 @@ goal:
     pattern:  /
     defaults: { _controller: "IsssrCoreBundle:Goal:index" }
 
-goal_as_super:
-    pattern:  /assuper
-    defaults: { _controller: "IsssrCoreBundle:Goal:indexAsSuper" }
+goal_as:
+    pattern:  /as/{role}
+    defaults: { _controller: "IsssrCoreBundle:Goal:indexAs" }
 
-goal_as_enactor:
-    pattern:  /asenactor
-    defaults: { _controller: "IsssrCoreBundle:Goal:indexAsEnactor" }
-      
 goal_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Goal:show" }
-    
-goal_show_as_super:
-    pattern:  /{id}/show_as_super
-    defaults: { _controller: "IsssrCoreBundle:Goal:showAsSuper" }
-    
-goal_show_as_enactor:
-    pattern:  /{id}/show_as_enactor
-    defaults: { _controller: "IsssrCoreBundle:Goal:showAsEnactor" }
 
+goal_show_as:
+    pattern:  /{id}/show/as/{role}
+    defaults: { _controller: "IsssrCoreBundle:Goal:showAs" }
+    
 goal_new:
     pattern:  /new
     defaults: { _controller: "IsssrCoreBundle:Goal:new" }

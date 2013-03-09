@@ -24,8 +24,11 @@
 				<ul class="dropdown-menu" style="text-align:left;">
 	      <!-- links -->
 	      			<li><a href="{{ path('goal') }}">All</a></li>
-			  		<li><a href="{{ path('goal_as_super') }}">as Super</a></li>
-			  		<li><a href="{{ path('goal_as_enactor') }}">as Enactor</a></li>
+	      			<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_OWNER')}) }}">as Owner</a></li>
+			  		<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_SUPER')}) }}">as Super</a></li>
+			  		<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_ENACTOR')}) }}">as Enactor</a></li>
+			  		<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_QS')}) }}">as QS</a></li>
+			  		<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_MMDM')}) }}">as MMDM</a></li>
 				</ul>
 			</li>
 			  

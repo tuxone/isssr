@@ -40,27 +40,10 @@ class Goal {
 	protected $priority;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="User", inversedBy="goalsAsOwner")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="id")
+	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="goal", cascade={"persist", "remove"})
 	 */
-	protected $owner;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="EnactorInGoal", inversedBy="goal")
-	 * @ORM\JoinColumn(name="enactor", referencedColumnName="id")
-	 */
-	protected $enactor;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="goal")
-	 */
-	protected $supers;
+	protected $roles;
 	
-	/**
-	 * @ORM\ManyToOne(targetEntity="MMDMInGoal", inversedBy="goal")
-	 * @ORM\JoinColumn(name="mmdm", referencedColumnName="id")
-	 */
-	protected $mmdm;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
@@ -116,13 +99,31 @@ class Goal {
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	protected $assumptions;
+	
+	/**
+	 * Rendering Facilities
+	 */
+	private $owner;
+	
+	private $enactor;
+	
+	private $supers;
+	
+	private $qss;
+	
+	private $mmdm;
+	
+	private $status;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->tags = new ArrayCollection();
+		$this->users = new ArrayCollection();
+		
 		$this->supers = new ArrayCollection();
+		$this->qss = new ArrayCollection();
 	}
 
 	/**
@@ -195,49 +196,6 @@ class Goal {
 	 */
 	public function getPriority() {
 		return $this->priority;
-	}
-
-	/**
-	 * Set owner
-	 *
-	 * @param \Isssr\CoreBundle\Entity\User $owner
-	 * @return Goal
-	 */
-	public function setOwner(\Isssr\CoreBundle\Entity\User $owner = null) {
-		$this->owner = $owner;
-
-		return $this;
-	}
-
-	/**
-	 * Get owner
-	 *
-	 * @return \Isssr\CoreBundle\Entity\User 
-	 */
-	public function getOwner() {
-		return $this->owner;
-	}
-
-	/**
-	 * Set enactor
-	 *
-	 * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
-	 * @return Goal
-	 */
-	public function setEnactor(
-			\Isssr\CoreBundle\Entity\EnactorInGoal $enactor = null) {
-		$this->enactor = $enactor;
-
-		return $this;
-	}
-
-	/**
-	 * Get enactor
-	 *
-	 * @return \Isssr\CoreBundle\Entity\User 
-	 */
-	public function getEnactor() {
-		return $this->enactor;
 	}
 
 	/**
@@ -459,94 +417,16 @@ class Goal {
 		return $this->assumptions;
 	}
 
-	/**
-	 * Add supers
-	 *
-	 * @param \Isssr\CoreBundle\Entity\SuperInGoal $supers
-	 * @return Goal
-	 */
-	public function addSuper(\Isssr\CoreBundle\Entity\SuperInGoal $supers) {
-		$this->supers[] = $supers;
-
-		return $this;
-	}
-
-	/**
-	 * Remove supers
-	 *
-	 * @param \Isssr\CoreBundle\Entity\SuperInGoal $supers
-	 */
-	public function removeSuper(\Isssr\CoreBundle\Entity\SuperInGoal $supers) {
-		$this->supers->removeElement($supers);
-	}
-
-	/**
-	 * Get supers
-	 *
-	 * @return \Doctrine\Common\Collections\Collection 
-	 */
-	public function getSupers() {
-		return $this->supers;
-	}
-
 	public function __toString() {
 		return $this->id . '_' . $this->title;
 	}
 
 	public function getStatus() {
-
-		if ($this->supers->count() == 0)
-			return Goal::STATUS_EDITABLE;
-
-		if ($this->enactor
-				&& $this->enactor->getStatus()
-						== EnactorInGoal::STATUS_ACCEPTED)
-			return Goal::STATUS_APPROVED;
-		
-// 		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_NOTSENT)
-// 			return Goal::STATUS_ACCEPTED;
-		
-		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-			return Goal::STATUS_SOFTEDITABLE;
-		
-		
-		$accepted = 0;
-		$rejected = 0;
-		$sent = 0;
-		$notsent = 0;
-
-		foreach ($this->supers as $super) {
-			if ($super->rejected())
-				$rejected++;
-			if ($super->sent())
-				$sent++;
-			if ($super->accepted())
-				$accepted++;
-			if ($super->notSent())
-				$notsent++;
-		}
-
-		if ($notsent > 0)
-			return Goal::STATUS_EDITABLE;
-
-		if ($rejected > 0)
-			return Goal::STATUS_SOFTEDITABLE;
-
-		if ($sent > 0)
-			return Goal::STATUS_NOTEDITABLE;
-
-		if ($accepted == $this->supers->count())
-		{
-			if (!$this->enactor) return Goal::STATUS_ACCEPTED;
-			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
-				return Goal::STATUS_ACCEPTED;
-			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-				return Goal::STATUS_SOFTEDITABLE;
-					
-		}
-					
-
-		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
+		return $this->status;
+	}
+	
+	public function setStatus($status){
+		$this->status = $status;
 	}
 
 	public function editable() {
@@ -589,53 +469,89 @@ class Goal {
 		return $this->rejections;
 	}
 
-	public function hasEnactor() {
-		return $this->enactor != null;
-	}
 
     /**
-     * Add enactor
+     * Add users
      *
-     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     * @param \Isssr\CoreBundle\Entity\UserInGoal $users
      * @return Goal
      */
-    public function addEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    public function addRole(\Isssr\CoreBundle\Entity\UserInGoal $roles)
     {
-        $this->enactor[] = $enactor;
+        $this->roles[] = $roles;
     
         return $this;
     }
 
     /**
-     * Remove enactor
+     * Remove users
      *
-     * @param \Isssr\CoreBundle\Entity\EnactorInGoal $enactor
+     * @param \Isssr\CoreBundle\Entity\UserInGoal $users
      */
-    public function removeEnactor(\Isssr\CoreBundle\Entity\EnactorInGoal $enactor)
+    public function removeRole(\Isssr\CoreBundle\Entity\UserInGoal $roles)
     {
-        $this->enactor->removeElement($enactor);
+        $this->roles->removeElement($roles);
     }
 
     /**
-     * Set mmdm
+     * Get users
      *
-     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $mmdm
-     * @return Goal
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setMmdm(\Isssr\CoreBundle\Entity\MMDMInGoal $mmdm = null)
+    public function getRoles()
     {
-        $this->mmdm = $mmdm;
+        return $this->roles;
+    }
     
-        return $this;
+    public function setOwner(User $owner){
+    	$this->owner = $owner;
     }
-
-    /**
-     * Get mmdm
-     *
-     * @return \Isssr\CoreBundle\Entity\MMDMInGoal 
-     */
-    public function getMmdm()
-    {
-        return $this->mmdm;
+    
+    public function getOwner(){
+    	return $this->owner;
+    }
+    
+    public function setEnactor(User $enactor){
+    	$this->enactor = $enactor;
+    }
+    
+    public function getEnactor(){
+    	return $this->enactor;
+    }
+    
+    public function setMmdm(User $mmdm){
+    	$this->mmdm = $mmdm;
+    }
+    
+    public function getMmdm(){
+    	return $this->mmdm;
+    }
+    
+    public function addSuper(User $super){
+    	$this->supers[] = $super;
+    	
+    	return $this;
+    }
+    
+    public function removeSuper(User $super){
+    	$this->supers->removeElement($super);
+    }
+    
+    public function getSupers(){
+    	return $this->supers;
+    }
+    
+    public function addQs(User $qs){
+    	$this->qss[] = $qs;
+    	
+    	return $this;
+    }
+    
+    public function removeQs(User $qs){
+    	$this->qss->removeElement($qs);
+    }
+    
+    public function getQss(){
+    	return $this->qss;
     }
 }

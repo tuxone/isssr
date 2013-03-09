@@ -1,8 +1,13 @@
 parameters:
-    twitter_plus_core.class: Isssr\CoreBundle\Services\HierarchyManager
+    isssr_hm.class: Isssr\CoreBundle\Services\HierarchyManager
+    isssr_gm.class: Isssr\CoreBundle\Services\GoalManager
 
 services:
 
     isssr_core.hierarchymanager:
-        class: "%twitter_plus_core.class%"
+        class: "%isssr_hm.class%"
+        arguments: ["@doctrine.orm.entity_manager"]
+        
+    isssr_core.goalmanager:
+        class: "%isssr_gm.class%"
         arguments: ["@doctrine.orm.entity_manager"]

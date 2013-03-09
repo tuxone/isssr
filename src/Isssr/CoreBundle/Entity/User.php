@@ -16,9 +16,7 @@ class User extends BaseUser {
 
 	public function __construct() {
 		parent::__construct();
-		$this->goalsAsEnactor = new ArrayCollection();
-		$this->goalsAsOwner = new ArrayCollection();
-		$this->goalsAsSuper = new ArrayCollection();
+		$this->goals = new ArrayCollection();
 	}
 
 	/**
@@ -39,25 +37,10 @@ class User extends BaseUser {
 	protected $lastname;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Goal", mappedBy="owner")
+	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="user")
 	 */
-	protected $goalsAsOwner;
+	protected $goals;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="EnactorInGoal", mappedBy="enactor")
-	 */
-	protected $goalsAsEnactor;
-	
-	/**
-	 * @ORM\OneToMany(targetEntity="SuperInGoal", mappedBy="super")
-	 */
-	protected $goalsAsSuper;
-	
-	/**
-	 * @ORM\OneToMany(targetEntity="MMDMInGoal", mappedBy="mmdm")
-	 */
-	protected $goalsAsMMDM;
-	
 	/**
 	 * @ORM\OneToMany(targetEntity="Tag", mappedBy="id")
 	 */
@@ -124,108 +107,9 @@ class User extends BaseUser {
         return $this->lastname;
     }
 
-    /**
-     * Add goalsAsOwner
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsOwner
-     * @return User
-     */
-    public function addGoalsAsOwner(\Isssr\CoreBundle\Entity\Goal $goalsAsOwner)
-    {
-        $this->goalsAsOwner[] = $goalsAsOwner;
-    
-        return $this;
-    }
-
-    /**
-     * Remove goalsAsOwner
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsOwner
-     */
-    public function removeGoalsAsOwner(\Isssr\CoreBundle\Entity\Goal $goalsAsOwner)
-    {
-        $this->goalsAsOwner->removeElement($goalsAsOwner);
-    }
-
-    /**
-     * Get goalsAsOwner
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGoalsAsOwner()
-    {
-        return $this->goalsAsOwner;
-    }
-
-    /**
-     * Add goalsAsEnactor
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsEnactor
-     * @return User
-     */
-    public function addGoalsAsEnactor(\Isssr\CoreBundle\Entity\Goal $goalsAsEnactor)
-    {
-        $this->goalsAsEnactor[] = $goalsAsEnactor;
-    
-        return $this;
-    }
-
-    /**
-     * Remove goalsAsEnactor
-     *
-     * @param \Isssr\CoreBundle\Entity\Goal $goalsAsEnactor
-     */
-    public function removeGoalsAsEnactor(\Isssr\CoreBundle\Entity\Goal $goalsAsEnactor)
-    {
-        $this->goalsAsEnactor->removeElement($goalsAsEnactor);
-    }
-
-    /**
-     * Get goalsAsEnactor
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGoalsAsEnactor()
-    {
-        return $this->goalsAsEnactor;
-    }
-    
     public function __toString()
     {
     	return $this->username;
-    }
-
-    /**
-     * Add goalsAsSuper
-     *
-     * @param \Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper
-     * @return User
-     */
-    public function addGoalsAsSuper(\Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper)
-    {
-        $this->goalsAsSuper[] = $goalsAsSuper;
-    
-        return $this;
-    }
-
-    /**
-     * Remove goalsAsSuper
-     *
-     * @param \Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper
-     */
-    public function removeGoalsAsSuper(\Isssr\CoreBundle\Entity\SuperInGoal $goalsAsSuper)
-    {
-        $this->goalsAsSuper->removeElement($goalsAsSuper);
-    }
-
-    /**
-     * Get goalsAsSuper
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGoalsAsSuper()
-    {
-        return $this->goalsAsSuper;
     }
 
     /**
@@ -325,5 +209,38 @@ class User extends BaseUser {
     public function getGoalsAsMMDM()
     {
         return $this->goalsAsMMDM;
+    }
+
+    /**
+     * Add goals
+     *
+     * @param \Isssr\CoreBundle\Entity\UserInGoal $goals
+     * @return User
+     */
+    public function addGoal(\Isssr\CoreBundle\Entity\UserInGoal $goals)
+    {
+        $this->goals[] = $goals;
+    
+        return $this;
+    }
+
+    /**
+     * Remove goals
+     *
+     * @param \Isssr\CoreBundle\Entity\UserInGoal $goals
+     */
+    public function removeGoal(\Isssr\CoreBundle\Entity\UserInGoal $goals)
+    {
+        $this->goals->removeElement($goals);
+    }
+
+    /**
+     * Get goals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoals()
+    {
+        return $this->goals;
     }
 }
