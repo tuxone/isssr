@@ -23,9 +23,10 @@ goal_edit:
     pattern:  /{id}/edit
     defaults: { _controller: "IsssrCoreBundle:Goal:edit" }
 
-goal_send_to_supers:
-    pattern:  /{id}/sendtosupers
-    defaults: { _controller: "IsssrCoreBundle:Goal:sendToSupers" }
+goal_notify_supers:
+    pattern:  /{id}/notifysupers
+    defaults: { _controller: "IsssrCoreBundle:Goal:notifySupers" }
+    requirements: { _method: post }
     
 goal_update:
     pattern:  /{id}/update

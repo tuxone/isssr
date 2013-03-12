@@ -9,6 +9,33 @@ use Doctrine\ORM\EntityRepository;
 class UserInGoalRepository extends EntityRepository
 {
 
+	public function findByUserAndGoal($uid, $gid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT r FROM IsssrCoreBundle:UserInGoal r '.
+				'WHERE r.user = '.$uid.' AND r.goal = '.$gid)
+				->getResult();
+	}
+	
+	public function findByUserGoalandRole($uid, $gid, $role)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT r FROM IsssrCoreBundle:UserInGoal r '.
+				'WHERE r.user = '.$uid.' AND r.goal = '.$gid.' AND r.role = '.$role)
+				->getSingleResult();
+	}
+	
+	public function findSingleUserByRole($gid, $role)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT r.user FROM IsssrCoreBundle:UserInGoal r '.
+				'WHERE r.goal = '.$gid.' AND r.role = '.$role)
+				->getSingleResult();
+	}
+	
 	public function findByOwner($uid)
 	{
 		return $this->getEntityManager()

@@ -29,13 +29,6 @@ class RolesController extends Controller
     public function createAction(Request $request, $id)
     {
     	$user = $this->getUser();
-    	
-    	$hm = $this->get('isssr_core.hierarchymanager');
-    	$supers = $hm->getSupers($user);
-    	
-        $role  = new UserInGoal();
-        $form = $this->createForm(new RoleType($supers, -1), $role);
-        $form->bind($request);
         
         $em = $this->getDoctrine()->getManager();
         
@@ -45,18 +38,25 @@ class RolesController extends Controller
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
         
+        $hm = $this->get('isssr_core.hierarchymanager');
+        $supers = $hm->getSupers($user);
+         
+        $role  = new UserInGoal();
+        $form = $this->createForm(new RoleType($supers, -1), $role);
+        $form->bind($request);
+        
         $role->setGoal($goal);
         $role->setStatus(SuperInGoal::STATUS_NOTSENT);
         
         $wm = $this->get('isssr_core.workflowmanager');
-        $grant = $wm->userCanAddRole($user, $role);
+        $grant = $wm->userCanAddRole($user, $goal, $role->getRole());
         
         if(!$grant)
         	throw new HttpException(403);
         
 		$em->persist($role);
         $em->flush();
-
+        
         return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
     }
     

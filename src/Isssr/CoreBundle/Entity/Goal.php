@@ -16,7 +16,8 @@ class Goal {
 	const STATUS_ACCEPTED = 2; // accepted by Goal Super Owners
 	const STATUS_SOFTEDITABLE = 3;
 	const STATUS_APPROVED = 4;
-
+	
+	private static $STATUSSTR = array('Not Editable', 'Editable', 'Accepted bi GSOs', 'Soft Editable', 'Approved');
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -423,14 +424,6 @@ class Goal {
 		return $this->id . '_' . $this->title;
 	}
 
-	public function getStatus() {
-		return $this->status;
-	}
-	
-	public function setStatus($status){
-		$this->status = $status;
-	}
-
 	public function editable() {
 		return $this->getStatus() == Goal::STATUS_EDITABLE;
 	}
@@ -570,5 +563,17 @@ class Goal {
     
     public function getQss(){
     	return $this->qss;
+    }
+    
+    public function getStatus() {
+    	return $this->status;
+    }
+    
+    public function getStatusString() {
+    	return self::$STATUSSTR[$this->status];
+    }
+    
+    public function setStatus($status){
+    	$this->status = $status;
     }
 }

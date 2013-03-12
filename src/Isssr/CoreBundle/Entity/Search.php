@@ -4,9 +4,7 @@ namespace Isssr\CoreBundle\Entity;
 
 
 class Search {
-	
-	protected $id;
-	
+		
 	protected $title;
 	
 	protected $description;
@@ -16,14 +14,6 @@ class Search {
 	protected $goalOwner;
 	
 	protected $goalEnactor;
-	
-	public function setId($id){
-		$this->id = $id;
-	}
-	
-	public function getId(){
-		return $this->id;
-	}
 	
 	public function setTitle($title){
 		$this->title = $title;

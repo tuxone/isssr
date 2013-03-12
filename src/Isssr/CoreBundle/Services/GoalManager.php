@@ -20,17 +20,21 @@ class GoalManager
 		$this->em = $em;
 	}
 	
-	public function getSupers(User $user) {
-
-		$repository = $this->em->getRepository('IsssrCoreBundle:User');
+	public function getRoles(User $user, Goal $goal)
+	{
+		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
+		$usersInGoal = $repository->findByUserAndGoal($user->getId(), $goal->getId());
 		
-		$query = $repository->createQueryBuilder('u')
-			->where('u.id < :id')
-			->setParameter('id', $user->getId())
-			->getQuery();
-		
-		$supers = $query->getResult();
-		return $supers;
+		$roles = new ArrayCollection();
+		foreach($usersInGoal as $userInGoal)
+			$roles->add($userInGoal->getRole());
+		return $roles;
+	}
+	
+	public function getRoleStatus(User $user, Goal $goal, $role)
+	{
+		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
+		return $repository->findByUserGoalandRole($user->getId(), $goal->getId(), $role);
 	}
 	
 	public function preRendering(Goal $goal){
@@ -72,12 +76,10 @@ class GoalManager
 		if (count($supers) == 0)
 			return Goal::STATUS_EDITABLE;
 		
-		if ($enactor
-				&& $enactor->getStatus()
-				== EnactorInGoal::STATUS_ACCEPTED)
+		if ($enactor && $enactor->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED)
 			return Goal::STATUS_APPROVED;
 		
-		if ($enactor && $enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+		if ($enactor && $enactor->getStatus() == UserInGoal::STATUS_GOAL_REJECTED)
 			return Goal::STATUS_SOFTEDITABLE;
 		
 		$accepted = 0;
@@ -127,6 +129,22 @@ class GoalManager
 		$goal->addRole($role);
 	}
 	
+	public function getSingleUserInGoalByRole(Goal $goal, $role)
+	{
+		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
+		return $repository->findSingleUserByRole($goal->getId(), $role);
+	}
+	
+	public function getOwner(Goal $goal)
+	{
+		return $this->getSingleUserInGoalByRole($goal, UserInGoal::ROLE_OWNER);
+	}
+	
+	public function getEnactor(Goal $goal)
+	{
+		return $this->getSingleUserInGoalByRole($goal, UserInGoal::ROLE_ENACTOR);
+	}
+	
 	public function getGoals($role, $user)
 	{
 		if ($role == UserInGoal::ROLE_SUPER) return $this->getGoalsAsSuper($user);
@@ -136,33 +154,33 @@ class GoalManager
 		else if ($role == UserInGoal::ROLE_QS) return $this->getGoalsAsQs($user);
 	}
 	
-	public function getGoalsAsSuper(User $user) {
+	private function getGoalsAsSuper(User $user) {
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
 		$goals = $repository->findBySuper($user->getId());
 		return $goals;
 	}
 	
-	public function getGoalsAsEnactor(User $user) {
+	private function getGoalsAsEnactor(User $user) {
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
 		$goals = $repository->findByEnactor($user->getId());
 		return $goals;
 	}
 	
-	public function getGoalsAsOwner($user)
+	private function getGoalsAsOwner($user)
 	{
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
 		$goals = $repository->findByOwner($user->getId());
 		return $goals;
 	}
 	
-	public function getGoalsAsMmdm($user)
+	private function getGoalsAsMmdm($user)
 	{
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
 		$goals = $repository->findByMmdm($user->getId());
 		return $goals;
 	}
 	
-	public function getGoalsAsQs($user)
+	private function getGoalsAsQs($user)
 	{
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
 		$goals = $repository->findByQs($user->getId());

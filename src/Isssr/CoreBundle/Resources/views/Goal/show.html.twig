@@ -7,16 +7,12 @@
 <table class="table">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
+            <th>Title</th>
+            <td>{{ entity.title }}</td>
         </tr>
         <tr>
             <th>Status</th>
-            <td>{{ entity.getStatus() }}</td>
-        </tr>
-        <tr>
-            <th>Title</th>
-            <td>{{ entity.title }}</td>
+            <td>{{ entity.getStatusString() }}</td>
         </tr>
 		<tr>
             <th>Description</th>
@@ -63,28 +59,118 @@
 </table>
 
        
-        	
-	       
-	        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
-	            {{ form_widget(delete_form) }}
-	            <button class="btn btn-danger" type="submit">Delete</button>
-	        </form>
+	{% if actions.canDelete() %}
+		<a href="#delete" role="button" class="btn btn-danger" style="width: 90px;" data-toggle="modal">Delete</a>
+	{% endif %}
+	
+	{% if actions.canEdit() or actions.canSoftEdit() %}
+		<a href="#edit" role="button" class="btn" style="width: 90px;" data-toggle="modal">Edit</a>
+	{% endif %}
+	
+	{% if actions.canAddSuper() %}
+		<a href="#addSuper" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Super</a>
+	{% endif %}
+	
+	{% if actions.canAddEnactor() %}
+		<a href="#addEnactor" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Enactor</a>
+	{% endif %}
+	
+	{% if actions.canNotifyEnactor() %}
+		<a href="#notifyEnactor" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Enactor</a>
+	{% endif %}
+	
+	{% if actions.canNotifySupers() %}
+		<a href="#notifySupers" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Supers</a>
+	{% endif %}
+	
+	{% if actions.canAcceptGoal() %}
+		<a href="#acceptGoal" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Supers</a>
+	{% endif %}
+	
+	{% if actions.canRejectGoal() %}
+		<a href="#rejectGoal" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Supers</a>
+	{% endif %}
+	
+	<div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;"> 
+			<p>Do you really want to delete this Organizational Goal?</p>      
+			<form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post" style="display: inline">
+				{{ form_widget(delete_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+				<button class="btn btn-primary" type="submit">Yes</button>
+			</form>
+		</div>
+	</div>
+	
 
-	        <a class="btn" href="{{ path('goal_edit', { 'id': entity.id }) }}">
-            	Edit
-        	</a>
-        	
-        	<a href="#addSuper" role="button" class="btn" data-toggle="modal">Add Super</a>
+	<div id="edit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		<div class="modal-header">
+		Edit Organizational Goal "<b>{{ entity.title }}</b>"
+		</div>
+		<div class="modal-footer" style="text-align:center;">
+			{% if entity.rejections.count() > 0 %}
+			<h3>Rejections</h3>
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Text</th>
+					<th>Datetime</th>
+					<th>User</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for rej in entity.rejections %}
+					<tr>
+						<td>{{ rej.text }}</td>
+						<td>{% if rej.datetime %}{{ rej.datetime|date('Y-m-d H:i:s') }}{% endif %}</td>
+						<td>{{ rej.creator }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
 
+			<form action="{{ path('goal_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+			{{ form_widget(edit_form) }}
 
-<div id="addSuper" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-footer">
-    <form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_super_form) }}>
-    {{ form_widget(add_super_form) }}
-    <button class="btn btn-primary" type="submit">Add</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-  </form>
-  </div>
-</div>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
+	        <button class="btn btn-primary" type="submit">Save</button>
+			</form>
+		</div>
+	</div>
+
+	
+	<div id="addSuper" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;">
+			<form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_super_form) }}>
+				{{ form_widget(add_super_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button class="btn btn-primary" type="submit">Add</button>
+			</form>
+		</div>
+	</div>
+	
+	
+	<div id="addEnactor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;">
+			<form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_super_form) }}>
+				{{ form_widget(add_enactor_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button class="btn btn-primary" type="submit">Add</button>
+			</form>
+		</div>
+	</div>
+	
+	
+	<div id="notifySupers" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;"> 
+			<p>Do you really want notify Goal Super Owners now?</p>      
+			<form action="{{ path('goal_notify_supers', { 'id': entity.id }) }}" method="post" style="display: inline">
+				{{ form_widget(notify_supers_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+				<button class="btn btn-primary" type="submit">Yes</button>
+			</form>
+		</div>
+	</div>
 
 {% endblock %}

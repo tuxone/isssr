@@ -1,6 +1,8 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+use Isssr\CoreBundle\Entity\GoalShowAction;
+
 use Isssr\CoreBundle\Form\RoleType;
 
 use Isssr\CoreBundle\Entity\UserInGoal;
@@ -84,17 +86,14 @@ class GoalController extends Controller {
 
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
-				
-		$deleteForm = $this->createDeleteForm($id);
-
 		
-		// da generare se owner+ controlli 
-		$hm = $this->get('isssr_core.hierarchymanager');
-		$tmpsupers = $hm->getSupers($user);
-		$supers = $this->filterSupersInGoal($tmpsupers, $goal);
-		 
-		$role = new UserInGoal();
-		$addSuperForm   = $this->createForm(new RoleType($supers, UserInGoal::ROLE_SUPER), $role);
+		$wm = $this->get('isssr_core.workflowmanager');
+		$actions = $wm->userGoalShowActions($user, $goal);
+						
+		$deleteForm = $this->createDeleteForm($id);
+		$editForm = $this->createForm(new GoalType(!$actions->canEdit()), $goal);
+		$addSuperForm = $this->createAddSuperForm($goal);
+		$addEnactorForm = $this->createAddEnactorForm($goal);
 		
 		
 		/*$roles = $em->getRepository('IsssrCoreBundle:UserInGoal')
@@ -106,39 +105,14 @@ class GoalController extends Controller {
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
 						array(
+								'actions' => $actions,
 								'entity' => $goal,
 								'delete_form' => $deleteForm->createView(),
+								'edit_form' => $editForm->createView(),
 								'add_super_form' => $addSuperForm->createView(),
+								'add_enactor_form' => $addEnactorForm->createView(),
 								'user' => $user,
 						));
-	}
-	
-	public function showAsAction($role, $id){
-		$user = $this->getUser();
-		
-		$em = $this->getDoctrine()->getManager();
-		
-		$gm = $this->get('isssr_core.goalmanager');
-    	$goals = $gm->getGoals($role, $user);
-    	
-    	$goal = null;
-    	
-    	foreach ($entity as $goals)
-    		if ($entity->getId() == $id) $goal = $entity;
-		
-		if (!$goal) {
-			throw $this->createNotFoundException('Unable to find Goal entity.');
-		}
-		
-		$gm->preRendering($goal);
-		
-		$deleteForm = $this->createDeleteForm($id);
-		return $this
-		->render('IsssrCoreBundle:Goal:show.html.twig',
-				array('entity' => $goal,
-						'delete_form' => $deleteForm->createView(),
-						'user' => $user,));
-
 	}
 
 //     /**
@@ -295,58 +269,55 @@ class GoalController extends Controller {
 								'user' => $user,));
 	}
 
-	//     /**
-	//      * Invio una mail ai super
-	//      *
-	//      */
-	//     public function sendToSupersAction($id)
-	//     {
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
+	    /**
+	     * Invio una mail ai super
+	     *
+	     */
+	    public function notifySupersAction(Request $request, $id)
+	    {
+	    	$user = $this->getUser();
 
-	//     	$em = $this->getDoctrine()->getManager();
+	    	$em = $this->getDoctrine()->getManager();
 
-	//     	$entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+	    	$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
 
-	//     	if (!$entity) {
-	//     		throw $this->createNotFoundException('Unable to find Goal entity.');
-	//     	}
-	//     	if ($entity->getOwner()->getId() != $user->getId()) {
-	//     		throw new HttpException(403);
-	//     	}
+	    	if (!$goal) {
+	    		throw $this->createNotFoundException('Unable to find Goal entity.');
+	    	}
+	    	
+	    	$gm = $this->get('isssr_core.goalmanager');
+	    	$gm->preRendering($goal);
+	    	
+	    	$wm = $this->get('isssr_core.workflowmanager');
+	    	$actions = $wm->userGoalShowActions($user, $goal);
+	    	if (!$actions->notifySupers())
+	    		throw new HttpException(403);
 
-	//     	$supers = $entity->getSupers();
-	//     	$body = null;
-	//     	if ($entity->softEditable()) $body = 'The Goal '.$entity->getTitle().', which some super owner previously refused, has been modified, Validate it agan, please';
-	//     	else $body = 'We are kindly informing you that you are now a Goal Super Owner of the goal '.$entity->getTitle();
+	    	$supers = $goal->getSupers();
+	    	$body = null;
+	    	if ($goal->softEditable()) $body = 'The Goal '.$goal->getTitle().', which some super owner previously refused, has been modified, Validate it agan, please';
+	    	else $body = 'We are kindly informing you that you are now a Goal Super Owner of the goal '.$goal->getTitle();
 
-	//     	foreach( $supers as $super) {
+	    	foreach( $supers as $super) {
 
-	// 	    	$message = \Swift_Message::newInstance()
-	// 	    	->setSubject('ISSSR Notifier')
-	// 	    	->setFrom('isssr@isssr.org')
-	// 	    	->setTo($super->getSuper()->getEmail())
-	// 	    	->setBody(
-	// 	    			$body
-	// 	    	);
-	// 	    	$this->get('mailer')->send($message);
+		    	$message = \Swift_Message::newInstance()
+		    	->setSubject('ISSSR Notifier')
+		    	->setFrom('isssr@isssr.org')
+		    	->setTo($super->getSuper()->getEmail())
+		    	->setBody(
+		    			$body
+		    	);
+		    	$this->get('mailer')->send($message);
 
-	// 	    	$super->setStatus(SuperInGoal::STATUS_SENT);
-	// 			$em->persist($super);
-	// 		}
+		    	$super->setStatus(SuperInGoal::STATUS_SENT);
+				$em->persist($super);
+			}
 
-	// 		$enactor = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->getGoal($entity->getId());
-	// 		if ($enactor) {
-	// 			$enactor[0]->setStatus(EnactorInGoal::STATUS_WAITING);
-	// 			$em->persist($enactor[0]);
-	// 		}
+	    	$em->flush();
 
-	//     	$em->flush();
+	    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
 
-	//     	return $this->redirect($this->generateUrl('superingoal', array('id' => $entity->getId())));
-
-	//     }
+	    }
 
 	/**
 	 * Edits an existing Goal entity.
@@ -540,6 +511,25 @@ class GoalController extends Controller {
 				->add('id', 'hidden')->getForm();
 	}
 	
+	private function createAddSuperForm($goal) {
+		$hm = $this->get('isssr_core.hierarchymanager');
+		$user = $this->getUser();
+		$tmpsupers = $hm->getSupers($user);
+		$supers = $this->filterSupersInGoal($tmpsupers, $goal);
+			
+		$role = new UserInGoal();
+		return $this->createForm(new RoleType($supers, UserInGoal::ROLE_SUPER), $role);
+	}
+	
+	private function createAddEnactorForm($goal) {
+		$em = $this->getDoctrine()->getManager();
+        $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
+		$users = $this->filterSupersInGoal($tmpusers, $goal);
+        
+		$role = new UserInGoal();
+		return $this->createForm(new RoleType($users, UserInGoal::ROLE_ENACTOR), $role);
+	}
+	
 	private function filterSupersInGoal($list, Goal $goal) {
 		$em = $this->getDoctrine()->getManager();
 				
@@ -553,7 +543,6 @@ class GoalController extends Controller {
 		$newsupers = array();
 		foreach ($list as $super) {
 			if(!in_array($super, $oldsupers)) {
-				$id = array_search($super, $list);
 				$newsupers[] = $em->getRepository('IsssrCoreBundle:User')->find($super);
 			}
 		}

@@ -2,6 +2,10 @@
 
 namespace Isssr\CoreBundle\Services;
 
+use Isssr\CoreBundle\Entity\GoalShowActions;
+
+use Isssr\CoreBundle\Controller\GoalController;
+
 use Isssr\CoreBundle\Entity\UserInGoal;
 
 use Isssr\CoreBundle\Entity\Goal;
@@ -22,29 +26,111 @@ class WorkflowManager
 		$this->gm = $gm;
 	}
 	
-	public function userCanAddRole(User $user, UserInGoal $userInGoal)
+	public function userGoalShowActions(User $user, Goal $goal)
 	{
 		$gm = $this->gm;
-		$goal = $userInGoal->getGoal();
-		$role = $userInGoal->getRole();
-		$newuser = $userInGoal->getUser();
+		$gm->preRendering($goal);
+		$roles = $gm->getRoles($user, $goal);
+		
+		$actions = new GoalShowActions();
+		
+		switch($gm->getStatus($goal))
+		{
+			case Goal::STATUS_EDITABLE:
+				if($roles->contains(UserInGoal::ROLE_OWNER))
+				{
+					$actions->add(GoalShowActions::SHOW_GOAL_ACTION_DELETE);
+					$actions->add(GoalShowActions::SHOW_GOAL_ACTION_EDIT);
+					$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_SUPER);
+					if($goal->getSupers()->count()>0)
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_NOTIFY_SUPERS);
+				}
+				break;
+				
+			case Goal::STATUS_SOFTEDITABLE:
+				if($roles->contains(UserInGoal::ROLE_OWNER))
+				{
+					$actions->add(GoalShowActions::SHOW_GOAL_ACTION_SOFTEDIT);
+					$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_SUPER);
+					if($goal->getSupers()->count()>0)
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_NOTIFY_SUPERS);
+				}
+				break;
+				
+			case Goal::STATUS_NOTEDITABLE:
+				if($roles->contains(UserInGoal::ROLE_SUPER))
+				{
+					$status = $gm->getRoleStatus($user, $goal, UserInGoal::ROLE_SUPER);
+					if($status == UserInGoal::STATUS_WAITING_FOR_VALIDATION) {
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ACCEPT_GOAL);
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_REJECT_GOAL);
+					}
+				}
+				
+				if($roles->contains(UserInGoal::ROLE_ENACTOR))
+				{
+					$status = $gm->getRoleStatus($user, $goal, UserInGoal::ROLE_ENACTOR);
+					if($status == UserInGoal::STATUS_WAITING_FOR_VALIDATION) {
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ACCEPT_GOAL);
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_REJECT_GOAL);
+					}
+				}
+				break;
+				
+			case Goal::STATUS_ACCEPTED:
+				if($roles->contains(UserInGoal::ROLE_OWNER))
+				{
+					if($this->userCanAddRole($user, $goal, UserInGoal::ROLE_ENACTOR))
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_ENACTOR);
+					if($goal->getEnactor() != null)
+						$actions->add(GoalShowActions::SHOW_GOAL_ACTION_NOTIFY_ENACTOR);
+				}
+				break;
+				
+			case Goal::STATUS_APPROVED:
+				
+				break;
+		}
+		
+		return $actions;
+	}
+	
+	public function userCanAddRole(User $user, Goal $goal, $role)
+	{
+		$gm = $this->gm;
 		
 		$gm->preRendering($goal);
 		$owner = $goal->getOwner();
 		$enactor = $goal->getEnactor();
+		$goalStatus = $goal->getStatus();
 				
-		if($role == UserInGoal::ROLE_SUPER || $role == UserInGoal::ROLE_ENACTOR)
+		if($role == UserInGoal::ROLE_SUPER)
 		{
 			if($user->getId() != $owner->getId())
 				return false;
 			
-			// @todo check sullo stato
+			if($goalStatus != Goal::STATUS_EDITABLE && $goalStatus != Goal::STATUS_SOFTEDITABLE)
+				return false;
+			
+			return true;
+		}
+		
+		if($role == UserInGoal::ROLE_ENACTOR)
+		{
+			if($user->getId() != $owner->getId())
+				return false;
+				
+			if($goalStatus != Goal::STATUS_ACCEPTED)
+				return false;
+				
+			if($enactor != null)
+				return false;
+			
 			return true;
 		}
 		
 		// tutti gli altri ruoli aggiungibili da un Enactor
 		
-		// @todo check sullo stato
 		
 		if($enactor == null)
 			return false;
@@ -52,9 +138,14 @@ class WorkflowManager
 		if($user->getId() != $enactor->getId())
 			return false;
 		
+		if($goalStatus != Goal::STATUS_APPROVED)
+			return false;
+		
 		return true;
 		
 	}
+	
+	
 	
 	
 }

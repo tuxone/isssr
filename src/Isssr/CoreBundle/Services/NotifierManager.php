@@ -17,14 +17,54 @@ class NotifierManager
 		$this->em = $em;
 	}
 	
-	public function notifyInvolvedRole(User $user, UserInGoal $role)
+	public function notifyInvolvedSuper(User $user, User $receiver, Goal $goal)
 	{
+		if($user->getId() == $role->getUser()->getId())
+			return;
+	
 		$body = null;
 		$goal = $role->getGoal();
 		if ($role->getRole() == UserInGoal::ROLE_SUPER){
 			if ($role->getStatus() == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED) $body = $this->bodySuperFirstSent($goal);
 			else if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodySuperOtherSent($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED) $body = $this->bodySyperAccept($user, $goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED) $body = $this->bodySuperAccept($user, $goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodySuperReject($user, $goal);
+		}
+		else if ($role->getRole() == UserInGoal::ROLE_ENACTOR) {
+			if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodyEnactor($goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED) $body = $this->bodyEnactorAccept($user, $goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodyEnactorReject($user, $goal);
+				
+		}
+		else if ($role->getRole() == UserInGoal::ROLE_QS) {
+			$body = $this->bodyQs($goal);
+		}
+		else if($role->getRole() == UserInGoal::ROLE_MMDM) {
+			$body = $this->bodyMmdm($goal);
+		}
+	
+	
+		$message = \Swift_Message::newInstance()
+		->setSubject('ISSSR Notifier')
+		->setFrom('isssr@isssr.org')
+		->setTo($role->getUser()->getEmail())
+		->setBody(
+				$body
+		);
+		$this->get('mailer')->send($message);
+	}
+	
+	public function notifyInvolvedRole(User $user, UserInGoal $role)
+	{
+		if($user->getId() == $role->getUser()->getId())
+			return;
+		
+		$body = null;
+		$goal = $role->getGoal();
+		if ($role->getRole() == UserInGoal::ROLE_SUPER){
+			if ($role->getStatus() == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED) $body = $this->bodySuperFirstSent($goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodySuperOtherSent($goal);
+			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED) $body = $this->bodySuperAccept($user, $goal);
 			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodySuperReject($user, $goal);
 		}
 		else if ($role->getRole() == UserInGoal::ROLE_ENACTOR) {
@@ -61,7 +101,7 @@ class NotifierManager
     	return 'The Goal '.$goal->getTitle().', which some super owner previously refused, has been modified, Validate it agan, please';
     }
     
-    private function bodySyperAccept(User $user, Goal $goal)
+    private function bodySuperAccept(User $user, Goal $goal)
     {
     	return 'The Goal Super Owner '.$user->getUsername().' did accept the goal '.$goal->getTitle();	
     }
