@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RejectJustType extends AbstractType
 {
+	
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

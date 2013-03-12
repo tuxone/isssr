@@ -2,6 +2,7 @@ parameters:
     isssr_hm.class: Isssr\CoreBundle\Services\HierarchyManager
     isssr_gm.class: Isssr\CoreBundle\Services\GoalManager
     isssr_nm.class: Isssr\CoreBundle\Services\NotifierManager
+    isssr_wm.class: Isssr\CoreBundle\Services\WorkflowManager
 
 services:
 
@@ -16,3 +17,7 @@ services:
     isssr_core.notifiermanager:
         class: "%isssr_nm.class%"
         arguments: ["@doctrine.orm.entity_manager"]
+        
+    isssr_core.workflowmanager:
+        class: "%isssr_wm.class%"
+        arguments: ["@doctrine.orm.entity_manager", "@isssr_core.goalmanager"]

@@ -8,7 +8,6 @@ use Isssr\CoreBundle\Entity\Goal;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
-use Isssr\CoreBundle\Entity\UserInGoal;
 
 class NotifierManager
 {
@@ -30,7 +29,7 @@ class NotifierManager
 			$body = $this->bodyEnactor($goal);	
 		}
 		else if ($role->getRole() == UserInGoal::ROLE_QS) {
-			$body = $this->bodyQs($goal)
+			$body = $this->bodyQs($goal);
 		}
 		else if($role->getRole() == UserInGoal::ROLE_MMDM) {
 			$body = $this->bodyMmdm($goal);

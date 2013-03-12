@@ -95,6 +95,13 @@ class GoalController extends Controller {
 		 
 		$role = new UserInGoal();
 		$addSuperForm   = $this->createForm(new RoleType($supers, UserInGoal::ROLE_SUPER), $role);
+		
+		
+		/*$roles = $em->getRepository('IsssrCoreBundle:UserInGoal')
+				->getBySuperAndGoal($user->getId(), $id);
+		$role = $roles[0];
+		$acceptForm = $this->createRoleAcceptsForm($role->getId());
+		$rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());*/
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
@@ -131,8 +138,7 @@ class GoalController extends Controller {
 				array('entity' => $goal,
 						'delete_form' => $deleteForm->createView(),
 						'user' => $user,));
-		
-		
+
 	}
 
 //     /**
@@ -415,291 +421,124 @@ class GoalController extends Controller {
 		return $this->redirect($this->generateUrl('goal'));
 	}
 
-	//     /**
-	//      * Accept a Goal from Super
-	//      *
-	//      */
-	//     public function superAcceptAction(Request $request, $id)
-	//     {
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
+	/**
+	 * Accept a Goal from Super
+	 *
+	 */
+	public function roleAcceptsAction(Request $request, $id)
+	{
+		$user = $this->getUser();
+	
+		$form = $this->createRoleAcceptsForm($id);
+		$form->bind($request);
+	
+		if ($form->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$role = $em->getRepository('IsssrCoreBundle:UserInGoal')->find($id);
+	
+			if (!$role) {
+				throw $this->createNotFoundException('Unable to find Role.');
+			}
+	
+			$role->setStatus(SuperInGoal::STATUS_ACCEPTED);
+	
+			$goal = $role->getGoal();
+			$goalOwner = $goal->getOwner();
+			$super = $role->getSuper();
+	
+			$message = \Swift_Message::newInstance()
+			->setSubject('ISSSR Notifier')
+			->setFrom('isssr@isssr.org')
+			->setTo($goalOwner->getEmail())
+			->setBody(
+					'The Goal Super Owner '.$super.' did accept the goal '.$goal->getTitle()
+			);
+			$this->get('mailer')->send($message);
+	
+			$em->persist($role);
+			$em->flush();
 
-	//     	$form = $this->createSuperAcceptForm($id);
-	//     	$form->bind($request);
-
-	//     	if ($form->isValid()) {
-	//     		$em = $this->getDoctrine()->getManager();
-	//     		$relation = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
-
-	//     		if (!$relation) {
-	//     			throw $this->createNotFoundException('Unable to find Goal entity.');
-
-	//     		}
-
-	//     		$relation->setStatus(SuperInGoal::STATUS_ACCEPTED);
-
-	//     		$goal = $relation->getGoal();
-	//     		$goalOwner = $goal->getOwner();
-	//     		$super = $relation->getSuper();
-
-	//     		$message = \Swift_Message::newInstance()
-	//     		->setSubject('ISSSR Notifier')
-	//     		->setFrom('isssr@isssr.org')
-	//     		->setTo($goalOwner->getEmail())
-	//     		->setBody(
-	//     				'The Goal Super Owner '.$super.' did accept the goal '.$goal->getTitle()
-	//     		);
-	//     		$this->get('mailer')->send($message);
-
-	//     		$em->persist($relation);
-	//     		$em->flush();
-	//     	}
-
-	//     	return $this->redirect(
-	//     			$this->generateUrl('goal_show_as_super',
-	//     			array('id' => $relation->getGoal()->getId()))
-	//     		);
-	//     }
-
-	//     /**
-	//      * Reject a Goal form Super
-	//      *
-	//      */
-	//     public function superRejectAction(Request $request, $id)
-	//     {
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
-
-	//     	$em = $this->getDoctrine()->getManager();
-
-	//     	$relation = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
-
-	//     	if (!$relation) {
-	//     		throw $this->createNotFoundException('Unable to find Goal entity.');
-	//     	}
-
-	//     	$goal = $relation->getGoal();
-	//     	$goalOwner = $goal->getOwner();
-	//     	$super = $relation->getSuper();
-
-	//     	$entity  = new RejectJust();
-	//     	$form = $this->createForm(new RejectJustType(), $entity);
-	//     	$form->bind($request);
-
-	//     	$entity->setCreator($super);
-	//     	$entity->setDatetime(new \DateTime('now'));
-	//     	$entity->setGoal($goal);
-
-	//     	if($form->isValid()) {
-
-	//     		// Aggiungo la nota di rifiuto
-
-	//     		$em->persist($entity);
-	//     		$em->flush();
-
-	//     		// Aggiorno lo stato
-
-	//     		$relation->setStatus(SuperInGoal::STATUS_REJECTED);
-
-	//     		$em->persist($relation);
-	//     		$em->flush();
-
-	//     		$message = \Swift_Message::newInstance()
-	//     		->setSubject('ISSSR Notifier')
-	//     		->setFrom('isssr@isssr.org')
-	//     		->setTo($goalOwner->getEmail())
-	//     		->setBody(
-	//     				'The Goal Super Owner '.$super.' did reject the goal '.$goal->getTitle()
-	//     		);
-	//     		$this->get('mailer')->send($message);
-	//     	}
-
-	//     	return $this->redirect(
-	//     			$this->generateUrl('goal_show_as_super',
-	//     			array('id' => $relation->getGoal()->getId()))
-	//     		);
-	//     }
-
-	//     public function sendToEnactorAction($id)
-	//     {
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
-
-	//     	$em = $this->getDoctrine()->getManager();
-
-	//     	$entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
-
-	//     	if (!$entity) {
-	//     		throw $this->createNotFoundException('Unable to find Goal entity.');
-	//     	}
-	//     	if ($entity->getOwner()->getId() != $user->getId()) {
-	//     		throw new HttpException(403);
-	//     	}
-
-	//     	$enactor = $entity->getEnactor();
-	//     	$body = "The Goal owner ".$entity->getOwner()." selected you as the Enactor for the Goal ".$entity->getTitle().".";
-
-	//     	if( $entity->getOwner() != $enactor) {
-
-	//     		$message = \Swift_Message::newInstance()
-	//     		->setSubject('ISSSR Notifier')
-	//     		->setFrom('isssr@isssr.org')
-	//     		->setTo($enactor->getEnactor()->getEmail())
-	//     		->setBody(
-	//     				$body
-	//     		);
-	//     		$this->get('mailer')->send($message);
-
-	//     		$enactor->setStatus(EnactorInGoal::STATUS_SENT);
-	//     		$em->persist($enactor);
-	//     	}
-
-	//     	else {
-	//     		$enactor->setStatus(EnactorInGoal::STATUS_ACCEPTED);
-	//     		$em->persist($enactor);
-	//     	}
-
-	//     	$em->flush();
-
-	//     	return $this->redirect($this->generateUrl('enactoringoal', array('id' => $entity->getId())));
-	//     }
-
-	//     public function enactorAcceptAction(Request $request, $id){
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
-	//     	$form = $this->createEnactorAcceptForm($id);
-	//     	$form->bind($request);
-
-	//     	if ($form->isValid()) {
-	//     		$em = $this->getDoctrine()->getManager();
-	//     		$relation = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->find($id);
-
-	//     		if (!$relation) {
-	//     			throw $this->createNotFoundException('Unable to find Goal entity.');
-
-	//     		}
-
-	//     		$relation->setStatus(EnactorInGoal::STATUS_ACCEPTED);
-
-	//     		$goal = $relation->getGoal();
-	//     		$goalOwner = $goal->getOwner();
-	//     		$enactor = $relation->getEnactor();
-
-	//     		$message = \Swift_Message::newInstance()
-	//     		->setSubject('ISSSR Notifier')
-	//     		->setFrom('isssr@isssr.org')
-	//     		->setTo($goalOwner->getEmail())
-	//     		->setBody(
-	//     				'The proposed Goal Enactor '.$enactor->getUsername().' for the Goal '.$goal->getTitle().' did accept your proposal.'
-	//     		);
-	//     		$this->get('mailer')->send($message);
-
-	//     		$em->persist($relation);
-	//     		$em->flush();
-	//     	}
-
-	//     	return $this->redirect(
-	//     			$this->generateUrl('goal_show_as_enactor',
-	//     			array('id' => $relation->getGoal()->getId()))
-	//     		);
-	//     }
-
-	//     public function enactorRejectAction(Request $request, $id){
-	//     	$scontext = $this->container->get('security.context');
-	//     	$token = $scontext->getToken();
-	//     	$user = $token->getUser();
-
-	//     	$em = $this->getDoctrine()->getManager();
-
-	//     	$relation = $em->getRepository('IsssrCoreBundle:EnactorInGoal')->find($id);
-
-	//     	if (!$relation) {
-	//     		throw $this->createNotFoundException('Unable to find Goal entity.');
-	//     	}
-
-	//     	$goal = $relation->getGoal();
-	//     	$goalOwner = $goal->getOwner();
-	//     	$enactor = $relation->getEnactor();
-
-	//     	$entity  = new RejectJust();
-	//     	$form = $this->createForm(new RejectJustType(), $entity);
-	//     	$form->bind($request);
-
-	//     	$entity->setCreator($enactor);
-	//     	$entity->setDatetime(new \DateTime('now'));
-	//     	$entity->setGoal($goal);
-
-	//     	if($form->isValid()) {
-
-	//     		// Aggiungo la nota di rifiuto
-
-	//     		$em->persist($entity);
-	//     		$em->flush();
-
-	//     		// Aggiorno lo stato
-
-	//     		$relation->setStatus(EnactorInGoal::STATUS_REJECTED);
-	//     		$em->persist($relation);
-
-	//     		$supers = $goal->getSupers();
-	//     		foreach ($supers as $super){
-	//     			$super->setStatus(SuperInGoal::STATUS_NOTSENT);
-	//     			$em->persist($super);
-	//     		}
-
-	//     		$em->flush();
-
-	//     		$message = \Swift_Message::newInstance()
-	//     		->setSubject('ISSSR Notifier')
-	//     		->setFrom('isssr@isssr.org')
-	//     		->setTo($goalOwner->getEmail())
-	//     		->setBody(
-	//     				'The proposed Goal Enactor '.$enactor->getUsername().' for the Goal '.$goal->getTitle().' did reject your proposal.'
-	//     		);
-	//     		$this->get('mailer')->send($message);
-	//     	}
-
-	//     	return $this->redirect(
-	//     			$this->generateUrl('goal_show_as_enactor',
-	//     			array('id' => $relation->getGoal()->getId()))
-	//     		);
-
-	//     }
-
+			return $this->redirect(
+					$this->generateUrl('goal_show',
+							array('id' => $goal->getId()))
+			);
+		}
+		
+		return $this->redirect($this->generateUrl('goal'));
+	}
+	
+	/**
+	 * Reject a Goal form Super
+	 *
+	 */
+	public function roleRejectsAction(Request $request, $id)
+	{
+		$scontext = $this->container->get('security.context');
+		$token = $scontext->getToken();
+		$user = $token->getUser();
+	
+		$em = $this->getDoctrine()->getManager();
+	
+		$relation = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
+	
+		if (!$relation) {
+			throw $this->createNotFoundException('Unable to find Goal entity.');
+		}
+	
+		$goal = $relation->getGoal();
+		$goalOwner = $goal->getOwner();
+		$super = $relation->getSuper();
+	
+		$entity  = new RejectJust();
+		$form = $this->createForm(new RejectJustType(), $entity);
+		$form->bind($request);
+	
+		$entity->setCreator($super);
+		$entity->setDatetime(new \DateTime('now'));
+		$entity->setGoal($goal);
+	
+		if($form->isValid()) {
+	
+			// Aggiungo la nota di rifiuto
+	
+			$em->persist($entity);
+			$em->flush();
+	
+			// Aggiorno lo stato
+	
+			$relation->setStatus(SuperInGoal::STATUS_REJECTED);
+	
+			$em->persist($relation);
+			$em->flush();
+	
+			$message = \Swift_Message::newInstance()
+			->setSubject('ISSSR Notifier')
+			->setFrom('isssr@isssr.org')
+			->setTo($goalOwner->getEmail())
+			->setBody(
+					'The Goal Super Owner '.$super.' did reject the goal '.$goal->getTitle()
+			);
+			$this->get('mailer')->send($message);
+		}
+	
+		return $this->redirect(
+				$this->generateUrl('goal_show_as_super',
+						array('id' => $relation->getGoal()->getId()))
+		);
+	}
+	
+	private function createRoleAcceptsForm($id)
+	{
+		return $this->createFormBuilder(array('id' => $id))
+		->add('id', 'hidden')
+		->getForm()
+		;
+	}
+	
 	private function createDeleteForm($id) {
 		return $this->createFormBuilder(array('id' => $id))
 				->add('id', 'hidden')->getForm();
 	}
-
-	//     private function createSuperAcceptForm($id)
-	//     {
-	//     	return $this->createFormBuilder(array('id' => $id))
-	//     	->add('id', 'hidden')
-	//     	->getForm()
-	//     	;
-	//     }
-
-	//     private function createEnactorAcceptForm($id)
-	//     {
-	//     	return $this->createFormBuilder(array('id' => $id))
-	//     	->add('id', 'hidden')
-	//     	->getForm()
-	//     	;
-	//     }
-
-	//     private function createSuperRejectForm($id)
-	//     {
-	//     	return $this->createFormBuilder(array('id' => $id))
-	//     	->add('id', 'hidden')
-	//     	->add('text', 'textarea', array(
-	// 			    'label' => 'Explain here:'))
-	//     	->getForm()
-	//     	;
-	//     }
 	
 	private function filterSupersInGoal($list, Goal $goal) {
 		$em = $this->getDoctrine()->getManager();

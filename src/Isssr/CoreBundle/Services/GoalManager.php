@@ -55,57 +55,67 @@ class GoalManager
 	}
 	
 	public function getStatus(Goal $goal){
+		$roles = $goal->getRoles();
+		$supers = array();
+		$owner = null;
+		$enactor = null;
 		
-		return Goal::STATUS_EDITABLE;
-// 		if ($this->supers->count() == 0)
-// 			return Goal::STATUS_EDITABLE;
+		foreach($roles as $role){
+			if ($role->getRole() == UserInGoal::ROLE_OWNER)
+				$owner = $role;
+			else if ($role->getRole() == UserInGoal::ROLE_ENACTOR)
+				$enactor = $role;
+			else if($role->getRole() == UserInGoal::ROLE_SUPER)
+				$supers[] = $role;	
+		}
+
+		if (count($supers) == 0)
+			return Goal::STATUS_EDITABLE;
 		
-// 		if ($this->enactor
-// 				&& $this->enactor->getStatus()
-// 				== EnactorInGoal::STATUS_ACCEPTED)
-// 			return Goal::STATUS_APPROVED;
+		if ($enactor
+				&& $enactor->getStatus()
+				== EnactorInGoal::STATUS_ACCEPTED)
+			return Goal::STATUS_APPROVED;
 		
-// 		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-// 			return Goal::STATUS_SOFTEDITABLE;
+		if ($enactor && $enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+			return Goal::STATUS_SOFTEDITABLE;
 		
+		$accepted = 0;
+		$rejected = 0;
+		$sent = 0;
+		$notsent = 0;
 		
-// 		$accepted = 0;
-// 		$rejected = 0;
-// 		$sent = 0;
-// 		$notsent = 0;
+		foreach ($supers as $super) {
+			if ($super->rejected())
+				$rejected++;
+			if ($super->sent())
+				$sent++;
+			if ($super->accepted())
+				$accepted++;
+			if ($super->notSent())
+				$notsent++;
+		}
 		
-// 		foreach ($this->supers as $super) {
-// 			if ($super->rejected())
-// 				$rejected++;
-// 			if ($super->sent())
-// 				$sent++;
-// 			if ($super->accepted())
-// 				$accepted++;
-// 			if ($super->notSent())
-// 				$notsent++;
-// 		}
+		if ($notsent > 0)
+			return Goal::STATUS_EDITABLE;
 		
-// 		if ($notsent > 0)
-// 			return Goal::STATUS_EDITABLE;
+		if ($rejected > 0)
+			return Goal::STATUS_SOFTEDITABLE;
 		
-// 		if ($rejected > 0)
-// 			return Goal::STATUS_SOFTEDITABLE;
+		if ($sent > 0)
+			return Goal::STATUS_NOTEDITABLE;
 		
-// 		if ($sent > 0)
-// 			return Goal::STATUS_NOTEDITABLE;
-		
-// 		if ($accepted == $this->supers->count())
-// 		{
-// 			if (!$this->enactor) return Goal::STATUS_ACCEPTED;
-// 			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
-// 				return Goal::STATUS_ACCEPTED;
-// 			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-// 				return Goal::STATUS_SOFTEDITABLE;
-				
-// 		}
+		if ($accepted == count($supers))
+		{
+			if (!$enactor) return Goal::STATUS_ACCEPTED;
+			if ($enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
+				return Goal::STATUS_ACCEPTED;
+			if ($enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+				return Goal::STATUS_SOFTEDITABLE;
+		}
 			
 		
-// 		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
+		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
 	}
 	
 	public function setOwner(Goal $goal, User $user) {

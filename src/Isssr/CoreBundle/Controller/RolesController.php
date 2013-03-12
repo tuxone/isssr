@@ -45,12 +45,14 @@ class RolesController extends Controller
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
         
-        // @todo verifica ----
-        //if($goal->getOwner()->getId() != $user->getId())
-        	//throw new HttpException(403);
-        
         $role->setGoal($goal);
         $role->setStatus(SuperInGoal::STATUS_NOTSENT);
+        
+        $wm = $this->get('isssr_core.workflowmanager');
+        $grant = $wm->userCanAddRole($user, $role);
+        
+        if(!$grant)
+        	throw new HttpException(403);
         
 		$em->persist($role);
         $em->flush();
@@ -62,19 +64,22 @@ class RolesController extends Controller
     {
 
     	$em = $this->getDoctrine()->getManager();
-    	$entity = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
+    	$role = $em->getRepository('IsssrCoreBundle:UserInGoal')->find($id);
     
-    	if (!$entity) {
+    	if (!$role) {
     		throw $this->createNotFoundException('Unable to find super entity.');
     	}
     
-    	// Ottengo il goal prima di eliminare il super
-    	$goal = $entity->getGoal();
+    	// verifico se posso eliminarlo
+    	// @todo
     	
-    	$em->remove($entity);
+    	// Ottengo il goal prima di eliminare il super
+    	$goal = $role->getGoal();
+    	
+    	$em->remove($role);
     	$em->flush();
     
-    	return $this->redirect($this->generateUrl('superingoal', array('id' => $goal->getId())));
+    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
     }
 
 }

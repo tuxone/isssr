@@ -155,4 +155,25 @@ class UserInGoal {
         return $this->goal;
     }
     
+    public function assigned() {
+    	return $this->status == UserInGoal::STATUS_GOAL_ASSIGNED;
+    }
+    
+    public function accepted() {
+    	return $this->status == UserInGoal::STATUS_GOAL_ACCEPTED;
+    }
+    
+    public function rejected() {
+    	return $this->status == UserInGoal::STATUS_GOAL_REJECTED;
+    }
+    
+    public function sent() {
+    	return $this->status == UserInGoal::STATUS_WAITING_FOR_VALIDATION;
+    }
+    
+    public function notSent() {
+    	return $this->status == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED ||
+    		$this->status == UserInGoal::STATUS_VALIDATION_NEEDED;
+    }
+    
 }

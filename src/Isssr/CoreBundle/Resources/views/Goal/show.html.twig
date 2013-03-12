@@ -11,6 +11,10 @@
             <td>{{ entity.id }}</td>
         </tr>
         <tr>
+            <th>Status</th>
+            <td>{{ entity.getStatus() }}</td>
+        </tr>
+        <tr>
             <th>Title</th>
             <td>{{ entity.title }}</td>
         </tr>
@@ -45,8 +49,11 @@
             <th>Supers</th>
             	<td>
             		<ul>
-					    {% for super in entity.getSupers() %}
-					        <li>{{ super }}</li>
+					    {% for super in entity.getSupersInGoal() %}
+					        <li>
+					        	{{ super.user }} - 
+					        	<a href="{{ path('roles_delete', { 'id': super.id }) }}">remove</a>
+					        </li>
 					    {% endfor %}
 					</ul>
             	</td>

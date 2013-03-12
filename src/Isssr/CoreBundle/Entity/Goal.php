@@ -103,17 +103,17 @@ class Goal {
 	/**
 	 * Rendering Facilities
 	 */
-	private $owner;
+	private $owner = null;
 	
-	private $enactor;
+	private $enactor = null;
 	
-	private $supers;
+	private $supers = null;
 	
-	private $qss;
+	private $qss = null;
 	
-	private $mmdm;
+	private $mmdm = null;
 	
-	private $status;
+	private $status = null;
 
 	/**
 	 * Constructor
@@ -503,6 +503,21 @@ class Goal {
     public function getRoles()
     {
         return $this->roles;
+    }
+    
+    /**
+     * Get supersInGoal
+     * serve per le baundary
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupersInGoal()
+    {
+    	$ret = new ArrayCollection();
+    	foreach ($this->roles as $role)
+    		if($role->getRole() == UserInGoal::ROLE_SUPER)
+    			$ret->add($role);
+    	return $ret;
     }
     
     public function setOwner(User $owner){
