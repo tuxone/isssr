@@ -3,7 +3,7 @@
 namespace Isssr\CoreBundle\Services;
 
 use Isssr\CoreBundle\Entity\UserInGoal;
-
+use Isssr\CoreBundle\Entity\User;
 use Isssr\CoreBundle\Entity\Goal;
 
 use Doctrine\ORM\EntityManager;
@@ -17,41 +17,37 @@ class NotifierManager
 		$this->em = $em;
 	}
 	
-	public function notifyInvolvedSuper(User $user, User $receiver, Goal $goal)
+	public function askSupersForValidation(Goal $goal)
 	{
-		if($user->getId() == $role->getUser()->getId())
-			return;
-	
+		$supers = $goal->getSupers();
 		$body = null;
-		$goal = $role->getGoal();
-		if ($role->getRole() == UserInGoal::ROLE_SUPER){
-			if ($role->getStatus() == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED) $body = $this->bodySuperFirstSent($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodySuperOtherSent($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED) $body = $this->bodySuperAccept($user, $goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodySuperReject($user, $goal);
+		if ($goal->editable()) $body = $this->bodySuperFirstSent($goal);
+		else $this->bodySuperOtherSent($goal);
+		foreach ($super as $supers)
+		{
+			$message = \Swift_Message::newInstance()
+			->setSubject('ISSSR Notifier')
+			->setFrom('isssr@isssr.org')
+			->setTo($super->getEmail())
+			->setBody(
+					$body
+			);
+			$this->get('mailer')->send($message);
 		}
-		else if ($role->getRole() == UserInGoal::ROLE_ENACTOR) {
-			if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodyEnactor($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED) $body = $this->bodyEnactorAccept($user, $goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodyEnactorReject($user, $goal);
-				
-		}
-		else if ($role->getRole() == UserInGoal::ROLE_QS) {
-			$body = $this->bodyQs($goal);
-		}
-		else if($role->getRole() == UserInGoal::ROLE_MMDM) {
-			$body = $this->bodyMmdm($goal);
-		}
+	}
 	
-	
+	public function notifyOwnerSuperAcceptance(Goal $goal, User $super)
+	{
+		$body = $this->bodySuperAccept($super, $goal);
 		$message = \Swift_Message::newInstance()
 		->setSubject('ISSSR Notifier')
 		->setFrom('isssr@isssr.org')
-		->setTo($role->getUser()->getEmail())
+		->setTo($goal->getOwner()->getEmail())
 		->setBody(
 				$body
 		);
 		$this->get('mailer')->send($message);
+		
 	}
 	
 	public function notifyInvolvedRole(User $user, UserInGoal $role)
