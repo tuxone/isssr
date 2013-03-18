@@ -27,83 +27,39 @@ class NotifierManager
 		else $this->bodySuperOtherSent($goal);
 		foreach ($supers as $super)
 		{
-			$message = \Swift_Message::newInstance()
-			->setSubject('ISSSR Notifier')
-			->setFrom('isssr@isssr.org')
-			->setTo($super->getEmail())
-			->setBody(
-					$body
-			);
-			$this->mailer->send($message);
+			$this->sendMessage($body, $super->getEmail());
 		}
 	}
 	
 	public function notifyOwnerSuperAcceptance(Goal $goal, User $super)
 	{
 		$body = $this->bodySuperAccept($super, $goal);
-		$message = \Swift_Message::newInstance()
-		->setSubject('ISSSR Notifier')
-		->setFrom('isssr@isssr.org')
-		->setTo($goal->getOwner()->getEmail())
-		->setBody(
-				$body
-		);
-		$this->get('mailer')->send($message);
-		
+		$this->sendMessage($body, $goal->getOwner());
 	}
 	
 	public function notifyOwnerSuperRejection(Goal $goal, User $super)
 	{
 		$body = $this->bodySuperReject($super, $goal);
-		$message = \Swift_Message::newInstance()
-		->setSubject('ISSSR Notifier')
-		->setFrom('isssr@isssr.org')
-		->setTo($goal->getOwner()->getEmail())
-		->setBody(
-				$body
-		);
-		$this->get('mailer')->send($message);
+		$this->sendMessage($body, $goal->getOwner());
 	}
 	
 	public function askEnactorForValidation(Goal $goal)
 	{
 		$enactor = $goal->getEnactor();
 		$body = $this->bodyEnactor($goal);
-		$message = \Swift_Message::newInstance()
-		->setSubject('ISSSR Notifier')
-		->setFrom('isssr@isssr.org')
-		->setTo($enactor->getEmail())
-		->setBody(
-				$body
-		);
-		$this->mailer->send($message);
-		
+		$this->sendMessage($body, $enactor);		
 	}
 	
 	public function notifyOwnerEnactorAcceptance(Goal $goal, User $enactor)
 	{
 		$body = $this->bodyEnactorAccept($enactor, $goal);
-		$message = \Swift_Message::newInstance()
-		->setSubject('ISSSR Notifier')
-		->setFrom('isssr@isssr.org')
-		->setTo($goal->getOwner()->getEmail())
-		->setBody(
-				$body
-		);
-		$this->get('mailer')->send($message);
+		$this->sendMessage($body, $goal->getOwner());
 	}
 	
 	public function notifyOwnerEnactorRejection(Goal $goal, User $enactor)
 	{
 		$body = $this->bodyEnactorReject($enactor, $goal);
-		$message = \Swift_Message::newInstance()
-		->setSubject('ISSSR Notifier')
-		->setFrom('isssr@isssr.org')
-		->setTo($goal->getOwner()->getEmail())
-		->setBody(
-				$body
-		);
-		$this->get('mailer')->send($message);
+		$this->sendMessage($body, $goal->getOwner());
 	}
 	
 	public function notifyQS($goal)
@@ -112,14 +68,7 @@ class NotifierManager
 		$body = $this->bodyQs($goal);
 		foreach ($QSs as $qs)
 		{
-			$message = \Swift_Message::newInstance()
-			->setSubject('ISSSR Notifier')
-			->setFrom('isssr@isssr.org')
-			->setTo($qs->getEmail())
-			->setBody(
-					$body
-			);
-			$this->mailer->send($message);
+			$this->sendMessage($body, $qs);
 		}
 		
 	}
@@ -127,10 +76,15 @@ class NotifierManager
 	public function notifyMMDM($goal)
 	{
 		$body = $this->bodyMmdm($goal);
+		$this->sendMessage($body, $goal->getMmdm());
+	}
+	
+	private function sendMessage($body, User $receiver)
+	{
 		$message = \Swift_Message::newInstance()
 		->setSubject('ISSSR Notifier')
 		->setFrom('isssr@isssr.org')
-		->setTo($goal->getMmdm()->getEmail())
+		->setTo($receiver->getEmail())
 		->setBody(
 				$body
 		);
