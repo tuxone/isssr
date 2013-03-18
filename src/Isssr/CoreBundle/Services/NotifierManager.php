@@ -52,37 +52,85 @@ class NotifierManager
 		
 	}
 	
-	public function notifyInvolvedRole(User $user, UserInGoal $role)
+	public function notifyOwnerSuperRejection(Goal $goal, User $super)
 	{
-		if($user->getId() == $role->getUser()->getId())
-			return;
-		
-		$body = null;
-		$goal = $role->getGoal();
-		if ($role->getRole() == UserInGoal::ROLE_SUPER){
-			if ($role->getStatus() == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED) $body = $this->bodySuperFirstSent($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodySuperOtherSent($goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ACCEPTED) $body = $this->bodySuperAccept($user, $goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodySuperReject($user, $goal);
-		}
-		else if ($role->getRole() == UserInGoal::ROLE_ENACTOR) {
-			if ($role->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED) $body = $this->bodyEnactor($goal);	
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED) $body = $this->bodyEnactorAccept($user, $goal);
-			else if ($role->getStatus() == UserInGoal::STATUS_GOAL_REJECTED) $body = $this->bodyEnactorReject($user, $goal);
-			
-		}
-		else if ($role->getRole() == UserInGoal::ROLE_QS) {
-			$body = $this->bodyQs($goal);
-		}
-		else if($role->getRole() == UserInGoal::ROLE_MMDM) {
-			$body = $this->bodyMmdm($goal);
-		}
-		
-		
+		$body = $this->bodySuperReject($super, $goal);
 		$message = \Swift_Message::newInstance()
 		->setSubject('ISSSR Notifier')
 		->setFrom('isssr@isssr.org')
-		->setTo($role->getUser()->getEmail())
+		->setTo($goal->getOwner()->getEmail())
+		->setBody(
+				$body
+		);
+		$this->get('mailer')->send($message);
+	}
+	
+	public function askEnactorForValidation(Goal $goal)
+	{
+		$enactor = $goal->getEnactor();
+		$body = $this->bodyEnactor($goal);
+		$message = \Swift_Message::newInstance()
+		->setSubject('ISSSR Notifier')
+		->setFrom('isssr@isssr.org')
+		->setTo($enactor->getEmail())
+		->setBody(
+				$body
+		);
+		$this->mailer->send($message);
+		
+	}
+	
+	public function notifyOwnerEnactorAcceptance(Goal $goal, User $enactor)
+	{
+		$body = $this->bodyEnactorAccept($enactor, $goal);
+		$message = \Swift_Message::newInstance()
+		->setSubject('ISSSR Notifier')
+		->setFrom('isssr@isssr.org')
+		->setTo($goal->getOwner()->getEmail())
+		->setBody(
+				$body
+		);
+		$this->get('mailer')->send($message);
+	}
+	
+	public function notifyOwnerEnactorRejection(Goal $goal, User $enactor)
+	{
+		$body = $this->bodyEnactorReject($enactor, $goal);
+		$message = \Swift_Message::newInstance()
+		->setSubject('ISSSR Notifier')
+		->setFrom('isssr@isssr.org')
+		->setTo($goal->getOwner()->getEmail())
+		->setBody(
+				$body
+		);
+		$this->get('mailer')->send($message);
+	}
+	
+	public function notifyQS($goal)
+	{
+		$QSs = $goal->getQss();
+		$body = $this->bodyQs($goal);
+		foreach ($QSs as $qs)
+		{
+			$message = \Swift_Message::newInstance()
+			->setSubject('ISSSR Notifier')
+			->setFrom('isssr@isssr.org')
+			->setTo($qs->getEmail())
+			->setBody(
+					$body
+			);
+			$this->mailer->send($message);
+		}
+		
+	}
+	
+	public function notifyMMDM($goal)
+	{
+		$body = $this->bodyMmdm($goal);
+		$message = \Swift_Message::newInstance()
+		->setSubject('ISSSR Notifier')
+		->setFrom('isssr@isssr.org')
+		->setTo($goal->getMmdm()->getEmail())
 		->setBody(
 				$body
 		);
