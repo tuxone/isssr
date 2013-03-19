@@ -13,7 +13,7 @@ class RejectJustType extends AbstractType
     {
         $builder
             ->add('text', 'textarea', array(
-			    'label' => 'Explain here:'))
+			    'label' => 'Explain here the cause:'))
         ;
     }
 

@@ -84,11 +84,11 @@
 	{% endif %}
 	
 	{% if actions.canAcceptGoal() %}
-		<a href="#acceptGoal" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Supers</a>
+		<a href="#acceptGoal" role="button" class="btn btn-success" style="width: 90px;" data-toggle="modal">Accept</a>
 	{% endif %}
 	
 	{% if actions.canRejectGoal() %}
-		<a href="#rejectGoal" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Supers</a>
+		<a href="#rejectGoal" role="button" class="btn btn-danger" style="width: 90px;" data-toggle="modal">Reject</a>
 	{% endif %}
 	
 	<div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -167,6 +167,30 @@
 			<p>Do you really want notify Goal Super Owners now?</p>      
 			<form action="{{ path('goal_notify_supers', { 'id': entity.id }) }}" method="post" style="display: inline">
 				{{ form_widget(notify_supers_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+				<button class="btn btn-primary" type="submit">Yes</button>
+			</form>
+		</div>
+	</div>
+	
+	
+	<div id="acceptGoal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;"> 
+			<p>Do you really want to accept this Organizational Goal?</p>      
+			<form action="{{ path('goal_accept', { 'id': entity.id }) }}" method="post" style="display: inline">
+				{{ form_widget(accept_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+				<button class="btn btn-primary" type="submit">Yes</button>
+			</form>
+		</div>
+	</div>
+	
+	
+	<div id="rejectGoal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;"> 
+			<p>Do you really want to reject this Organizational Goal?</p>      
+			<form action="{{ path('goal_reject', { 'id': entity.id }) }}" method="post" style="display: inline">
+				{{ form_widget(reject_form) }}
 				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
 				<button class="btn btn-primary" type="submit">Yes</button>
 			</form>

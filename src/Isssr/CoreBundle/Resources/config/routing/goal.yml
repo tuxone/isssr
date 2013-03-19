@@ -38,26 +38,17 @@ goal_delete:
     defaults: { _controller: "IsssrCoreBundle:Goal:delete" }
     requirements: { _method: post }
     
-goal_super_accept:
-    pattern:  /{id}/super_accept
-    defaults: { _controller: "IsssrCoreBundle:Goal:superAccept" }
+goal_accept:
+    pattern:  /{id}/accept
+    defaults: { _controller: "IsssrCoreBundle:Goal:roleAccepts" }
     requirements: { _method: post }
     
-goal_super_reject:
-    pattern:  /{id}/super_reject
-    defaults: { _controller: "IsssrCoreBundle:Goal:superReject" }
+goal_reject:
+    pattern:  /{id}/reject
+    defaults: { _controller: "IsssrCoreBundle:Goal:roleRejects" }
     requirements: { _method: post }
     
 goal_send_to_enactor:
     pattern:  /{id}/sendtoenactor
     defaults: { _controller: "IsssrCoreBundle:Goal:sendToEnactor" }
-    
-goal_enactor_accept:
-    pattern:  /{id}/enactor_accept
-    defaults: { _controller: "IsssrCoreBundle:Goal:enactorAccept" }
-    requirements: { _method: post }
-    
-goal_enactor_reject:
-    pattern:  /{id}/enactor_reject
-    defaults: { _controller: "IsssrCoreBundle:Goal:enactorReject" }
-    requirements: { _method: post }
+

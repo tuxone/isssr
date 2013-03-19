@@ -31,10 +31,17 @@ class GoalManager
 		return $roles;
 	}
 	
+	public function getFirstRole(User $user, Goal $goal)
+	{
+		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
+		return $repository->findFirstByUserAndGoal($user->getId(), $goal->getId());
+	}
+	
 	public function getRoleStatus(User $user, Goal $goal, $role)
 	{
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
-		return $repository->findByUserGoalAndRole($user->getId(), $goal->getId(), $role);
+		$userInGoal = $repository->findByUserGoalAndRole($user->getId(), $goal->getId(), $role);
+		return $userInGoal->getStatus();
 	}
 	
 	public function updateSupersStatusAfterAskingValidation(Goal $goal)
@@ -122,9 +129,9 @@ class GoalManager
 		if ($accepted == count($supers))
 		{
 			if (!$enactor) return Goal::STATUS_ACCEPTED;
-			if ($enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
+			if ($enactor->getStatus() == UserInGoal::STATUS_WAITING_FOR_VALIDATION)
 				return Goal::STATUS_ACCEPTED;
-			if ($enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
+			if ($enactor->getStatus() == UserInGoal::STATUS_GOAL_REJECTED)
 				return Goal::STATUS_SOFTEDITABLE;
 		}
 			

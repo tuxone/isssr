@@ -4,17 +4,10 @@ namespace Isssr\CoreBundle\Controller;
 use Isssr\CoreBundle\Entity\GoalShowAction;
 
 use Isssr\CoreBundle\Form\RoleType;
-
 use Isssr\CoreBundle\Entity\UserInGoal;
-
 use Isssr\CoreBundle\Entity\RejectJust;
-
 use Isssr\CoreBundle\Form\RejectJustType;
-
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Isssr\CoreBundle\Entity\SuperInGoal;
-use Isssr\CoreBundle\Entity\EnactorInGoal;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -96,12 +89,9 @@ class GoalController extends Controller {
 		$addEnactorForm = $this->createAddEnactorForm($goal);
 		$notifySupersForm = $this->createNotifySupersForm($id);
 		
-		
-		/*$roles = $em->getRepository('IsssrCoreBundle:UserInGoal')
-				->getBySuperAndGoal($user->getId(), $id);
-		$role = $roles[0];
+		$role = $gm->getFirstRole($user, $goal);
 		$acceptForm = $this->createRoleAcceptsForm($role->getId());
-		$rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());*/
+		$rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
@@ -113,6 +103,8 @@ class GoalController extends Controller {
 								'add_super_form' => $addSuperForm->createView(),
 								'add_enactor_form' => $addEnactorForm->createView(),
 								'notify_supers_form' => $notifySupersForm->createView(),
+								'accept_form' => $acceptForm->createView(),
+								'reject_form' => $rejectForm->createView(),
 								'user' => $user,
 						));
 	}
@@ -357,25 +349,26 @@ class GoalController extends Controller {
 	 */
 	public function deleteAction(Request $request, $id) {
 		$user = $this->getUser();
-
+		
 		$form = $this->createDeleteForm($id);
 		$form->bind($request);
 
 		if ($form->isValid()) {
 			$em = $this->getDoctrine()->getManager();
-			$entity = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+			$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
 
-			if (!$entity) {
+			if (!$goal) {
 				throw $this
 						->createNotFoundException('Unable to find Goal entity.');
 
 			}
 
-			if ($entity->getOwner()->getId() != $user->getId()) {
+			$wm = $this->get('isssr_core.workflowmanager');
+			$actions = $wm->userGoalShowActions($user, $goal);
+			if (!$actions->canDelete())
 				throw new HttpException(403);
-			}
 
-			$em->remove($entity);
+			$em->remove($goal);
 			$em->flush();
 		}
 
@@ -401,28 +394,23 @@ class GoalController extends Controller {
 				throw $this->createNotFoundException('Unable to find Role.');
 			}
 	
-			$role->setStatus(SuperInGoal::STATUS_ACCEPTED);
-	
-			$goal = $role->getGoal();
-			$goalOwner = $goal->getOwner();
-			$super = $role->getSuper();
-	
-			$message = \Swift_Message::newInstance()
-			->setSubject('ISSSR Notifier')
-			->setFrom('isssr@isssr.org')
-			->setTo($goalOwner->getEmail())
-			->setBody(
-					'The Goal Super Owner '.$super.' did accept the goal '.$goal->getTitle()
-			);
-			$this->get('mailer')->send($message);
-	
+			$role->setStatus(UserInGoal::STATUS_GOAL_ACCEPTED);
 			$em->persist($role);
 			$em->flush();
+			
+			$goal = $role->getGoal();
+			
+			$gm = $this->get('isssr_core.goalmanager');
+			$gm->preRendering($goal);
+				
+			$nm = $this->get('isssr_core.notifiermanager');
+			if($role->getRole() == UserInGoal::ROLE_ENACTOR)
+		    	$nm->notifyOwnerEnactorAcceptance($goal, $user);
+			else
+				$nm->notifyOwnerSuperAcceptance($goal, $user);
 
 			return $this->redirect(
-					$this->generateUrl('goal_show',
-							array('id' => $goal->getId()))
-			);
+					$this->generateUrl('goal_show', array('id' => $goal->getId())));
 		}
 		
 		return $this->redirect($this->generateUrl('goal'));
@@ -434,27 +422,21 @@ class GoalController extends Controller {
 	 */
 	public function roleRejectsAction(Request $request, $id)
 	{
-		$scontext = $this->container->get('security.context');
-		$token = $scontext->getToken();
-		$user = $token->getUser();
+		$user = $this->getUser();
 	
 		$em = $this->getDoctrine()->getManager();
 	
-		$relation = $em->getRepository('IsssrCoreBundle:SuperInGoal')->find($id);
+		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
 	
-		if (!$relation) {
+		if (!$goal) {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
-	
-		$goal = $relation->getGoal();
-		$goalOwner = $goal->getOwner();
-		$super = $relation->getSuper();
-	
+		
 		$entity  = new RejectJust();
 		$form = $this->createForm(new RejectJustType(), $entity);
 		$form->bind($request);
 	
-		$entity->setCreator($super);
+		$entity->setCreator($user);
 		$entity->setDatetime(new \DateTime('now'));
 		$entity->setGoal($goal);
 	
@@ -466,25 +448,23 @@ class GoalController extends Controller {
 			$em->flush();
 	
 			// Aggiorno lo stato
+			$gm = $this->get('isssr_core.goalmanager');
+			$role = $gm->getFirstRole($user, $goal);
+			$role->setStatus(UserInGoal::STATUS_GOAL_REJECTED);
 	
-			$relation->setStatus(SuperInGoal::STATUS_REJECTED);
-	
-			$em->persist($relation);
+			$em->persist($role);
 			$em->flush();
 	
-			$message = \Swift_Message::newInstance()
-			->setSubject('ISSSR Notifier')
-			->setFrom('isssr@isssr.org')
-			->setTo($goalOwner->getEmail())
-			->setBody(
-					'The Goal Super Owner '.$super.' did reject the goal '.$goal->getTitle()
-			);
-			$this->get('mailer')->send($message);
+			$gm->preRendering($goal);
+			$nm = $this->get('isssr_core.notifiermanager');
+			if($role->getRole() == UserInGoal::ROLE_ENACTOR)
+				$nm->notifyOwnerEnactorRejection($goal, $user);
+			else
+		    	$nm->notifyOwnerSuperRejection($goal, $user);
 		}
 	
 		return $this->redirect(
-				$this->generateUrl('goal_show_as_super',
-						array('id' => $relation->getGoal()->getId()))
+				$this->generateUrl('goal_show', array('id' => $goal->getId()))
 		);
 	}
 	

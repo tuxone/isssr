@@ -27,6 +27,15 @@ class UserInGoalRepository extends EntityRepository
 				->getResult();
 	}
 	
+	public function findFirstByUserAndGoal($uid, $gid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT r FROM IsssrCoreBundle:UserInGoal r '.
+				'WHERE r.user = '.$uid.' AND r.goal = '.$gid)
+				->getSingleResult();
+	}
+	
 	public function findByUserGoalAndRole($uid, $gid, $role)
 	{
 		return $this->getEntityManager()

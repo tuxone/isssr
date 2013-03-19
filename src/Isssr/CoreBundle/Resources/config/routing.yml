@@ -26,11 +26,3 @@ IsssrCoreBundle_rejectjust:
         resource: "@IsssrCoreBundle/Resources/config/routing/rejectjust.yml"
         prefix:   /rejectjust
         
-IsssrCoreBundle_enactoringoal:
-        resource: "@IsssrCoreBundle/Resources/config/routing/enactoringoal.yml"
-        prefix:   /enactoringoal
-        
-IsssrCoreBundle_mmdmingoal:
-        resource: "@IsssrCoreBundle/Resources/config/routing/mmdmingoal.yml"
-        prefix:   /mmdmingoal
-        

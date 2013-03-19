@@ -88,7 +88,7 @@ class NotifierManager
 		->setBody(
 				$body
 		);
-		$this->get('mailer')->send($message);
+		$this->mailer->send($message);
 	}
 	
     private function bodySuperFirstSent(Goal $goal)

@@ -17,7 +17,7 @@ class Goal {
 	const STATUS_SOFTEDITABLE = 3;
 	const STATUS_APPROVED = 4;
 	
-	private static $STATUSSTR = array('Not Editable', 'Editable', 'Accepted bi GSOs', 'Soft Editable', 'Approved');
+	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable', 'Accepted bi GSOs', 'Soft Editable', 'Approved');
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
