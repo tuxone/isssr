@@ -9,6 +9,15 @@ use Doctrine\ORM\EntityRepository;
 class UserInGoalRepository extends EntityRepository
 {
 
+	public function findByGoalAndRole($gid, $role)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT r FROM IsssrCoreBundle:UserInGoal r '.
+				'WHERE r.role = '.$role.' AND r.goal = '.$gid)
+				->getResult();
+	}
+	
 	public function findByUserAndGoal($uid, $gid)
 	{
 		return $this->getEntityManager()
@@ -18,7 +27,7 @@ class UserInGoalRepository extends EntityRepository
 				->getResult();
 	}
 	
-	public function findByUserGoalandRole($uid, $gid, $role)
+	public function findByUserGoalAndRole($uid, $gid, $role)
 	{
 		return $this->getEntityManager()
 		->createQuery(

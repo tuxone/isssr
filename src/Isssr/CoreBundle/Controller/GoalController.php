@@ -94,6 +94,7 @@ class GoalController extends Controller {
 		$editForm = $this->createForm(new GoalType(!$actions->canEdit()), $goal);
 		$addSuperForm = $this->createAddSuperForm($goal);
 		$addEnactorForm = $this->createAddEnactorForm($goal);
+		$notifySupersForm = $this->createNotifySupersForm($id);
 		
 		
 		/*$roles = $em->getRepository('IsssrCoreBundle:UserInGoal')
@@ -111,6 +112,7 @@ class GoalController extends Controller {
 								'edit_form' => $editForm->createView(),
 								'add_super_form' => $addSuperForm->createView(),
 								'add_enactor_form' => $addEnactorForm->createView(),
+								'notify_supers_form' => $notifySupersForm->createView(),
 								'user' => $user,
 						));
 	}
@@ -277,44 +279,32 @@ class GoalController extends Controller {
 	    {
 	    	$user = $this->getUser();
 
-	    	$em = $this->getDoctrine()->getManager();
-
-	    	$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
-
-	    	if (!$goal) {
-	    		throw $this->createNotFoundException('Unable to find Goal entity.');
+	    	$form = $this->createNotifySupersForm($id);
+	    	$form->bind($request);
+	    	
+	    	if ($form->isValid()) {
+	    		
+		    	$em = $this->getDoctrine()->getManager();
+		    	$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+	
+		    	if (!$goal) {
+		    		throw $this->createNotFoundException('Unable to find Goal entity.');
+		    	}
+		    	
+		    	$gm = $this->get('isssr_core.goalmanager');
+		    	$gm->preRendering($goal);
+		    	
+		    	$wm = $this->get('isssr_core.workflowmanager');
+		    	$actions = $wm->userGoalShowActions($user, $goal);
+		    	if (!$actions->canNotifySupers())
+		    		throw new HttpException(403);
+	
+		    	$nm = $this->get('isssr_core.notifiermanager');
+		    	$nm->askSupersForValidation($goal);
+	
+		    	$gm->updateSupersStatusAfterAskingValidation($goal);
+	    	
 	    	}
-	    	
-	    	$gm = $this->get('isssr_core.goalmanager');
-	    	$gm->preRendering($goal);
-	    	
-	    	$wm = $this->get('isssr_core.workflowmanager');
-	    	$actions = $wm->userGoalShowActions($user, $goal);
-	    	if (!$actions->notifySupers())
-	    		throw new HttpException(403);
-
-	    	$supers = $goal->getSupers();
-	    	$body = null;
-	    	if ($goal->softEditable()) $body = 'The Goal '.$goal->getTitle().', which some super owner previously refused, has been modified, Validate it agan, please';
-	    	else $body = 'We are kindly informing you that you are now a Goal Super Owner of the goal '.$goal->getTitle();
-
-	    	foreach( $supers as $super) {
-
-		    	$message = \Swift_Message::newInstance()
-		    	->setSubject('ISSSR Notifier')
-		    	->setFrom('isssr@isssr.org')
-		    	->setTo($super->getSuper()->getEmail())
-		    	->setBody(
-		    			$body
-		    	);
-		    	$this->get('mailer')->send($message);
-
-		    	$super->setStatus(SuperInGoal::STATUS_SENT);
-				$em->persist($super);
-			}
-
-	    	$em->flush();
-
 	    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
 
 	    }
@@ -509,6 +499,11 @@ class GoalController extends Controller {
 	private function createDeleteForm($id) {
 		return $this->createFormBuilder(array('id' => $id))
 				->add('id', 'hidden')->getForm();
+	}
+	
+	private function createNotifySupersForm($id) {
+		return $this->createFormBuilder(array('id' => $id))
+		->add('id', 'hidden')->getForm();
 	}
 	
 	private function createAddSuperForm($goal) {

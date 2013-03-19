@@ -16,7 +16,7 @@ services:
         
     isssr_core.notifiermanager:
         class: "%isssr_nm.class%"
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@mailer"]
         
     isssr_core.workflowmanager:
         class: "%isssr_wm.class%"

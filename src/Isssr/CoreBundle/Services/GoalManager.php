@@ -34,7 +34,19 @@ class GoalManager
 	public function getRoleStatus(User $user, Goal $goal, $role)
 	{
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
-		return $repository->findByUserGoalandRole($user->getId(), $goal->getId(), $role);
+		return $repository->findByUserGoalAndRole($user->getId(), $goal->getId(), $role);
+	}
+	
+	public function updateSupersStatusAfterAskingValidation(Goal $goal)
+	{
+		$em = $this->em;
+		$repository = $em->getRepository('IsssrCoreBundle:UserInGoal');
+		$supersInGoal = $repository->findByGoalAndRole($goal->getId(), UserInGoal::ROLE_SUPER);
+		foreach($supersInGoal as $superInGoal) {
+			$superInGoal->setStatus(UserInGoal::STATUS_WAITING_FOR_VALIDATION);
+			$em->persist($superInGoal);
+		}
+		$em->flush();
 	}
 	
 	public function preRendering(Goal $goal){
@@ -186,6 +198,5 @@ class GoalManager
 		$goals = $repository->findByQs($user->getId());
 		return $goals;
 	}
-	
 	
 }

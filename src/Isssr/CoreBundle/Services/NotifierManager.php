@@ -12,9 +12,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class NotifierManager
 {
 	private $em;
+	private $mailer;
 	
-	public function __construct(EntityManager $em){
+	public function __construct(EntityManager $em, $mailer){
 		$this->em = $em;
+		$this->mailer = $mailer;
 	}
 	
 	public function askSupersForValidation(Goal $goal)
@@ -23,7 +25,7 @@ class NotifierManager
 		$body = null;
 		if ($goal->editable()) $body = $this->bodySuperFirstSent($goal);
 		else $this->bodySuperOtherSent($goal);
-		foreach ($super as $supers)
+		foreach ($supers as $super)
 		{
 			$message = \Swift_Message::newInstance()
 			->setSubject('ISSSR Notifier')
@@ -32,7 +34,7 @@ class NotifierManager
 			->setBody(
 					$body
 			);
-			$this->get('mailer')->send($message);
+			$this->mailer->send($message);
 		}
 	}
 	
