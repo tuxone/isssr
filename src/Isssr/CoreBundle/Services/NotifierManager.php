@@ -27,7 +27,7 @@ class NotifierManager
 		else $this->bodySuperOtherSent($goal);
 		foreach ($supers as $super)
 		{
-			$this->sendMessage($body, $super->getEmail());
+			$this->sendMessage($body, $super);
 		}
 	}
 	

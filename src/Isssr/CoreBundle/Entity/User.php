@@ -179,39 +179,6 @@ class User extends BaseUser {
     }
 
     /**
-     * Add goalsAsMMDM
-     *
-     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM
-     * @return User
-     */
-    public function addGoalsAsMMDM(\Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM)
-    {
-        $this->goalsAsMMDM[] = $goalsAsMMDM;
-    
-        return $this;
-    }
-
-    /**
-     * Remove goalsAsMMDM
-     *
-     * @param \Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM
-     */
-    public function removeGoalsAsMMDM(\Isssr\CoreBundle\Entity\MMDMInGoal $goalsAsMMDM)
-    {
-        $this->goalsAsMMDM->removeElement($goalsAsMMDM);
-    }
-
-    /**
-     * Get goalsAsMMDM
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGoalsAsMMDM()
-    {
-        return $this->goalsAsMMDM;
-    }
-
-    /**
      * Add goals
      *
      * @param \Isssr\CoreBundle\Entity\UserInGoal $goals

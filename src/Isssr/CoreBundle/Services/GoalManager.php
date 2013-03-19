@@ -44,16 +44,40 @@ class GoalManager
 		return $userInGoal->getStatus();
 	}
 	
-	public function updateSupersStatusAfterAskingValidation(Goal $goal)
+	public function updateStatusesAfterAskingSupersForValidation(Goal $goal)
 	{
-		$em = $this->em;
-		$repository = $em->getRepository('IsssrCoreBundle:UserInGoal');
-		$supersInGoal = $repository->findByGoalAndRole($goal->getId(), UserInGoal::ROLE_SUPER);
-		foreach($supersInGoal as $superInGoal) {
-			$superInGoal->setStatus(UserInGoal::STATUS_WAITING_FOR_VALIDATION);
-			$em->persist($superInGoal);
+		$roles = $goal->getRoles();
+		foreach($roles as $role)
+		{
+			if($role->getRole() == UserInGoal::ROLE_SUPER)
+				$role->setStatus(UserInGoal::STATUS_WAITING_FOR_VALIDATION);
+			if($role->getRole() == UserInGoal::ROLE_ENACTOR)
+				$role->setStatus(UserInGoal::STATUS_VALIDATION_NEEDED);
 		}
-		$em->flush();
+		$this->em->persist($goal);
+		$this->em->flush();
+	}
+	
+	public function updateStatusesAfterAskingEnactorForValidation(Goal $goal)
+	{
+		$roles = $goal->getRoles();
+		foreach($roles as $role)
+		{
+			if($role->getRole() == UserInGoal::ROLE_ENACTOR)
+				$role->setStatus(UserInGoal::STATUS_WAITING_FOR_VALIDATION);
+		}
+		$this->em->persist($goal);
+		$this->em->flush();
+	}
+	
+	public function updateStatusesAfterRejection(Goal $goal)
+	{
+		$roles = $goal->getRoles();
+		foreach($roles as $role)
+			if ($role->getRole() == UserInGoal::ROLE_ENACTOR || $role->getRole() == UserInGoal::ROLE_SUPER)
+				$role->setStatus(UserInGoal::STATUS_VALIDATION_NEEDED);
+		$this->em->persist($goal);
+		$this->em->flush();
 	}
 	
 	public function preRendering(Goal $goal){
@@ -117,11 +141,11 @@ class GoalManager
 				$notsent++;
 		}
 		
-		if ($notsent > 0)
-			return Goal::STATUS_EDITABLE;
-		
 		if ($rejected > 0)
 			return Goal::STATUS_SOFTEDITABLE;
+		
+		if ($notsent > 0)
+			return Goal::STATUS_EDITABLE;
 		
 		if ($sent > 0)
 			return Goal::STATUS_NOTEDITABLE;
@@ -129,7 +153,8 @@ class GoalManager
 		if ($accepted == count($supers))
 		{
 			if (!$enactor) return Goal::STATUS_ACCEPTED;
-			if ($enactor->getStatus() == UserInGoal::STATUS_WAITING_FOR_VALIDATION)
+			if ($enactor->getStatus() == UserInGoal::STATUS_FIRST_VALIDATION_NEEDED ||
+					$enactor->getStatus() == UserInGoal::STATUS_VALIDATION_NEEDED)
 				return Goal::STATUS_ACCEPTED;
 			if ($enactor->getStatus() == UserInGoal::STATUS_GOAL_REJECTED)
 				return Goal::STATUS_SOFTEDITABLE;

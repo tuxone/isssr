@@ -174,10 +174,22 @@
 	</div>
 	
 	
+	<div id="notifyEnactor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-footer" style="text-align:center;"> 
+			<p>Do you really want notify Goal Enactor now?</p>      
+			<form action="{{ path('goal_notify_enactor', { 'id': entity.id }) }}" method="post" style="display: inline">
+				{{ form_widget(notify_enactor_form) }}
+				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+				<button class="btn btn-primary" type="submit">Yes</button>
+			</form>
+		</div>
+	</div>
+	
+	
 	<div id="acceptGoal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-footer" style="text-align:center;"> 
 			<p>Do you really want to accept this Organizational Goal?</p>      
-			<form action="{{ path('goal_accept', { 'id': entity.id }) }}" method="post" style="display: inline">
+			<form action="{{ path('goal_accept', { 'id': role.id }) }}" method="post" style="display: inline">
 				{{ form_widget(accept_form) }}
 				<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
 				<button class="btn btn-primary" type="submit">Yes</button>

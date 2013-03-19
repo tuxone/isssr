@@ -28,6 +28,11 @@ goal_notify_supers:
     defaults: { _controller: "IsssrCoreBundle:Goal:notifySupers" }
     requirements: { _method: post }
     
+goal_notify_enactor:
+    pattern:  /{id}/notifyenactor
+    defaults: { _controller: "IsssrCoreBundle:Goal:notifyEnactor" }
+    requirements: { _method: post }
+    
 goal_update:
     pattern:  /{id}/update
     defaults: { _controller: "IsssrCoreBundle:Goal:update" }

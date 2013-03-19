@@ -46,7 +46,7 @@ class RolesController extends Controller
         $form->bind($request);
         
         $role->setGoal($goal);
-        $role->setStatus(SuperInGoal::STATUS_NOTSENT);
+        $role->setStatus(UserInGoal::STATUS_FIRST_VALIDATION_NEEDED);
         
         $wm = $this->get('isssr_core.workflowmanager');
         $grant = $wm->userCanAddRole($user, $goal, $role->getRole());

@@ -88,6 +88,7 @@ class GoalController extends Controller {
 		$addSuperForm = $this->createAddSuperForm($goal);
 		$addEnactorForm = $this->createAddEnactorForm($goal);
 		$notifySupersForm = $this->createNotifySupersForm($id);
+		$notifyEnactorForm = $this->createNotifyEnactorForm($id);
 		
 		$role = $gm->getFirstRole($user, $goal);
 		$acceptForm = $this->createRoleAcceptsForm($role->getId());
@@ -103,9 +104,11 @@ class GoalController extends Controller {
 								'add_super_form' => $addSuperForm->createView(),
 								'add_enactor_form' => $addEnactorForm->createView(),
 								'notify_supers_form' => $notifySupersForm->createView(),
+								'notify_enactor_form' => $notifyEnactorForm->createView(),
 								'accept_form' => $acceptForm->createView(),
 								'reject_form' => $rejectForm->createView(),
 								'user' => $user,
+								'role' => $role,
 						));
 	}
 
@@ -294,11 +297,49 @@ class GoalController extends Controller {
 		    	$nm = $this->get('isssr_core.notifiermanager');
 		    	$nm->askSupersForValidation($goal);
 	
-		    	$gm->updateSupersStatusAfterAskingValidation($goal);
+		    	$gm->updateStatusesAfterAskingSupersForValidation($goal);
 	    	
 	    	}
 	    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
 
+	    }
+	    
+	    /**
+	     * Invio una mail all'enactor
+	     *
+	     */
+	    public function notifyEnactorAction(Request $request, $id)
+	    {
+	    	$user = $this->getUser();
+	    
+	    	$form = $this->createNotifyEnactorForm($id);
+	    	$form->bind($request);
+	    
+	    	if ($form->isValid()) {
+	    		 
+	    		$em = $this->getDoctrine()->getManager();
+	    		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+	    
+	    		if (!$goal) {
+	    			throw $this->createNotFoundException('Unable to find Goal entity.');
+	    		}
+	    		 
+	    		$gm = $this->get('isssr_core.goalmanager');
+	    		$gm->preRendering($goal);
+	    		 
+	    		$wm = $this->get('isssr_core.workflowmanager');
+	    		$actions = $wm->userGoalShowActions($user, $goal);
+	    		if (!$actions->canNotifyEnactor())
+	    			throw new HttpException(403);
+	    
+	    		$nm = $this->get('isssr_core.notifiermanager');
+	    		$nm->askEnactorForValidation($goal);
+	    
+	    		$gm->updateStatusesAfterAskingEnactorForValidation($goal);
+	    
+	    	}
+	    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
+	    
 	    }
 
 	/**
@@ -393,7 +434,7 @@ class GoalController extends Controller {
 			if (!$role) {
 				throw $this->createNotFoundException('Unable to find Role.');
 			}
-	
+
 			$role->setStatus(UserInGoal::STATUS_GOAL_ACCEPTED);
 			$em->persist($role);
 			$em->flush();
@@ -447,8 +488,10 @@ class GoalController extends Controller {
 			$em->persist($entity);
 			$em->flush();
 	
-			// Aggiorno lo stato
+			// Aggiorno gli stati
 			$gm = $this->get('isssr_core.goalmanager');
+			$gm->updateStatusesAfterRejection($goal);
+			
 			$role = $gm->getFirstRole($user, $goal);
 			$role->setStatus(UserInGoal::STATUS_GOAL_REJECTED);
 	
@@ -482,6 +525,11 @@ class GoalController extends Controller {
 	}
 	
 	private function createNotifySupersForm($id) {
+		return $this->createFormBuilder(array('id' => $id))
+		->add('id', 'hidden')->getForm();
+	}
+	
+	private function createNotifyEnactorForm($id) {
 		return $this->createFormBuilder(array('id' => $id))
 		->add('id', 'hidden')->getForm();
 	}
