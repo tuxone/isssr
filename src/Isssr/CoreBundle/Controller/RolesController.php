@@ -53,7 +53,6 @@ class RolesController extends Controller
         
         if(!$grant)
         	throw new HttpException(403);
-        
 		$em->persist($role);
         $em->flush();
         

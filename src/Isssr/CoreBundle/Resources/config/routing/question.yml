@@ -1,0 +1,30 @@
+question:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Question:index" }
+
+question_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Question:show" }
+
+question_new:
+    pattern:  /goal/{id}/new/
+    defaults: { _controller: "IsssrCoreBundle:Question:new" }
+
+question_create:
+    pattern:  /goal/{id}/create
+    defaults: { _controller: "IsssrCoreBundle:Question:create" }
+    requirements: { _method: post }
+
+question_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:Question:edit" }
+
+question_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:Question:update" }
+    requirements: { _method: post }
+
+question_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Question:delete" }
+    requirements: { _method: post }

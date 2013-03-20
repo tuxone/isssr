@@ -1,0 +1,33 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Question{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Question</th>
+            <td>{{ entity.question }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ entity.status }}</td>
+        </tr>
+        <tr>
+            <th>Creator</th>
+            <td>{{ entity.creator.getUser().getUsername() }}</td>
+        </tr>
+    </tbody>
+</table>
+
+        <button href="{{ path('question_edit', { 'id': entity.id }) }}">
+            Edit
+        </button>
+        <form action="{{ path('question_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    
+
+{% endblock %}

@@ -16,7 +16,8 @@ class Goal {
 	const STATUS_ACCEPTED = 2; // accepted by Goal Super Owners
 	const STATUS_SOFTEDITABLE = 3;
 	const STATUS_APPROVED = 4;
-
+	
+	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable', 'Accepted by GSOs', 'Soft Editable', 'Approved');
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -40,7 +41,7 @@ class Goal {
 	protected $priority;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="goal")
+	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $roles;
 	
@@ -99,6 +100,21 @@ class Goal {
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	protected $assumptions;
+	
+	/**
+	 * Rendering Facilities
+	 */
+	private $owner = null;
+	
+	private $enactor = null;
+	
+	private $supers = null;
+	
+	private $qss = null;
+	
+	private $mmdm = null;
+	
+	private $status = null;
 
 	/**
 	 * Constructor
@@ -106,6 +122,11 @@ class Goal {
 	public function __construct() {
 		$this->tags = new ArrayCollection();
 		$this->users = new ArrayCollection();
+	}
+	
+	public function initPreRendering() {
+		$this->supers = new ArrayCollection();
+		$this->qss = new ArrayCollection();
 	}
 
 	/**
@@ -403,59 +424,6 @@ class Goal {
 		return $this->id . '_' . $this->title;
 	}
 
-	public function getStatus() {
-
-		if ($this->supers->count() == 0)
-			return Goal::STATUS_EDITABLE;
-
-		if ($this->enactor
-				&& $this->enactor->getStatus()
-						== EnactorInGoal::STATUS_ACCEPTED)
-			return Goal::STATUS_APPROVED;
-		
-		if ($this->enactor && $this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-			return Goal::STATUS_SOFTEDITABLE;
-		
-		
-		$accepted = 0;
-		$rejected = 0;
-		$sent = 0;
-		$notsent = 0;
-
-		foreach ($this->supers as $super) {
-			if ($super->rejected())
-				$rejected++;
-			if ($super->sent())
-				$sent++;
-			if ($super->accepted())
-				$accepted++;
-			if ($super->notSent())
-				$notsent++;
-		}
-
-		if ($notsent > 0)
-			return Goal::STATUS_EDITABLE;
-
-		if ($rejected > 0)
-			return Goal::STATUS_SOFTEDITABLE;
-
-		if ($sent > 0)
-			return Goal::STATUS_NOTEDITABLE;
-
-		if ($accepted == $this->supers->count())
-		{
-			if (!$this->enactor) return Goal::STATUS_ACCEPTED;
-			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_WAITING)
-				return Goal::STATUS_ACCEPTED;
-			if ($this->enactor->getStatus() == EnactorInGoal::STATUS_REJECTED)
-				return Goal::STATUS_SOFTEDITABLE;
-					
-		}
-					
-
-		return Goal::STATUS_NOTEDITABLE; // non dovrebbe arrivarci mai
-	}
-
 	public function editable() {
 		return $this->getStatus() == Goal::STATUS_EDITABLE;
 	}
@@ -528,5 +496,84 @@ class Goal {
     public function getRoles()
     {
         return $this->roles;
+    }
+    
+    /**
+     * Get supersInGoal
+     * serve per le baundary
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupersInGoal()
+    {
+    	$ret = new ArrayCollection();
+    	foreach ($this->roles as $role)
+    		if($role->getRole() == UserInGoal::ROLE_SUPER)
+    			$ret->add($role);
+    	return $ret;
+    }
+    
+    public function setOwner(User $owner){
+    	$this->owner = $owner;
+    }
+    
+    public function getOwner(){
+    	return $this->owner;
+    }
+    
+    public function setEnactor(User $enactor){
+    	$this->enactor = $enactor;
+    }
+    
+    public function getEnactor(){
+    	return $this->enactor;
+    }
+    
+    public function setMmdm(User $mmdm){
+    	$this->mmdm = $mmdm;
+    }
+    
+    public function getMmdm(){
+    	return $this->mmdm;
+    }
+    
+    public function addSuper(User $super){
+    	$this->supers[] = $super;
+    	
+    	return $this;
+    }
+    
+    public function removeSuper(User $super){
+    	$this->supers->removeElement($super);
+    }
+    
+    public function getSupers(){
+    	return $this->supers;
+    }
+    
+    public function addQs(User $qs){
+    	$this->qss[] = $qs;
+    	
+    	return $this;
+    }
+    
+    public function removeQs(User $qs){
+    	$this->qss->removeElement($qs);
+    }
+    
+    public function getQss(){
+    	return $this->qss;
+    }
+    
+    public function getStatus() {
+    	return $this->status;
+    }
+    
+    public function getStatusString() {
+    	return self::$STATUSSTR[$this->status];
+    }
+    
+    public function setStatus($status){
+    	$this->status = $status;
     }
 }

@@ -1,0 +1,14 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}New Question for {{ goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('question_create', { 'id': goal.id })  }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
+
+{% endblock %}

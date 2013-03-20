@@ -53,6 +53,16 @@ class UserInGoal {
 	 */
    	protected $status;
 
+   	/**
+   	 * @ORM\OneToMany(targetEntity="Question", mappedBy="id")
+   	 */
+   	protected $questionsOwned;
+   	
+   	public function __construct()
+   	{
+   		$this->questionsOwned = new ArrayCollection();
+   	}
+   	
     /**
      * Get id
      *
@@ -176,4 +186,37 @@ class UserInGoal {
     		$this->status == UserInGoal::STATUS_VALIDATION_NEEDED;
     }
     
+
+    /**
+     * Add questionsOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Question $questionsOwned
+     * @return UserInGoal
+     */
+    public function addQuestionsOwned(\Isssr\CoreBundle\Entity\Question $questionsOwned)
+    {
+        $this->questionsOwned[] = $questionsOwned;
+    
+        return $this;
+    }
+
+    /**
+     * Remove questionsOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Question $questionsOwned
+     */
+    public function removeQuestionsOwned(\Isssr\CoreBundle\Entity\Question $questionsOwned)
+    {
+        $this->questionsOwned->removeElement($questionsOwned);
+    }
+
+    /**
+     * Get questionsOwned
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestionsOwned()
+    {
+        return $this->questionsOwned;
+    }
 }

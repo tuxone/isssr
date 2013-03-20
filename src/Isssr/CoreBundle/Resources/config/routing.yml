@@ -25,4 +25,8 @@ IsssrCoreBundle_search:
 IsssrCoreBundle_rejectjust:
         resource: "@IsssrCoreBundle/Resources/config/routing/rejectjust.yml"
         prefix:   /rejectjust
-        
+
+IsssrCoreBundle_question:
+        resource: "@IsssrCoreBundle/Resources/config/routing/question.yml"
+        prefix:   /question
+

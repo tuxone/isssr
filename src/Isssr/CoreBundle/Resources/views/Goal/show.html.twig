@@ -153,7 +153,7 @@
 	
 	<div id="addEnactor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-footer" style="text-align:center;">
-			<form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_super_form) }}>
+			<form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_enactor_form) }}>
 				{{ form_widget(add_enactor_form) }}
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 				<button class="btn btn-primary" type="submit">Add</button>
