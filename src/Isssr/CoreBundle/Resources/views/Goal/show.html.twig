@@ -48,7 +48,9 @@
 					    {% for super in entity.getSupersInGoal() %}
 					        <li>
 					        	{{ super.user }} -
+                                <!--
 					        	<a href="{{ path('roles_delete', { 'id': super.id }) }}">remove</a>
+					        	-->
 					        </li>
 					    {% endfor %}
 					</ul>
