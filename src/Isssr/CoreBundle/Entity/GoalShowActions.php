@@ -19,6 +19,7 @@ class GoalShowActions {
     const SHOW_GOAL_ACTION_ADD_MMDM = 9;
     const SHOW_GOAL_ACTION_ADD_QS = 10;
     const SHOW_GOAL_ACTION_CREATE_QUESTION = 11;
+    const SHOW_GOAL_ACTION_SELECT_QUESTIONS = 12;
 
 	private $actions;
 	
@@ -78,6 +79,10 @@ class GoalShowActions {
 
     public function canCreateQuestion() {
         return $this->actions->contains(self::SHOW_GOAL_ACTION_CREATE_QUESTION);
+    }
+
+    public function canSelectQuestions() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
     }
 	
 	

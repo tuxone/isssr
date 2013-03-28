@@ -580,13 +580,13 @@ class Goal {
     	$this->status = $status;
     }
 
-    public function addQuestion(User $qs){
+    public function addQuestion(Question $qs){
         $this->questions[] = $qs;
 
         return $this;
     }
 
-    public function removeQuestion(User $qs){
+    public function removeQuestion(Question $qs){
         $this->questions->removeElement($qs);
     }
 

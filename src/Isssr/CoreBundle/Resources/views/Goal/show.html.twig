@@ -75,7 +75,10 @@
         <tr>
             <th>Questions</th>
             <td>
-                <a href="#showQuestions" role="button" class="btn btn-small" style="width: 90px;" data-toggle="modal">Show</a>
+                <a href="#showQuestions" role="button" class="btn btn-small" data-toggle="modal">Show</a>
+                {% if actions.canSelectQuestions() %}
+                    <a href="#selectQuestions" role="button" class="btn btn-small" data-toggle="modal">Select</a>
+                {% endif %}
             </td>
         </tr>
 
@@ -170,8 +173,9 @@
 			<form action="{{ path('goal_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
 			{{ form_widget(edit_form) }}
 
+            <button class="btn btn-primary" type="submit">Save</button>
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
-	        <button class="btn btn-primary" type="submit">Save</button>
+
 			</form>
 		</div>
 	</div>
@@ -274,11 +278,10 @@
             Add question to "<b>{{ entity.title }}</b>"
         </div>
         <div class="modal-footer" style="text-align:center;">
-            <form action="{{ path('question_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(create_question_form) }}>
+            <form action="{{ path('question_create', { 'id': entity.id })  }}" method="post" {{ form_enctype(create_question_form) }}>
                 {{ form_widget(create_question_form) }}
-
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
                 <button class="btn btn-primary" type="submit">Save</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
             </form>
         </div>
     </div>
@@ -290,6 +293,24 @@
         </div>
         <div class="modal-footer" style="text-align:center;">
             {% include 'IsssrCoreBundle:Question:index.html.twig' with {'entities': entity.getQuestions()}%}
+        </div>
+    </div>
+
+    <div id="selectQuestions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-header">
+            Questions in "<b>{{ entity.title }}</b>"
+        </div>
+        <div class="modal-body">
+                {% for entity in entity.getQuestions() %}
+                        <input type="checkbox"> -
+                        {{ entity.question }}
+                    <br>
+                {% endfor %}
+        </div>
+        <div class="modal-footer" style="text-align:center;">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
+            </table>
         </div>
     </div>
 

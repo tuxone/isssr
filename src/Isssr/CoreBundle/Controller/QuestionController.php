@@ -84,14 +84,14 @@ class QuestionController extends Controller
     	$user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $entity  = new Question();
-        $form = $this->createForm(new QuestionType(), $entity);
-        $form->bind($request);
-
         $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
         $roles = $em->getRepository('IsssrCoreBundle:UserInGoal')->findByUserAndGoal($user->getId(), $goal->getId());
         $creator = $roles[0];
+
+        $entity  = new Question();
         $entity->setCreator($creator);
+        $form = $this->createForm(new QuestionType(), $entity);
+        $form->bind($request);
 
         if ($form->isValid()) {
 

@@ -93,6 +93,7 @@ class WorkflowManager
                     if(!$roles->contains(UserInGoal::ROLE_MMDM))
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
                     $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_QS);
+                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
                 }
 
                 if($roles->contains(UserInGoal::ROLE_QS))
