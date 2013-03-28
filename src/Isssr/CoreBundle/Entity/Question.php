@@ -29,7 +29,6 @@ class Question {
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="UserInGoal", inversedBy="questionsOwned")
-	 * @ORM\JoinColumn(name="id", referencedColumnName="id")
 	 */
 	protected $creator;
 	

@@ -99,6 +99,12 @@ class GoalManager
 				
 		}
 		$goal->setStatus($this->getStatus($goal));
+
+        $em = $this->em;
+        $repository = $em->getRepository('IsssrCoreBundle:Question');
+        $questions = $repository->findByGoal($goal->getId());
+        foreach($questions as $question)
+            $goal->addQuestion($question);
 	}
 	
 	public function getStatus(Goal $goal){

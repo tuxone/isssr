@@ -9,12 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class RoleType extends AbstractType
 {
 	protected $candidates;
-	protected $role;
 	
-	public function __construct ($candidates, $role)
+	public function __construct ($candidates)
 	{
 		$this->candidates = $candidates;
-		$this->role = $role;
 	}
 	
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -26,10 +24,8 @@ class RoleType extends AbstractType
 			    'multiple' => false,
 				'choices' => $this->candidates,
 			))
-        	->add('role', 'hidden', array(
-     			'data' => $this->role,
-			)
-       	);
+            ->add('role','hidden')
+            ->add('status', 'hidden');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

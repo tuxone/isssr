@@ -16,7 +16,10 @@ class GoalShowActions {
 	const SHOW_GOAL_ACTION_NOTIFY_ENACTOR = 6;
 	const SHOW_GOAL_ACTION_ACCEPT_GOAL = 7;
 	const SHOW_GOAL_ACTION_REJECT_GOAL = 8;
-	
+    const SHOW_GOAL_ACTION_ADD_MMDM = 9;
+    const SHOW_GOAL_ACTION_ADD_QS = 10;
+    const SHOW_GOAL_ACTION_CREATE_QUESTION = 11;
+
 	private $actions;
 	
 	public function __construct()
@@ -48,6 +51,14 @@ class GoalShowActions {
 	public function canAddEnactor() {
 		return $this->actions->contains(self::SHOW_GOAL_ACTION_ADD_ENACTOR);
 	}
+
+    public function canAddMMDM() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_ADD_MMDM);
+    }
+
+    public function canAddQS() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_ADD_QS);
+    }
 	
 	public function canNotifySupers() {
 		return $this->actions->contains(self::SHOW_GOAL_ACTION_NOTIFY_SUPERS);
@@ -64,6 +75,10 @@ class GoalShowActions {
 	public function canRejectGoal() {
 		return $this->actions->contains(self::SHOW_GOAL_ACTION_REJECT_GOAL);
 	}
+
+    public function canCreateQuestion() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_CREATE_QUESTION);
+    }
 	
 	
 }

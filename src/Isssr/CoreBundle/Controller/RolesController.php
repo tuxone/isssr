@@ -37,25 +37,31 @@ class RolesController extends Controller
         if (!$goal) {
         	throw $this->createNotFoundException('Unable to find Goal entity.');
         }
-        
-        $hm = $this->get('isssr_core.hierarchymanager');
-        $supers = $hm->getSupers($user);
+
+        $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
          
         $role  = new UserInGoal();
-        $form = $this->createForm(new RoleType($supers, -1), $role);
-        $form->bind($request);
-        
         $role->setGoal($goal);
-        $role->setStatus(UserInGoal::STATUS_FIRST_VALIDATION_NEEDED);
+        $form = $this->createForm(new RoleType($tmpusers), $role);
+        $form->bind($request);
         
         $wm = $this->get('isssr_core.workflowmanager');
         $grant = $wm->userCanAddRole($user, $goal, $role->getRole());
         
         if(!$grant)
         	throw new HttpException(403);
+
 		$em->persist($role);
         $em->flush();
-        
+
+        if($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED) {
+            $gm = $this->get('isssr_core.goalmanager');
+            $gm->preRendering($goal);
+
+            $nm = $this->get('isssr_core.notifiermanager');
+            $nm->notifyOtherRoles($role);
+        }
+
         return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
     }
     

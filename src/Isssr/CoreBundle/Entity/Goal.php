@@ -116,6 +116,8 @@ class Goal {
 	
 	private $status = null;
 
+    private $questions = null;
+
 	/**
 	 * Constructor
 	 */
@@ -127,6 +129,7 @@ class Goal {
 	public function initPreRendering() {
 		$this->supers = new ArrayCollection();
 		$this->qss = new ArrayCollection();
+        $this->questions = new ArrayCollection();
 	}
 
 	/**
@@ -575,5 +578,19 @@ class Goal {
     
     public function setStatus($status){
     	$this->status = $status;
+    }
+
+    public function addQuestion(User $qs){
+        $this->questions[] = $qs;
+
+        return $this;
+    }
+
+    public function removeQuestion(User $qs){
+        $this->questions->removeElement($qs);
+    }
+
+    public function getQuestions(){
+        return $this->questions;
     }
 }

@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class QuestionRepository extends EntityRepository
 {
+    public function findByGoal($gid)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q FROM IsssrCoreBundle:Question q, IsssrCoreBundle:UserInGoal u '.
+                    'WHERE q.creator = u.id and u.goal = '.$gid)
+            ->getResult();
+    }
 }

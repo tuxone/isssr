@@ -82,20 +82,23 @@ class QuestionController extends Controller
     public function createAction(Request $request, $id)
     {
     	$user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
         $entity  = new Question();
         $form = $this->createForm(new QuestionType(), $entity);
         $form->bind($request);
 
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        $roles = $em->getRepository('IsssrCoreBundle:UserInGoal')->findByUserAndGoal($user->getId(), $goal->getId());
+        $creator = $roles[0];
+        $entity->setCreator($creator);
+
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
-            $roles = $em->getRepository('IsssrCoreBundle:UserInGoal')->findByUserAndGoal($user->getId(), $goal->getId());
-            $creator = $roles[0];
-            $entity->setCreator($creator);
+
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('question_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('goal_show', array('id' => $id)));
         }
 
         return $this->render('IsssrCoreBundle:Question:new.html.twig', array(

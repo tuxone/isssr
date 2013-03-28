@@ -88,7 +88,17 @@ class WorkflowManager
 				break;
 				
 			case Goal::STATUS_APPROVED:
-				
+				if($roles->contains(UserInGoal::ROLE_ENACTOR))
+                {
+                    if(!$roles->contains(UserInGoal::ROLE_MMDM))
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
+                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_QS);
+                }
+
+                if($roles->contains(UserInGoal::ROLE_QS))
+                {
+                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CREATE_QUESTION);
+                }
 				break;
 		}
 		

@@ -3,6 +3,8 @@
 namespace Isssr\CoreBundle\Controller;
 use Isssr\CoreBundle\Entity\GoalShowAction;
 
+use Isssr\CoreBundle\Entity\Question;
+use Isssr\CoreBundle\Form\QuestionType;
 use Isssr\CoreBundle\Form\RoleType;
 use Isssr\CoreBundle\Entity\UserInGoal;
 use Isssr\CoreBundle\Entity\RejectJust;
@@ -87,12 +89,23 @@ class GoalController extends Controller {
 		$editForm = $this->createForm(new GoalType(!$actions->canEdit()), $goal);
 		$addSuperForm = $this->createAddSuperForm($goal);
 		$addEnactorForm = $this->createAddEnactorForm($goal);
+        $addMMDMForm = $this->createAddMMDMForm($goal);
+        $addQSForm = $this->createAddQSForm($goal);
 		$notifySupersForm = $this->createNotifySupersForm($id);
 		$notifyEnactorForm = $this->createNotifyEnactorForm($id);
-		
-		$role = $gm->getFirstRole($user, $goal);
-		$acceptForm = $this->createRoleAcceptsForm($role->getId());
-		$rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());
+        $createQuestionForm = $this->createForm(new QuestionType(), new Question());
+
+        try {
+		    $role = $gm->getFirstRole($user, $goal);
+            $acceptForm = $this->createRoleAcceptsForm($role->getId());
+            $rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());
+        }
+        catch(\Exception $e)
+        {
+            $role = new UserInGoal();
+		    $acceptForm = $this->createRoleAcceptsForm(0);
+		    $rejectForm = $this->createForm(new RejectJustType(),  new RejectJust());
+        }
 
 		return $this
 				->render('IsssrCoreBundle:Goal:show.html.twig',
@@ -103,8 +116,11 @@ class GoalController extends Controller {
 								'edit_form' => $editForm->createView(),
 								'add_super_form' => $addSuperForm->createView(),
 								'add_enactor_form' => $addEnactorForm->createView(),
+                                'add_mmdm_form' => $addMMDMForm->createView(),
+                                'add_qs_form' => $addQSForm->createView(),
 								'notify_supers_form' => $notifySupersForm->createView(),
 								'notify_enactor_form' => $notifyEnactorForm->createView(),
+                                'create_question_form' => $createQuestionForm->createView(),
 								'accept_form' => $acceptForm->createView(),
 								'reject_form' => $rejectForm->createView(),
 								'user' => $user,
@@ -541,7 +557,9 @@ class GoalController extends Controller {
 		$supers = $this->filterSupersInGoal($tmpsupers, $goal);
 			
 		$role = new UserInGoal();
-		return $this->createForm(new RoleType($supers, UserInGoal::ROLE_SUPER), $role);
+        $role->setStatus(UserInGoal::STATUS_FIRST_VALIDATION_NEEDED);
+        $role->setRole(UserInGoal::ROLE_SUPER);
+		return $this->createForm(new RoleType($supers), $role);
 	}
 	
 	private function createAddEnactorForm($goal) {
@@ -550,7 +568,9 @@ class GoalController extends Controller {
 		$users = $this->filterSupersInGoal($tmpusers, $goal);
         
 		$role = new UserInGoal();
-		return $this->createForm(new RoleType($users, UserInGoal::ROLE_ENACTOR), $role);
+        $role->setStatus(UserInGoal::STATUS_FIRST_VALIDATION_NEEDED);
+        $role->setRole(UserInGoal::ROLE_ENACTOR);
+		return $this->createForm(new RoleType($users), $role);
 	}
 	
 	private function filterSupersInGoal($list, Goal $goal) {
@@ -572,4 +592,34 @@ class GoalController extends Controller {
 	
 		return $newsupers;
 	}
+
+    private function createAddMMDMForm(Goal $goal) {
+        $em = $this->getDoctrine()->getManager();
+        $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
+        $users = $this->filterSupersInGoal($tmpusers, $goal);
+
+        if(($key = array_search($goal->getOwner(), $users)) !== false) {
+            unset($users[$key]);
+        }
+
+        $role = new UserInGoal();
+        $role->setStatus(UserInGoal::STATUS_GOAL_ASSIGNED);
+        $role->setRole(UserInGoal::ROLE_MMDM);
+        return $this->createForm(new RoleType($users), $role);
+    }
+
+    private function createAddQSForm(Goal $goal) {
+        $em = $this->getDoctrine()->getManager();
+        $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
+        $users = $this->filterSupersInGoal($tmpusers, $goal);
+
+        if(($key = array_search($goal->getOwner(), $users)) !== false) {
+            unset($users[$key]);
+        }
+
+        $role = new UserInGoal();
+        $role->setStatus(UserInGoal::STATUS_GOAL_ASSIGNED);
+        $role->setRole(UserInGoal::ROLE_QS);
+        return $this->createForm(new RoleType($users), $role);
+    }
 }

@@ -47,7 +47,7 @@
             		<ul>
 					    {% for super in entity.getSupersInGoal() %}
 					        <li>
-					        	{{ super.user }} - 
+					        	{{ super.user }} -
 					        	<a href="{{ path('roles_delete', { 'id': super.id }) }}">remove</a>
 					        </li>
 					    {% endfor %}
@@ -55,6 +55,30 @@
             	</td>
             
         </tr>
+        <tr>
+            <th>Questions Stakeholders</th>
+                <td>
+                    <ul>
+                        {% for qs in entity.getQss() %}
+                            <li>
+                                {{ qs }} -
+                                <a href="{{ path('roles_delete', { 'id': qs.id }) }}">remove</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+        </tr>
+        <tr>
+            <th>Measurement Model Design Manager</th>
+            <td>{{ entity.getMmdm() }}</td>
+        </tr>
+        <tr>
+            <th>Questions</th>
+            <td>
+                <a href="#showQuestions" role="button" class="btn btn-small" style="width: 90px;" data-toggle="modal">Show</a>
+            </td>
+        </tr>
+
     </tbody>
 </table>
 
@@ -74,6 +98,14 @@
 	{% if actions.canAddEnactor() %}
 		<a href="#addEnactor" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Enactor</a>
 	{% endif %}
+
+    {% if actions.canAddMMDM() %}
+        <a href="#addMMDM" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Measurement Model Design Manager</a>
+    {% endif %}
+
+    {% if actions.canAddQS() %}
+        <a href="#addQS" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Questions Stakeholders</a>
+    {% endif %}
 	
 	{% if actions.canNotifyEnactor() %}
 		<a href="#notifyEnactor" role="button" class="btn" style="width: 90px;" data-toggle="modal">Notify Enactor</a>
@@ -90,6 +122,11 @@
 	{% if actions.canRejectGoal() %}
 		<a href="#rejectGoal" role="button" class="btn btn-danger" style="width: 90px;" data-toggle="modal">Reject</a>
 	{% endif %}
+
+    {% if actions.canCreateQuestion() %}
+        <a href="#createQuestion" role="button" class="btn" style="width: 90px;" data-toggle="modal">Add Question</a>
+    {% endif %}
+
 	
 	<div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-footer" style="text-align:center;"> 
@@ -160,6 +197,28 @@
 			</form>
 		</div>
 	</div>
+
+
+    <div id="addMMDM" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-footer" style="text-align:center;">
+            <form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_mmdm_form) }}>
+                {{ form_widget(add_mmdm_form) }}
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="addQS" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-footer" style="text-align:center;">
+            <form action="{{ path('roles_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(add_qs_form) }}>
+                {{ form_widget(add_qs_form) }}
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
 	
 	
 	<div id="notifySupers" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -208,5 +267,30 @@
 			</form>
 		</div>
 	</div>
+
+
+    <div id="createQuestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-header">
+            Add question to "<b>{{ entity.title }}</b>"
+        </div>
+        <div class="modal-footer" style="text-align:center;">
+            <form action="{{ path('question_create', { 'id': entity.id }) }}" method="post" {{ form_enctype(create_question_form) }}>
+                {{ form_widget(create_question_form) }}
+
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="showQuestions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-header">
+            Questions in "<b>{{ entity.title }}</b>"
+        </div>
+        <div class="modal-footer" style="text-align:center;">
+            {% include 'IsssrCoreBundle:Question:index.html.twig' with {'entities': entity.getQuestions()}%}
+        </div>
+    </div>
 
 {% endblock %}
