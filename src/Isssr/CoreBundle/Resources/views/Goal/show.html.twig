@@ -64,7 +64,9 @@
                         {% for qs in entity.getQss() %}
                             <li>
                                 {{ qs }} -
+                                <!--
                                 <a href="{{ path('roles_delete', { 'id': qs.id }) }}">remove</a>
+                                -->
                             </li>
                         {% endfor %}
                     </ul>
