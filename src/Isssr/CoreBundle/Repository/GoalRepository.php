@@ -2,6 +2,8 @@
 
 namespace Isssr\CoreBundle\Repository;
 
+use Isssr\CoreBundle\Entity\UserInGoal;
+
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -16,8 +18,8 @@ class GoalRepository extends EntityRepository
 	{
 		return $this->getEntityManager()
 		->createQuery(
-				'SELECT g FROM IsssrCoreBundle:Goal g '.
-				'WHERE g.owner = '.$uid)
+				'SELECT g FROM IsssrCoreBundle:UserInGoal g '.
+				'WHERE g.user = '.$uid.' AND g.role = '.UserInGoal::ROLE_OWNER)
 				->getResult();
 	}
 	
@@ -25,8 +27,8 @@ class GoalRepository extends EntityRepository
 	{
 		return $this->getEntityManager()
 		->createQuery(
-				'SELECT g FROM IsssrCoreBundle:Goal g '.
-				'WHERE g.enactor = '.$uid)
+				'SELECT g FROM IsssrCoreBundle:UserInGoal g '.
+				'WHERE g.user = '.$uid.' AND g.role = '.UserInGoal::ROLE_ENACTOR)
 				->getResult();
 	}
  	

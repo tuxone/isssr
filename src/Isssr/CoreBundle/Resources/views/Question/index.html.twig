@@ -9,7 +9,12 @@
     {% for entity in entities %}
         <tr>
             <td>{{ entity.question }}</td>
-            <td>{{ entity.status }}</td>
+            <td>{{ entity.getStatusString() }}</td>
+            <td>
+            	{% if entity.status == 'Unused' %} 
+            		<a href="{{ path('question_edit', { 'id': entity.id }) }}">edit</a> 
+            	{% endif %}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

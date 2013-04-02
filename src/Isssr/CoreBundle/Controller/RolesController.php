@@ -39,7 +39,7 @@ class RolesController extends Controller
         }
 
         $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
-         
+        die(sizeof($tmpusers).'');
         $role  = new UserInGoal();
         $role->setGoal($goal);
         $form = $this->createForm(new RoleType($tmpusers), $role);
@@ -54,7 +54,7 @@ class RolesController extends Controller
 		$em->persist($role);
         $em->flush();
 
-        if($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED) {
+        if($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED && $user != $role->getUser()) {
             $gm = $this->get('isssr_core.goalmanager');
             $gm->preRendering($goal);
 

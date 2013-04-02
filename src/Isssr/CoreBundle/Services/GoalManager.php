@@ -70,12 +70,38 @@ class GoalManager
 		$this->em->flush();
 	}
 	
+	public function updateStatusesIfOwnerChooseHimselfAsEnactor(Goal $goal)
+	{
+		$roles = $goal->getRoles();
+		foreach($roles as $role)
+		{
+			if($role->getRole() == UserInGoal::ROLE_ENACTOR)
+				$role->setStatus(UserInGoal::STATUS_GOAL_ACCEPTED);
+		}
+		$this->em->persist($goal);
+		$this->em->flush();
+	}
+	
 	public function updateStatusesAfterRejection(Goal $goal)
 	{
 		$roles = $goal->getRoles();
 		foreach($roles as $role)
 			if ($role->getRole() == UserInGoal::ROLE_ENACTOR || $role->getRole() == UserInGoal::ROLE_SUPER)
 				$role->setStatus(UserInGoal::STATUS_VALIDATION_NEEDED);
+		$this->em->persist($goal);
+		$this->em->flush();
+	}
+	
+	public function askEnactorForValidationAfterSuperAcceptance(Goal $goal, $nm)
+	{
+		$roles = $goal->getRoles();
+		foreach($roles as $role)
+			if ($role->getRole() == UserInGoal::ROLE_ENACTOR)
+			{
+				$nm->askEnactorForValidation($goal);
+				
+				$this->updateStatusesAfterAskingEnactorForValidation($goal);
+			}
 		$this->em->persist($goal);
 		$this->em->flush();
 	}

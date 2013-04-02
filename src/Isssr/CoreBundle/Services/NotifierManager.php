@@ -24,7 +24,7 @@ class NotifierManager
         $supers = $goal->getSupers();
         $body = null;
         if ($goal->editable()) $body = $this->bodySuperFirstSent($goal);
-        else $this->bodySuperOtherSent($goal);
+        else $body = $this->bodySuperOtherSent($goal);
         foreach ($supers as $super)
         {
             $this->sendMessage($body, $super);

@@ -10,6 +10,10 @@ goal_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Goal:show" }
     
+goal_show_more:
+    pattern:  /{id}/show/more
+    defaults: { _controller: "IsssrCoreBundle:Goal:showMore" }
+    
 goal_new:
     pattern:  /new
     defaults: { _controller: "IsssrCoreBundle:Goal:new" }

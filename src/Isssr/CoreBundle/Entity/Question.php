@@ -42,7 +42,7 @@ class Question {
      */
     public function __construct()
     {
-    	$this->status = Tag::STATUS_UNUSED;
+    	$this->status = self::STATUS_UNUSED;
     	$this->question = new ArrayCollection();
     }
     
@@ -124,5 +124,12 @@ class Question {
     public function getCreator()
     {
         return $this->creator;
+    }
+    
+    public function getStatusString()
+    {
+    	if ($this->getStatus() == self::STATUS_REJECTED) return 'Rejected';
+    	else if ($this->getStatus() == self::STATUS_ACCEPTED) return 'Accepted';
+    	else if ($this->getStatus() == self::STATUS_UNUSED) return 'Unused';
     }
 }

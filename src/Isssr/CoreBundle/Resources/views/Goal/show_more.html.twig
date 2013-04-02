@@ -1,0 +1,76 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Goal{% endblock %}
+ 
+{% block content %}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Title</th>
+            <td>{{ entity.title }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ entity.getStatusString() }}</td>
+        </tr>
+		<tr>
+            <th>Description</th>
+            <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+            <th>Priority</th>
+            <td>{{ entity.priority }}</td>
+        </tr>
+        <tr>
+            <th>Tags</th>
+            	<td>
+            		<ul>
+					    {% for tag in entity.tags %}
+					        <li>{{ tag }}</li>
+					    {% endfor %}
+					</ul>
+            	</td>
+        </tr>
+        <tr>
+            <th>Focus</th>
+            <td>{{ entity.focus }}</td>
+        </tr>
+        <tr>
+            <th>Object</th>
+            <td>{{ entity.object }}</td>
+        </tr>
+        <tr>
+            <th>Magnitude</th>
+            <td>{{ entity.magnitude }}</td>
+        </tr>
+        <tr>
+            <th>Timeframe</th>
+            <td>{{ entity.timeframe }}</td>
+        </tr>
+        <tr>
+            <th>Organizational Scope</th>
+            <td>{{ entity.organizationalScope }}</td>
+        </tr>
+        <tr>
+            <th>Constraints</th>
+            <td>{{ entity.constraints }}</td>
+        </tr>
+        <tr>
+            <th>Relations</th>
+            <td>{{ entity.relations }}</td>
+        </tr>
+        <tr>
+            <th>Contest</th>
+            <td>{{ entity.contest }}</td>
+        </tr>
+        <tr>
+            <th>Assumptions</th>
+            <td>{{ entity.assumptions }}</td>
+        </tr>
+        
+    </tbody>
+</table>
+
+
+{% endblock %}

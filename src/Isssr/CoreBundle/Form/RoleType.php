@@ -13,6 +13,7 @@ class RoleType extends AbstractType
 	public function __construct ($candidates)
 	{
 		$this->candidates = $candidates;
+		
 	}
 	
     public function buildForm(FormBuilderInterface $builder, array $options)

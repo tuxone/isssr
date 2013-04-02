@@ -68,11 +68,15 @@ class SearchController extends Controller
 		}
 		else if ($entity->getGoalOwner()) {
 			$owner = $em->getRepository('IsssrCoreBundle:User')->findByUsername($entity->getGoalOwner());
-			if ($owner) $goal = $em->getRepository('IsssrCoreBundle:Goal')->findByOwner($owner->getId());
+			if ($owner) {
+				$goal = $em->getRepository('IsssrCoreBundle:UserInGoal')->findByOwner($owner->getId());
+			}
 		}
 		else if ($entity->getGoalEnactor()) {
 			$enactor = $em->getRepository('IsssrCoreBundle:User')->findByUsername($entity->getGoalEnactor());
-			if ($enactor) $goal = $em->getRepository('IsssrCoreBundle:Goal')->findByEnactor($enactor->getId());
+			if ($enactor) {
+				$goal = $em->getRepository('IsssrCoreBundle:UserInGoal')->findByEnactor($enactor->getId());
+			}
 		}
 				
 		

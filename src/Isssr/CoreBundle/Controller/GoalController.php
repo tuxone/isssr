@@ -128,6 +128,32 @@ class GoalController extends Controller {
 						));
 	}
 
+	/**
+	 * Finds and displays a Goal entity.
+	 *
+	 */
+	public function showMoreAction($id) {
+		$user = $this->getUser();
+	
+		$em = $this->getDoctrine()->getManager();
+	
+		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+	
+		if (!$goal) {
+			throw $this->createNotFoundException('Unable to find Goal entity.');
+		}
+	
+		$gm = $this->get('isssr_core.goalmanager');
+		$gm->preRendering($goal);
+	
+	
+		return $this
+		->render('IsssrCoreBundle:Goal:show_more.html.twig',
+				array(
+						'entity' => $goal,
+						'user' => $user,
+				));
+	}
 //     /**
 //      * Finds and displays a Goal entity, Super point of View
 //      *
@@ -270,8 +296,8 @@ class GoalController extends Controller {
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
 		//@todo controllo sull'owner del goal
-
-		$editForm = $this->createForm(new GoalType(false), $goal);
+		$softeditable = $goal->softEditable();
+		$editForm = $this->createForm(new GoalType($softeditable), $goal);
 		$deleteForm = $this->createDeleteForm($id);
 
 		return $this
@@ -348,11 +374,13 @@ class GoalController extends Controller {
 	    		if (!$actions->canNotifyEnactor())
 	    			throw new HttpException(403);
 	    
-	    		$nm = $this->get('isssr_core.notifiermanager');
-	    		$nm->askEnactorForValidation($goal);
-	    
-	    		$gm->updateStatusesAfterAskingEnactorForValidation($goal);
-	    
+	    		if ($user != $goal->getEnactor())
+	    		{
+		    		$nm = $this->get('isssr_core.notifiermanager');
+		    		$nm->askEnactorForValidation($goal);
+		       		$gm->updateStatusesAfterAskingEnactorForValidation($goal);
+	    		}
+	    		else $gm->updateStatusesIfOwnerChooseHimselfAsEnactor($goal);
 	    	}
 	    	return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
 	    
@@ -375,15 +403,19 @@ class GoalController extends Controller {
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
-
+		$gm = $this->get('isssr_core.goalmanager');
+		$gm->preRendering($entity);
+		
 		$deleteForm = $this->createDeleteForm($id);
 
 		$softeditable = $entity->softEditable();
-
+		$title = null;
+		if ($softeditable) $title = $entity->getTitle();
 		$editForm = $this->createForm(new GoalType($softeditable), $entity);
 		$editForm->bind($request);
 
 		if ($editForm->isValid()) {
+			if ($softeditable) $entity->setTitle($title);
 			$em->persist($entity);
 			$em->flush();
 
@@ -465,7 +497,8 @@ class GoalController extends Controller {
 		    	$nm->notifyOwnerEnactorAcceptance($goal, $user);
 			else
 				$nm->notifyOwnerSuperAcceptance($goal, $user);
-
+			if($gm->getStatus($goal) == Goal::STATUS_ACCEPTED)
+				$gm->askEnactorForValidationAfterSuperAcceptance($goal, $nm);
 			return $this->redirect(
 					$this->generateUrl('goal_show', array('id' => $goal->getId())));
 		}
@@ -598,7 +631,7 @@ class GoalController extends Controller {
         $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
         $users = $this->filterSupersInGoal($tmpusers, $goal);
 
-        if(($key = array_search($goal->getOwner(), $users)) !== false) {
+        if(($key = array_search($goal->getOwner(), $users)) !== false && $goal->getOwner() != $goal->getEnactor()) {
             unset($users[$key]);
         }
 
@@ -613,7 +646,7 @@ class GoalController extends Controller {
         $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
         $users = $this->filterSupersInGoal($tmpusers, $goal);
 
-        if(($key = array_search($goal->getOwner(), $users)) !== false) {
+        if(($key = array_search($goal->getOwner(), $users)) !== false && $goal->getOwner() != $goal->getEnactor()) {
             unset($users[$key]);
         }
 
