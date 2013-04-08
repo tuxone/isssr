@@ -24,7 +24,6 @@ class RolesController extends Controller
 
     /**
      * Creates a new SuperInGoal entity.
-     *
      */
     public function createAction(Request $request, $id)
     {
@@ -39,7 +38,7 @@ class RolesController extends Controller
         }
 
         $tmpusers = $em->getRepository('IsssrCoreBundle:User')->findAll();
-        die(sizeof($tmpusers).'');
+
         $role  = new UserInGoal();
         $role->setGoal($goal);
         $form = $this->createForm(new RoleType($tmpusers), $role);

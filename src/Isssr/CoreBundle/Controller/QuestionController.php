@@ -219,26 +219,102 @@ class QuestionController extends Controller
             throw $this->createNotFoundException('Unable to find Goal entity.');
         }
 
+        $wm = $this->get('isssr_core.workflowmanager');
+        $actions = $wm->userGoalShowActions($user, $goal);
+        if (!$actions->canSelectQuestions())
+            throw new HttpException(403);
+
         $entity  = new RejectQuestion();
         $form = $this->createForm(new RejectQuestionType(null), $entity);
         $form->bind($request);
 
         if($form->isValid()) {
 
+            $em->persist($entity);
+            $em->flush();
+
             $nm = $this->get('isssr_core.notifiermanager');
 
             foreach($entity->getQuestions() as $question)
             {
-                // notify creator (qs)
-
                 $question->setStatus(Question::STATUS_REJECTED);
+                $question->setRejectform($entity);
                 $em->persist($question);
+                $em->flush();
+                // notify creator (qs)
+                $nm->questionRejected($question);
             }
 
-            $em->persist($entity);
+        }
+
+        return $this->redirect(
+            $this->generateUrl('goal_show', array('id' => $goal->getId()))
+        );
+    }
+
+    /**
+     * Approve all questions
+     *
+     */
+    public function approveAllAction($id)
+    {
+        $user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+
+        if (!$goal) {
+            throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+
+        $wm = $this->get('isssr_core.workflowmanager');
+        $actions = $wm->userGoalShowActions($user, $goal);
+        if (!$actions->canSelectQuestions())
+            throw new HttpException(403);
+
+        $nm = $this->get('isssr_core.notifiermanager');
+
+        foreach($goal->getUnusedQuestions() as $question)
+        {
+            $question->setStatus(Question::STATUS_ACCEPTED);
+            $em->persist($question);
             $em->flush();
 
+            // notify creator (qs)
+            $nm->questionAccepted($question);
         }
+
+        return $this->redirect(
+            $this->generateUrl('goal_show', array('id' => $goal->getId()))
+        );
+    }
+
+    /**
+     *  Close questioning session
+     */
+    public function closeAction($id)
+    {
+        $user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+
+        if (!$goal) {
+            throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+
+        $wm = $this->get('isssr_core.workflowmanager');
+        $actions = $wm->userGoalShowActions($user, $goal);
+        if (!$actions->canCloseQuestioning())
+            throw new HttpException(403);
+
+        $gm = $this->get('isssr_core.goalmanager');
+        $gm->closeQuestioning($goal);
+
+        $nm = $this->get('isssr_core.notifiermanager');
+        $nm->questionSetClosed($goal);
 
         return $this->redirect(
             $this->generateUrl('goal_show', array('id' => $goal->getId()))

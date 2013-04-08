@@ -81,12 +81,12 @@ class NotifierManager
     	$this->sendMessage($body, $user);
     }
     
-    public function questionRejected(Questino $question)
+    public function questionRejected(Question $question)
     {
     	$goal = $question->getCreator()->getGoal();
     	$user = $question->getCreator()->getUser();
     	$text = $question->getQuestion();
-    	$motivation = $question->getRejectForm()->getText();
+    	$motivation = $question->getRejectform()->getText();
     	$body = $this->bodyQuestionRejected($goal, $user, $text, $motivation);
     	$this->sendMessage($body, $user);
     }

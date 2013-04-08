@@ -82,8 +82,11 @@
                 {% if entity.getAcceptedQuestions().count()>0 %}
                 <a href="#showQuestions" role="button" class="btn btn-small btn-primary" data-toggle="modal">Show</a>
                 {% endif %}
-                {% if actions.canSelectQuestions() and entity.getUnusedQuestions().count() > 0 %}
+                {% if actions.canSelectQuestions() %}
                     <a href="#selectQuestions" role="button" class="btn btn-small btn-warning" data-toggle="modal">New entries</a>
+                {% endif %}
+                {% if actions.canCloseQuestioning() %}
+                    <a href="#closeQuestioning" role="button" class="btn btn-small btn-danger" data-toggle="modal">Close</a>
                 {% endif %}
             </td>
         </tr>
@@ -305,6 +308,7 @@
         </div>
     </div>
 
+
     <div id="selectQuestions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
         <form action="{{ path('question_reject', { 'id': entity.id })  }}" method="post" {{ form_enctype(reject_questions_form) }}>
             <div class="modal-header">
@@ -314,12 +318,21 @@
                 {{ form_widget(reject_questions_form) }}
             </div>
             <div class="modal-footer" style="text-align:center;">
-                    <a href="" class="btn btn-success">Approve all</a>
+                    <a href="{{ path('question_approve_all', { 'id': entity.id }) }}" class="btn btn-success">Approve all</a>
                     <button class="btn btn-danger" type="submit" style="width:130px;">Reject selected</button>
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
                 </table>
             </div>
         </form>
+    </div>
+
+
+    <div id="closeQuestioning" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-footer" style="text-align:center;">
+            <p>Do you really want to close the questioning session for this goal?</p>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                <a class="btn btn-primary" href="{{ path('question_close', { 'id': entity.id }) }}">Yes</a>
+        </div>
     </div>
 
 {% endblock %}

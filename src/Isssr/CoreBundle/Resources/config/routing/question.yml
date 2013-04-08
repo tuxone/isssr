@@ -33,3 +33,11 @@ question_reject:
     pattern:  /{id}/reject
     defaults: { _controller: "IsssrCoreBundle:Question:reject" }
     requirements: { _method: post }
+
+question_approve_all:
+    pattern:  /{id}/approveall
+    defaults: { _controller: "IsssrCoreBundle:Question:approveAll" }
+
+question_close:
+    pattern:  /{id}/close
+    defaults: { _controller: "IsssrCoreBundle:Question:close" }

@@ -20,6 +20,7 @@ class GoalShowActions {
     const SHOW_GOAL_ACTION_ADD_QS = 10;
     const SHOW_GOAL_ACTION_CREATE_QUESTION = 11;
     const SHOW_GOAL_ACTION_SELECT_QUESTIONS = 12;
+    const SHOW_GOAL_ACTION_CLOSE_QUESTIONING = 13;
 
 	private $actions;
 	
@@ -84,6 +85,8 @@ class GoalShowActions {
     public function canSelectQuestions() {
         return $this->actions->contains(self::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
     }
-	
-	
+
+    public function canCloseQuestioning() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_CLOSE_QUESTIONING);
+    }
 }

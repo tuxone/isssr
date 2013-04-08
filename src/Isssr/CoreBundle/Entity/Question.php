@@ -152,29 +152,6 @@ class Question {
     }
 
     /**
-     * Set rejectJust
-     *
-     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectJust
-     * @return Question
-     */
-    public function setRejectJust(\Isssr\CoreBundle\Entity\RejectQuestion $rejectJust = null)
-    {
-        $this->rejectJust = $rejectJust;
-    
-        return $this;
-    }
-
-    /**
-     * Get rejectJust
-     *
-     * @return \Isssr\CoreBundle\Entity\RejectQuestion 
-     */
-    public function getRejectJust()
-    {
-        return $this->rejectJust;
-    }
-
-    /**
      * Set rejectform
      *
      * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectform

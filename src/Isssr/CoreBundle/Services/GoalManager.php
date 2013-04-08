@@ -43,7 +43,28 @@ class GoalManager
 		$userInGoal = $repository->findByUserGoalAndRole($user->getId(), $goal->getId(), $role);
 		return $userInGoal->getStatus();
 	}
-	
+
+    public function closeQuestioning(Goal $goal)
+    {
+        foreach($goal->getRoles() as $role)
+            if($role->getRole() == UserInGoal::ROLE_QS)
+                $role->setStatus(UserInGoal::STATUS_GOAL_COMPLETED);
+        $this->em->persist($goal);
+        $this->em->flush();
+    }
+
+    public function isQuestioningClosed(Goal $goal)
+    {
+        foreach($goal->getRoles() as $role)
+            if($role->getRole() == UserInGoal::ROLE_QS)
+            {
+                if($role->getStatus() != UserInGoal::STATUS_GOAL_COMPLETED)
+                    return false;
+                else
+                    return true;
+            }
+    }
+
 	public function updateStatusesAfterAskingSupersForValidation(Goal $goal)
 	{
 		$roles = $goal->getRoles();

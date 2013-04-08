@@ -92,13 +92,19 @@ class WorkflowManager
                 {
                     if(!$roles->contains(UserInGoal::ROLE_MMDM))
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
-                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_QS);
-                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
+                    if(!$gm->isQuestioningClosed($goal))
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_QS);
+                    if($goal->getUnusedQuestions()->count() > 0)
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
+                    if($goal->getAcceptedQuestions()->count() > 0 && !$gm->isQuestioningClosed($goal))
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CLOSE_QUESTIONING);
                 }
 
                 if($roles->contains(UserInGoal::ROLE_QS))
                 {
-                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CREATE_QUESTION);
+                    $status = $gm->getRoleStatus($user, $goal, UserInGoal::ROLE_QS);
+                    if($status != UserInGoal::STATUS_GOAL_COMPLETED)
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CREATE_QUESTION);
                 }
 				break;
 		}

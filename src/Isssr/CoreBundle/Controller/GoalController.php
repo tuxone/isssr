@@ -299,7 +299,11 @@ class GoalController extends Controller {
 		
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
+
 		//@todo controllo sull'owner del goal
+        if ($goal->getOwner()->getId() != $user->getId() )
+            throw new HttpException(403);
+
 		$softeditable = $goal->softEditable();
 		$editForm = $this->createForm(new GoalType($softeditable), $goal);
 		$deleteForm = $this->createDeleteForm($id);
