@@ -44,7 +44,6 @@ class Goal {
 	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $roles;
-	
 
 	/**
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
@@ -116,6 +115,8 @@ class Goal {
 	
 	private $status = null;
 
+    private $questions = null;
+
 	/**
 	 * Constructor
 	 */
@@ -127,6 +128,7 @@ class Goal {
 	public function initPreRendering() {
 		$this->supers = new ArrayCollection();
 		$this->qss = new ArrayCollection();
+        $this->questions = new ArrayCollection();
 	}
 
 	/**
@@ -575,5 +577,35 @@ class Goal {
     
     public function setStatus($status){
     	$this->status = $status;
+    }
+
+    public function addQuestion(Question $qs){
+        $this->questions[] = $qs;
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $qs){
+        $this->questions->removeElement($qs);
+    }
+
+    public function getQuestions(){
+        return $this->questions;
+    }
+
+    public function getAcceptedQuestions(){
+        $ret = new ArrayCollection();
+        foreach($this->questions as $question)
+            if($question->isAccepted())
+                $ret->add($question);
+        return $ret;
+    }
+
+    public function getUnusedQuestions(){
+        $ret = new ArrayCollection();
+        foreach($this->questions as $question)
+            if($question->isUnused())
+                $ret->add($question);
+        return $ret;
     }
 }

@@ -44,7 +44,6 @@ class Goal {
 	 * @ORM\OneToMany(targetEntity="UserInGoal", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $roles;
-	
 
 	/**
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
@@ -592,5 +591,21 @@ class Goal {
 
     public function getQuestions(){
         return $this->questions;
+    }
+
+    public function getAcceptedQuestions(){
+        $ret = new ArrayCollection();
+        foreach($this->questions as $question)
+            if($question->isAccepted())
+                $ret->add($question);
+        return $ret;
+    }
+
+    public function getUnusedQuestions(){
+        $ret = new ArrayCollection();
+        foreach($this->questions as $question)
+            if($question->isUnused())
+                $ret->add($question);
+        return $ret;
     }
 }

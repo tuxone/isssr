@@ -29,9 +29,13 @@ class Question {
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="UserInGoal", inversedBy="questionsOwned")
-	 * @ORM\JoinColumn(name="id", referencedColumnName="id")
 	 */
 	protected $creator;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RejectQuestion", inversedBy="questions")
+     */
+    protected $rejectform;
 	
 	/**
 	 * @ORM\Column(type="integer")
@@ -43,7 +47,127 @@ class Question {
      */
     public function __construct()
     {
-    	$this->status = Tag::STATUS_UNUSED;
+    	$this->status = self::STATUS_UNUSED;
+    	$this->question = new ArrayCollection();
     }
     
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set question
+     *
+     * @param string $question
+     * @return Question
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
+    
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return string 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Question
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \Isssr\CoreBundle\Entity\UserInGoal $creator
+     * @return Question
+     */
+    public function setCreator(\Isssr\CoreBundle\Entity\UserInGoal $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \Isssr\CoreBundle\Entity\UserInGoal 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+    
+    public function getStatusString()
+    {
+    	if ($this->getStatus() == self::STATUS_REJECTED) return 'Rejected';
+    	else if ($this->getStatus() == self::STATUS_ACCEPTED) return 'Accepted';
+    	else if ($this->getStatus() == self::STATUS_UNUSED) return 'Unused';
+    }
+
+    public function isAccepted()
+    {
+        return $this->status == self::STATUS_ACCEPTED;
+    }
+
+    public function isUnused()
+    {
+        return $this->status == self::STATUS_UNUSED;
+    }
+
+    /**
+     * Set rejectJust
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectJust
+     * @return Question
+     */
+    public function setRejectJust(\Isssr\CoreBundle\Entity\RejectQuestion $rejectJust = null)
+    {
+        $this->rejectJust = $rejectJust;
+    
+        return $this;
+    }
+
+    /**
+     * Get rejectJust
+     *
+     * @return \Isssr\CoreBundle\Entity\RejectQuestion 
+     */
+    public function getRejectJust()
+    {
+        return $this->rejectJust;
+    }
 }

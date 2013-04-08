@@ -54,7 +54,7 @@ class UserInGoal {
    	protected $status;
 
    	/**
-   	 * @ORM\OneToMany(targetEntity="Question", mappedBy="id")
+   	 * @ORM\OneToMany(targetEntity="Question", mappedBy="creator")
    	 */
    	protected $questionsOwned;
    	

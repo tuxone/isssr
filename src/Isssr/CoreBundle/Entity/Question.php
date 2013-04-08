@@ -31,6 +31,11 @@ class Question {
 	 * @ORM\ManyToOne(targetEntity="UserInGoal", inversedBy="questionsOwned")
 	 */
 	protected $creator;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RejectQuestion", inversedBy="questions")
+     */
+    protected $rejectform;
 	
 	/**
 	 * @ORM\Column(type="integer")
@@ -43,9 +48,12 @@ class Question {
     public function __construct()
     {
     	$this->status = self::STATUS_UNUSED;
-    	$this->question = new ArrayCollection();
     }
     
+    public function __toString()
+    {
+        return $this->question;
+    }
 
     /**
      * Get id
@@ -131,5 +139,61 @@ class Question {
     	if ($this->getStatus() == self::STATUS_REJECTED) return 'Rejected';
     	else if ($this->getStatus() == self::STATUS_ACCEPTED) return 'Accepted';
     	else if ($this->getStatus() == self::STATUS_UNUSED) return 'Unused';
+    }
+
+    public function isAccepted()
+    {
+        return $this->status == self::STATUS_ACCEPTED;
+    }
+
+    public function isUnused()
+    {
+        return $this->status == self::STATUS_UNUSED;
+    }
+
+    /**
+     * Set rejectJust
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectJust
+     * @return Question
+     */
+    public function setRejectJust(\Isssr\CoreBundle\Entity\RejectQuestion $rejectJust = null)
+    {
+        $this->rejectJust = $rejectJust;
+    
+        return $this;
+    }
+
+    /**
+     * Get rejectJust
+     *
+     * @return \Isssr\CoreBundle\Entity\RejectQuestion 
+     */
+    public function getRejectJust()
+    {
+        return $this->rejectJust;
+    }
+
+    /**
+     * Set rejectform
+     *
+     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectform
+     * @return Question
+     */
+    public function setRejectform(\Isssr\CoreBundle\Entity\RejectQuestion $rejectform = null)
+    {
+        $this->rejectform = $rejectform;
+    
+        return $this;
+    }
+
+    /**
+     * Get rejectform
+     *
+     * @return \Isssr\CoreBundle\Entity\RejectQuestion 
+     */
+    public function getRejectform()
+    {
+        return $this->rejectform;
     }
 }

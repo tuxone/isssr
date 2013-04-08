@@ -28,3 +28,8 @@ question_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "IsssrCoreBundle:Question:delete" }
     requirements: { _method: post }
+
+question_reject:
+    pattern:  /{id}/reject
+    defaults: { _controller: "IsssrCoreBundle:Question:reject" }
+    requirements: { _method: post }

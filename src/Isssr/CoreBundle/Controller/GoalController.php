@@ -4,7 +4,9 @@ namespace Isssr\CoreBundle\Controller;
 use Isssr\CoreBundle\Entity\GoalShowAction;
 
 use Isssr\CoreBundle\Entity\Question;
+use Isssr\CoreBundle\Entity\RejectQuestion;
 use Isssr\CoreBundle\Form\QuestionType;
+use Isssr\CoreBundle\Form\RejectQuestionType;
 use Isssr\CoreBundle\Form\RoleType;
 use Isssr\CoreBundle\Entity\UserInGoal;
 use Isssr\CoreBundle\Entity\RejectJust;
@@ -94,6 +96,7 @@ class GoalController extends Controller {
 		$notifySupersForm = $this->createNotifySupersForm($id);
 		$notifyEnactorForm = $this->createNotifyEnactorForm($id);
         $createQuestionForm = $this->createForm(new QuestionType(), new Question());
+        $rejectQuestionsForm = $this->createForm(new RejectQuestionType($goal->getUnusedQuestions()), new RejectQuestion());
 
         try {
 		    $role = $gm->getFirstRole($user, $goal);
@@ -123,6 +126,7 @@ class GoalController extends Controller {
                                 'create_question_form' => $createQuestionForm->createView(),
 								'accept_form' => $acceptForm->createView(),
 								'reject_form' => $rejectForm->createView(),
+                                'reject_questions_form' => $rejectQuestionsForm->createView(),
 								'user' => $user,
 								'role' => $role,
 						));

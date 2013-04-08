@@ -2,6 +2,8 @@
 
 namespace Isssr\CoreBundle\Controller;
 
+use Isssr\CoreBundle\Entity\RejectQuestion;
+use Isssr\CoreBundle\Form\RejectQuestionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -199,5 +201,47 @@ class QuestionController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    /**
+     * Reject one or more questions
+     *
+     */
+    public function rejectAction(Request $request, $id)
+    {
+        $user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+
+        if (!$goal) {
+            throw $this->createNotFoundException('Unable to find Goal entity.');
+        }
+
+        $entity  = new RejectQuestion();
+        $form = $this->createForm(new RejectQuestionType(null), $entity);
+        $form->bind($request);
+
+        if($form->isValid()) {
+
+            $nm = $this->get('isssr_core.notifiermanager');
+
+            foreach($entity->getQuestions() as $question)
+            {
+                // notify creator (qs)
+
+                $question->setStatus(Question::STATUS_REJECTED);
+                $em->persist($question);
+            }
+
+            $em->persist($entity);
+            $em->flush();
+
+        }
+
+        return $this->redirect(
+            $this->generateUrl('goal_show', array('id' => $goal->getId()))
+        );
     }
 }
