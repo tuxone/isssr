@@ -70,6 +70,26 @@ class NotifierManager
         else if ($role->getRole() == UserInGoal::ROLE_QS) $body = $this->bodyQs($role->getGoal());
         $this->sendMessage($body, $role->getUser());
     }
+    
+    public function questionAccepted(Goal $goal, User $qs)
+    {
+    	$body = $this->bodyQuestionAccepted($goal, $user);
+    	$this->sendMessage($body, $user);
+    }
+    
+    public function questionRejected(Goal $goal, User $qs)
+    {
+    	$body = $this->bodyQuestionRejected($goal, $user);
+    	$this->sendMessage($body, $user);
+    }
+    
+    public function questionSetClosed(Goal $goal)
+    {
+    	$qss = $goal->getQss();
+    	$body = $this->bodyQuestionSetClosed($goal);
+    	foreach ($qss as $qs)
+    		$this->sendMessage($body, $qs);
+    }
 
     private function sendMessage($body, User $receiver)
     {
@@ -136,6 +156,21 @@ class NotifierManager
     private function bodyQs(Goal $goal)
     {
         return "We are kindly informing you that ".$goal->getEnactor()->getUsername().", as enactor of the goal ".$goal->getTitle().", did define you as a Question Stakeholder for that goal";
+    }
+    
+    private function bodyQuestionAccepted(Goal $goal, User $user)
+    {
+    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' accepted yout question concerning the goal '.$goal->getTitle().'.';
+    }
+    
+    private function bodyQuestionRejected(Goal $goal, User $user)
+    {
+    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' did reject yout question concerning the goal '.$goal->getTitle().'.';
+    }
+    
+    private function bodyQuestionSetClosed(Goal $goal)
+    {
+    	return 'The set of the questions for the goal '.$goal->getTitle().' has been accepted by the goal enactor '.$goal->getEnactor()->getUsername();
     }
 
 
