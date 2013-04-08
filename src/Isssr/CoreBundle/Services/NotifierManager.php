@@ -5,6 +5,7 @@ namespace Isssr\CoreBundle\Services;
 use Isssr\CoreBundle\Entity\UserInGoal;
 use Isssr\CoreBundle\Entity\User;
 use Isssr\CoreBundle\Entity\Goal;
+use Isssr\CoreBundle\Entity\Question;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -71,15 +72,22 @@ class NotifierManager
         $this->sendMessage($body, $role->getUser());
     }
     
-    public function questionAccepted(Goal $goal, User $qs)
+    public function questionAccepted(Question $question)
     {
-    	$body = $this->bodyQuestionAccepted($goal, $user);
+    	$goal = $question->getCreator()->getGoal();
+    	$user = $question->getCreator()->getUser();
+    	$text = $question->getQuestion();
+    	$body = $this->bodyQuestionAccepted($goal, $user, $text);
     	$this->sendMessage($body, $user);
     }
     
-    public function questionRejected(Goal $goal, User $qs)
+    public function questionRejected(Questino $question)
     {
-    	$body = $this->bodyQuestionRejected($goal, $user);
+    	$goal = $question->getCreator()->getGoal();
+    	$user = $question->getCreator()->getUser();
+    	$text = $question->getQuestion();
+    	$motivation = $question->getRejectForm()->getText();
+    	$body = $this->bodyQuestionRejected($goal, $user, $text, $motivation);
     	$this->sendMessage($body, $user);
     }
     
@@ -158,14 +166,14 @@ class NotifierManager
         return "We are kindly informing you that ".$goal->getEnactor()->getUsername().", as enactor of the goal ".$goal->getTitle().", did define you as a Question Stakeholder for that goal";
     }
     
-    private function bodyQuestionAccepted(Goal $goal, User $user)
+    private function bodyQuestionAccepted(Goal $goal, User $user, $text)
     {
-    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' accepted yout question concerning the goal '.$goal->getTitle().'.';
+    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' accepted your question "'.$text.'" concerning the goal '.$goal->getTitle().'.';
     }
     
-    private function bodyQuestionRejected(Goal $goal, User $user)
+    private function bodyQuestionRejected(Goal $goal, User $user, $text, $motivation)
     {
-    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' did reject yout question concerning the goal '.$goal->getTitle().'.';
+    	return 'Dear '.$user->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' did reject your question "'.$text.'" concerning the goal '.$goal->getTitle().' with motivation: '.$motivation.'.';
     }
     
     private function bodyQuestionSetClosed(Goal $goal)
