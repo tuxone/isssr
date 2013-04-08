@@ -310,6 +310,13 @@ class QuestionController extends Controller
         if (!$actions->canCloseQuestioning())
             throw new HttpException(403);
 
+        foreach($goal->getUnusedQuestions() as $question)
+        {
+            $question->setStatus(Question::STATUS_ACCEPTED);
+            $em->persist($question);
+            $em->flush();
+        }
+
         $gm = $this->get('isssr_core.goalmanager');
         $gm->closeQuestioning($goal);
 
