@@ -54,7 +54,7 @@ class RolesController extends Controller
         $em->flush();
 
         $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
-        
+
         if($role->getStatus() == UserInGoal::STATUS_GOAL_ASSIGNED && $user != $role->getUser()) {
             $gm = $this->get('isssr_core.goalmanager');
             $gm->preRendering($goal);

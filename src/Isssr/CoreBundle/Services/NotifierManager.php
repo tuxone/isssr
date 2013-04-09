@@ -158,7 +158,7 @@ class NotifierManager
 
     private function bodyMmdm(Goal $goal)
     {
-        return 'Dear '.$goal->getMmdm()->getUsername().', the goal enactor '.$goal->getEnactor()->getUsername().' included you in the MMDMs for the goal '.$goal->getTitle().'.';
+        return 'The goal enactor '.$goal->getEnactor()->getUsername().' included you in the MMDMs for the goal '.$goal->getTitle().'.';
     }
 
     private function bodyQs(Goal $goal)
