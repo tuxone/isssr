@@ -46,7 +46,7 @@ class Goal {
 	protected $roles;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $rejections;
 
