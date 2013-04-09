@@ -80,10 +80,13 @@
             <th>Questions</th>
             <td>
                 {% if entity.getAcceptedQuestions().count()>0 %}
-                <a href="#showQuestions" role="button" class="btn btn-small btn-primary" data-toggle="modal">Show</a>
+                    [{{ entity.getAcceptedQuestions().count() }}]
+                    <a href="#showQuestions" role="button" class="btn btn-small btn-primary" data-toggle="modal">Show</a>
+                {% else %}
+                    [0]
                 {% endif %}
                 {% if actions.canSelectQuestions() %}
-                    <a href="#selectQuestions" role="button" class="btn btn-small btn-warning" data-toggle="modal">New entries</a>
+                    <a href="#selectQuestions" role="button" class="btn btn-small btn-warning" data-toggle="modal">Submitted entries</a>
                 {% endif %}
                 {% if actions.canCloseQuestioning() %}
                     <a href="#closeQuestioning" role="button" class="btn btn-small btn-danger" data-toggle="modal">Close</a>
