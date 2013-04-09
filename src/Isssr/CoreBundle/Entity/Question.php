@@ -36,6 +36,11 @@ class Question {
      * @ORM\ManyToOne(targetEntity="MeasureUnit", inversedBy="questions")
      */
     protected $measure;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Measurement", mappedBy="measure")
+     */
+    protected $quantitativeValue;
 
     /**
      * @ORM\ManyToOne(targetEntity="RejectQuestion", inversedBy="questions")
@@ -200,5 +205,38 @@ class Question {
     public function getMeasure()
     {
         return $this->measure;
+    }
+
+    /**
+     * Add quantitativeValue
+     *
+     * @param \Isssr\CoreBundle\Entity\Measurement $quantitativeValue
+     * @return Question
+     */
+    public function addQuantitativeValue(\Isssr\CoreBundle\Entity\Measurement $quantitativeValue)
+    {
+        $this->quantitativeValue[] = $quantitativeValue;
+    
+        return $this;
+    }
+
+    /**
+     * Remove quantitativeValue
+     *
+     * @param \Isssr\CoreBundle\Entity\Measurement $quantitativeValue
+     */
+    public function removeQuantitativeValue(\Isssr\CoreBundle\Entity\Measurement $quantitativeValue)
+    {
+        $this->quantitativeValue->removeElement($quantitativeValue);
+    }
+
+    /**
+     * Get quantitativeValue
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuantitativeValue()
+    {
+        return $this->quantitativeValue;
     }
 }

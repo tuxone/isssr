@@ -1,0 +1,12 @@
+measurement:
+    pattern:  /question/{id}
+    defaults: { _controller: "IsssrCoreBundle:Measurement:index" }
+
+measurement_new:
+    pattern:  /question/{id}/new
+    defaults: { _controller: "IsssrCoreBundle:Measurement:new" }
+
+measurement_create:
+    pattern:  /question/{id}/create
+    defaults: { _controller: "IsssrCoreBundle:Measurement:create" }
+    requirements: { _method: post }

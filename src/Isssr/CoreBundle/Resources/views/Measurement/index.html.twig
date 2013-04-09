@@ -1,0 +1,23 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Measurement list for Question {{ question.question}}{% endblock %}
+ 
+{% block content %}
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Measure</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.measure }}</td>
+            <td>{% if entity.datetime %}{{ entity.datetime|date('Y-m-d H:i:s') }}{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

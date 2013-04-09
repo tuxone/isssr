@@ -30,3 +30,6 @@ IsssrCoreBundle_question:
         resource: "@IsssrCoreBundle/Resources/config/routing/question.yml"
         prefix:   /question
 
+IsssrCoreBundle_measurement:
+        resource: "@IsssrCoreBundle/Resources/config/routing/measurement.yml"
+        prefix:   /measurement

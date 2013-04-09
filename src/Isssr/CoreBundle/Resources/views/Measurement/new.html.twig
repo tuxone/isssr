@@ -1,0 +1,14 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}New Measure for {{ question.question}}{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('measurement_create', { 'id': question.id }) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
+
+{% endblock %}

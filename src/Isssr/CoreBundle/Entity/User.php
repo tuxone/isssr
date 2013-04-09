@@ -50,6 +50,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="id")
 	 */
 	protected $rejections;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Measurement", mappedBy="id")
+	 */
+	protected $measures;
 
     /**
      * Get id
@@ -209,5 +214,38 @@ class User extends BaseUser {
     public function getGoals()
     {
         return $this->goals;
+    }
+
+    /**
+     * Add measures
+     *
+     * @param \Isssr\CoreBundle\Entity\Measurement $measures
+     * @return User
+     */
+    public function addMeasure(\Isssr\CoreBundle\Entity\Measurement $measures)
+    {
+        $this->measures[] = $measures;
+    
+        return $this;
+    }
+
+    /**
+     * Remove measures
+     *
+     * @param \Isssr\CoreBundle\Entity\Measurement $measures
+     */
+    public function removeMeasure(\Isssr\CoreBundle\Entity\Measurement $measures)
+    {
+        $this->measures->removeElement($measures);
+    }
+
+    /**
+     * Get measures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMeasures()
+    {
+        return $this->measures;
     }
 }
