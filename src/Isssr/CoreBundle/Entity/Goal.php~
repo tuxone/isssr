@@ -16,8 +16,12 @@ class Goal {
 	const STATUS_ACCEPTED = 2; // accepted by Goal Super Owners
 	const STATUS_SOFTEDITABLE = 3;
 	const STATUS_APPROVED = 4;
+    const STATUS_QUESTIONED = 5;
+    const STATUS_MEASURED = 6;
+    const STATUS_RUNNING = 7;
+    const STATUS_COMPLETED = 8;
 	
-	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable', 'Accepted by GSOs', 'Soft Editable', 'Approved');
+	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable', 'Accepted by GSOs', 'Soft Editable', 'Approved', 'Questioned', 'Measured', 'Running', 'Completed');
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -46,7 +50,7 @@ class Goal {
 	protected $roles;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal")
+	 * @ORM\OneToMany(targetEntity="RejectJust", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $rejections;
 

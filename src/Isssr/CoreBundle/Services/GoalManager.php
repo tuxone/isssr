@@ -55,14 +55,7 @@ class GoalManager
 
     public function isQuestioningClosed(Goal $goal)
     {
-        foreach($goal->getRoles() as $role)
-            if($role->getRole() == UserInGoal::ROLE_QS)
-            {
-                if($role->getStatus() != UserInGoal::STATUS_GOAL_COMPLETED)
-                    return false;
-                else
-                    return true;
-            }
+        return $this->getStatus($goal) >= Goal::STATUS_QUESTIONED;
     }
 
 	public function updateStatusesAfterAskingSupersForValidation(Goal $goal)
@@ -157,6 +150,8 @@ class GoalManager
 	public function getStatus(Goal $goal){
 		$roles = $goal->getRoles();
 		$supers = array();
+        $qss = array();
+        $mmdm = null;
 		$owner = null;
 		$enactor = null;
 		
@@ -166,8 +161,16 @@ class GoalManager
 			else if ($role->getRole() == UserInGoal::ROLE_ENACTOR)
 				$enactor = $role;
 			else if($role->getRole() == UserInGoal::ROLE_SUPER)
-				$supers[] = $role;	
+				$supers[] = $role;
+            else if($role->getRole() == UserInGoal::ROLE_QS)
+                $qss[] = $role;
+            else if($role->getRole() == UserInGoal::ROLE_MMDM)
+                $mmdm = $role;
 		}
+
+        if(count($qss)>0)
+            if($qss[0]->getStatus() == UserInGoal::STATUS_GOAL_COMPLETED)
+                return Goal::STATUS_QUESTIONED;
 
 		if (count($supers) == 0)
 			return Goal::STATUS_EDITABLE;

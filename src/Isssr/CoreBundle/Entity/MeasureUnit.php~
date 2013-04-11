@@ -1,0 +1,45 @@
+<?php
+
+namespace Isssr\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity()
+ */
+class MeasureUnit {
+		
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\Column(type="string", length=64, nullable=false, unique=true)
+	 */
+	protected $name;
+
+    /**
+     * @ORM\Column(type="string", length=64, nullable=false)
+     */
+    protected $unitstr;
+	
+	/**
+	 * @ORM\Column(type="string", length=256)
+	 */
+	protected $notes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="measure")
+     */
+    protected $questions;
+    
+    public function __toString()
+    {
+    	return $this->name;
+    }
+
+}

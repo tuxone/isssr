@@ -23,6 +23,7 @@ class UserInGoal {
 	const STATUS_GOAL_REJECTED = 3;
 	const STATUS_GOAL_ACCEPTED = 4;
 	const STATUS_GOAL_ASSIGNED = 5;
+    const STATUS_GOAL_COMPLETED = 6;
 	
 	/**
 	 * @ORM\Id

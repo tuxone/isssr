@@ -417,13 +417,10 @@ class GoalController extends Controller {
 		$deleteForm = $this->createDeleteForm($id);
 
 		$softeditable = $entity->softEditable();
-		$title = null;
-		if ($softeditable) $title = $entity->getTitle();
 		$editForm = $this->createForm(new GoalType($softeditable), $entity);
 		$editForm->bind($request);
 
 		if ($editForm->isValid()) {
-			if ($softeditable) $entity->setTitle($title);
 			$em->persist($entity);
 			$em->flush();
 

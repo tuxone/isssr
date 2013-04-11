@@ -33,6 +33,11 @@ class Question {
 	protected $creator;
 
     /**
+     * @ORM\ManyToOne(targetEntity="MeasureUnit", inversedBy="questions")
+     */
+    protected $measure;
+
+    /**
      * @ORM\ManyToOne(targetEntity="RejectQuestion", inversedBy="questions")
      */
     protected $rejectform;
@@ -48,9 +53,12 @@ class Question {
     public function __construct()
     {
     	$this->status = self::STATUS_UNUSED;
-    	$this->question = new ArrayCollection();
     }
     
+    public function __toString()
+    {
+        return $this->question;
+    }
 
     /**
      * Get id
@@ -149,25 +157,25 @@ class Question {
     }
 
     /**
-     * Set rejectJust
+     * Set rejectform
      *
-     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectJust
+     * @param \Isssr\CoreBundle\Entity\RejectQuestion $rejectform
      * @return Question
      */
-    public function setRejectJust(\Isssr\CoreBundle\Entity\RejectQuestion $rejectJust = null)
+    public function setRejectform(\Isssr\CoreBundle\Entity\RejectQuestion $rejectform = null)
     {
-        $this->rejectJust = $rejectJust;
+        $this->rejectform = $rejectform;
     
         return $this;
     }
 
     /**
-     * Get rejectJust
+     * Get rejectform
      *
      * @return \Isssr\CoreBundle\Entity\RejectQuestion 
      */
-    public function getRejectJust()
+    public function getRejectform()
     {
-        return $this->rejectJust;
+        return $this->rejectform;
     }
 }

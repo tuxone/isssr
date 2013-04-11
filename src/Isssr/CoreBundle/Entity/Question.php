@@ -33,6 +33,11 @@ class Question {
 	protected $creator;
 
     /**
+     * @ORM\ManyToOne(targetEntity="MeasureUnit", inversedBy="questions")
+     */
+    protected $measure;
+
+    /**
      * @ORM\ManyToOne(targetEntity="RejectQuestion", inversedBy="questions")
      */
     protected $rejectform;
@@ -172,5 +177,28 @@ class Question {
     public function getRejectform()
     {
         return $this->rejectform;
+    }
+
+    /**
+     * Set measure
+     *
+     * @param \Isssr\CoreBundle\Entity\MeasureUnit $measure
+     * @return Question
+     */
+    public function setMeasure(\Isssr\CoreBundle\Entity\MeasureUnit $measure = null)
+    {
+        $this->measure = $measure;
+    
+        return $this;
+    }
+
+    /**
+     * Get measure
+     *
+     * @return \Isssr\CoreBundle\Entity\MeasureUnit 
+     */
+    public function getMeasure()
+    {
+        return $this->measure;
     }
 }

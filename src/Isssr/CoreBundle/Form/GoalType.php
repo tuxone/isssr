@@ -20,7 +20,9 @@ class GoalType extends AbstractType
     {
     	if(!$this->softedit)
     		$builder->add('title', null, array('label' => 'Title *'));
-    	
+        else
+            $builder->add('title', null, array('label' => 'Title', 'read_only'=> true));
+
         $builder
             ->add('description', null, array('label' => 'Description *'))
             ->add('priority')
