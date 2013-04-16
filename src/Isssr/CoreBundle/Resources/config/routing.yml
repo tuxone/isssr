@@ -33,3 +33,8 @@ IsssrCoreBundle_question:
 IsssrCoreBundle_measurement:
         resource: "@IsssrCoreBundle/Resources/config/routing/measurement.yml"
         prefix:   /measurement
+
+IsssrCoreBundle_expression:
+        resource: "@IsssrCoreBundle/Resources/config/routing/expression.yml"
+        prefix:   /expression
+        

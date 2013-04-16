@@ -18,7 +18,7 @@ class Measurement {
 	protected $id;
 
     /**
-     * @ORM\Column(type="decimal", nullable=false)
+     * @ORM\Column(type="string", length=10, nullable=false)
      */
     protected $measure;
     

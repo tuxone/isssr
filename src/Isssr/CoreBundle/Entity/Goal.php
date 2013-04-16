@@ -105,6 +105,11 @@ class Goal {
 	protected $assumptions;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="Expression", mappedBy="goal")
+	 */
+	protected $expressions;
+	
+	/**
 	 * Rendering Facilities
 	 */
 	private $owner = null;
@@ -611,5 +616,38 @@ class Goal {
             if($question->isUnused())
                 $ret->add($question);
         return $ret;
+    }
+
+    /**
+     * Add expressions
+     *
+     * @param \Isssr\CoreBundle\Entity\Expression $expressions
+     * @return Goal
+     */
+    public function addExpression(\Isssr\CoreBundle\Entity\Expression $expressions)
+    {
+        $this->expressions[] = $expressions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove expressions
+     *
+     * @param \Isssr\CoreBundle\Entity\Expression $expressions
+     */
+    public function removeExpression(\Isssr\CoreBundle\Entity\Expression $expressions)
+    {
+        $this->expressions->removeElement($expressions);
+    }
+
+    /**
+     * Get expressions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpressions()
+    {
+        return $this->expressions;
     }
 }

@@ -18,7 +18,7 @@ class Measurement {
 	protected $id;
 
     /**
-     * @ORM\Column(type="decimal", nullable=false)
+     * @ORM\Column(type="string", length=10, nullable=false)
      */
     protected $measure;
     
@@ -115,5 +115,28 @@ class Measurement {
     public function getQuestion()
     {
         return $this->question;
+    }
+
+    /**
+     * Set datetime
+     *
+     * @param \DateTime $datetime
+     * @return Measurement
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return \DateTime 
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
     }
 }

@@ -1,0 +1,16 @@
+expression:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Expression:index" }
+
+expression_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Expression:show" }
+
+expression_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:Expression:new" }
+
+expression_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:Expression:create" }
+    requirements: { _method: post }
