@@ -107,6 +107,21 @@ class WorkflowManager
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CREATE_QUESTION);
                 }
 				break;
+
+            case Goal::STATUS_QUESTIONED:
+                if($roles->contains(UserInGoal::ROLE_ENACTOR))
+                {
+                    if(!$roles->contains(UserInGoal::ROLE_MMDM))
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
+                }
+
+                if($roles->contains(UserInGoal::ROLE_MMDM))
+                {
+                    $status = $gm->getRoleStatus($user, $goal, UserInGoal::ROLE_MMDM);
+                    if($status != UserInGoal::STATUS_GOAL_COMPLETED)
+                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_MEASURE_UNIT);
+                }
+                break;
 		}
 		
 		return $actions;

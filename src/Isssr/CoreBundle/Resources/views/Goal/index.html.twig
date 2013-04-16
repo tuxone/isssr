@@ -21,21 +21,7 @@
             <td>{{ entity.title }}</td>
             <td>{{ entity.description }}</td>
             <td>
-            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_NOTEDITABLE') %}
-            		<p class="text-warning">Not editable</p>
-            	{% endif %}
-            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_EDITABLE') %}
-            		<p class="text-warning">Editable</p>
-            	{% endif %}
-            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_ACCEPTED') %}
-            		<p class="text-success">Accepted by GSOs</p>
-            	{% endif %}
-            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_SOFTEDITABLE') %}
-            		<p class="text-error">Rejected, need new version</p>
-            	{% endif %}
-            	{% if entity.getStatus() == constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_APPROVED') %}
-            		<p class="text-error">Goal Approved by Enactor</p>
-            	{% endif %}
+            	{{ entity.getStatusString() }}
             
             </td>
             <td>{{ entity.priority }}</td>

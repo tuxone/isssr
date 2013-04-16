@@ -21,6 +21,8 @@ class GoalShowActions {
     const SHOW_GOAL_ACTION_CREATE_QUESTION = 11;
     const SHOW_GOAL_ACTION_SELECT_QUESTIONS = 12;
     const SHOW_GOAL_ACTION_CLOSE_QUESTIONING = 13;
+    const SHOW_GOAL_ACTION_SELECT_MEASURE_UNIT = 14;
+    const SHOW_GOAL_ACTION_ADD_MEASUREMENT = 15;
 
 	private $actions;
 	
@@ -88,5 +90,13 @@ class GoalShowActions {
 
     public function canCloseQuestioning() {
         return $this->actions->contains(self::SHOW_GOAL_ACTION_CLOSE_QUESTIONING);
+    }
+
+    public function canSelectMeasureUnit() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_SELECT_MEASURE_UNIT);
+    }
+
+    public function canAddMeasurement() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_ADD_MEASUREMENT);
     }
 }
