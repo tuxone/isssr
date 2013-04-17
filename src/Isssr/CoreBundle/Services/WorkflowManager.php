@@ -170,7 +170,7 @@ class WorkflowManager
 		if($user->getId() != $enactor->getId())
 			return false;
 		
-		if($goalStatus != Goal::STATUS_APPROVED)
+		if($goalStatus < Goal::STATUS_APPROVED)
 			return false;
 		
 		return true;

@@ -1,28 +1,21 @@
-<h1>Expression list</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Expressions for Goal {{goal.title}}{% endblock %}
+ 
+{% block content %}
 
 <table class="records_list">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Expression</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('expression_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            
             <td>{{ entity.expression }}</td>
-            <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('expression_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('expression_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-            </td>
+
         </tr>
     {% endfor %}
     </tbody>
@@ -35,3 +28,5 @@
         </a>
     </li>
 </ul>
+
+{% endblock %}
