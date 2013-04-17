@@ -1,0 +1,30 @@
+measureunit:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:index" }
+
+measureunit_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:show" }
+
+measureunit_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:new" }
+
+measureunit_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:create" }
+    requirements: { _method: post }
+
+measureunit_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:edit" }
+
+measureunit_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:update" }
+    requirements: { _method: post }
+
+measureunit_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:delete" }
+    requirements: { _method: post }

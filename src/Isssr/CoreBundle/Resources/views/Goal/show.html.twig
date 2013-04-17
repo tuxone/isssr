@@ -145,6 +145,10 @@
         <a href="#createQuestion" role="button" class="btn" style="width: 120px;" data-toggle="modal">Submit a Question</a>
     {% endif %}
 
+    {% if actions.canSelectMeasureUnit() %}
+        <a href="#createQuestion" role="button" class="btn" style="width: 120px;" data-toggle="modal">Measure Model</a>
+    {% endif %}
+
 	
 	<div id="delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-footer" style="text-align:center;"> 
