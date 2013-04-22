@@ -18,16 +18,20 @@ class ExpressionController extends Controller
      * Lists all Expression entities.
      *
      */
-    public function indexAction()
+    public function indexAction($id)
     {
     	$user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        $gm = $this->get('isssr_core.goalmanager');
+        $gm->preRendering($goal);
 
         $entities = $em->getRepository('IsssrCoreBundle:Expression')->findAll();
 
         return $this->render('IsssrCoreBundle:Expression:index.html.twig', array(
             'entities' => $entities,
         	'user' => $user,
+        	'goal' => $goal,
         ));
     }
 
@@ -36,16 +40,21 @@ class ExpressionController extends Controller
      * Displays a form to create a new Expression entity.
      *
      */
-    public function newAction()
+    public function newAction($id)
     {
     	$user = $this->getUser();
         $entity = new Expression();
         $form   = $this->createForm(new ExpressionType(), $entity);
-
+        $em = $this->getDoctrine()->getManager();
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        $gm = $this->get('isssr_core.goalmanager');
+        $gm->preRendering($goal);
+		$entity->setGoal($goal);
         return $this->render('IsssrCoreBundle:Expression:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         	'user' => $user,
+        	'goal' => $goal,
         ));
     }
 
@@ -53,18 +62,21 @@ class ExpressionController extends Controller
      * Creates a new Expression entity.
      *
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $id)
     {
     	$user = $this->getUser();
         $entity  = new Expression();
         $form = $this->createForm(new ExpressionType(), $entity);
         $form->bind($request);
-
+        $em = $this->getDoctrine()->getManager();
+        $goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+        $gm = $this->get('isssr_core.goalmanager');
+        $gm->preRendering($goal);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        	$entity->setGoal($goal);
             $em->persist($entity);
             $em->flush();
-
+            
             return $this->redirect($this->generateUrl('expression_show', array('id' => $entity->getId())));
         }
 
@@ -72,6 +84,7 @@ class ExpressionController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         	'user' => $user,
+        	'goal' => $goal,
         ));
     }
 

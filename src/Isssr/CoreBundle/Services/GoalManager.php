@@ -3,7 +3,7 @@
 namespace Isssr\CoreBundle\Services;
 
 use Isssr\CoreBundle\Entity\UserInGoal;
-
+use Isssr\CoreBundle\Entity\Question;
 use Isssr\CoreBundle\Entity\Goal;
 
 use Doctrine\ORM\EntityManager;
@@ -182,7 +182,18 @@ class GoalManager
 
         if(count($qss)>0)
             if($qss[0]->getStatus() == UserInGoal::STATUS_GOAL_COMPLETED)
-                return Goal::STATUS_QUESTIONED;
+            {
+//                 $questions = $goal->getQuestions();
+//                 foreach($questions as $question)
+//                 	if ($question->getMeasure() == null) return Goal::STATUS_QUESTIONED;
+//                 if ($mmdm != null){
+// 	                foreach($questions as $question)
+// 	                	if (!$question->getQuantitativeValue()) return Goal::STATUS_MEASURED;
+// 	              	return Goal::STATUS_RUNNING;
+//                 }
+//                 else return Goal::STATUS_QUESTIONED;
+			return Goal::STATUS_QUESTIONED;
+        	}
 
 		if (count($supers) == 0)
 			return Goal::STATUS_EDITABLE;

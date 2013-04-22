@@ -3,6 +3,7 @@ parameters:
     isssr_gm.class: Isssr\CoreBundle\Services\GoalManager
     isssr_nm.class: Isssr\CoreBundle\Services\NotifierManager
     isssr_wm.class: Isssr\CoreBundle\Services\WorkflowManager
+    isssr_im.class: Isssr\CoreBundle\Services\InterpretativeModel
 
 services:
 
@@ -21,3 +22,7 @@ services:
     isssr_core.workflowmanager:
         class: "%isssr_wm.class%"
         arguments: ["@doctrine.orm.entity_manager", "@isssr_core.goalmanager"]
+        
+    isssr_core.interpretativemodel:
+        class: "%isssr_im.class%"
+        arguments: ["@doctrine.orm.entity_manager"]

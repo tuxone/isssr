@@ -14,7 +14,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class MeasurementRepository extends EntityRepository
 {
-	public function findByOwner($uid)
+	
+	public function findByQuestion($qid)
 	{
 		return $this->getEntityManager()
 		->createQuery(

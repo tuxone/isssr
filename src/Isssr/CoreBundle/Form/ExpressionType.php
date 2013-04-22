@@ -12,7 +12,7 @@ class ExpressionType extends AbstractType
     {
         $builder
             ->add('expression')
-            ->add('goal')
+            
         ;
     }
 

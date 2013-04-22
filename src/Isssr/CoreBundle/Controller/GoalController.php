@@ -565,6 +565,38 @@ class GoalController extends Controller {
 		);
 	}
 	
+	public function evaluateGoalAction($id)
+	{
+		
+		$user = $this->getUser();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+				
+		if (!$goal) {
+			throw $this->createNotFoundException('Unable to find Goal entity.');
+		}
+		
+		$gm = $this->get('isssr_core.goalmanager');
+		$gm->preRendering($goal);
+		
+		$expressions = $goal->getExpressions();
+		
+        $im = $this->get('isssr_core.interpretativemodel');
+        $values = array();
+		foreach($expressions as $expression){
+			$values[] = $im->evaluate($expression->getExpression(), $goal);
+		}
+		
+		$result = true;
+		foreach($values as $value)
+			$result = $result && $value;
+		
+		if ($result == true) die("goal raggiunto");
+		else die ("goal non raggiunto");
+	}
+	
 	private function createRoleAcceptsForm($id)
 	{
 		return $this->createFormBuilder(array('id' => $id))
