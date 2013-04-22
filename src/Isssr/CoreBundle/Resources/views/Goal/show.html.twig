@@ -347,6 +347,24 @@
     </div>
 
 
+    <div id="selectQuestions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <form action="{{ path('question_reject', { 'id': entity.id })  }}" method="post" {{ form_enctype(reject_questions_form) }}>
+            <div class="modal-header">
+                Questions added in "<b>{{ entity.title }}</b>"
+            </div>
+            <div class="modal-body">
+                {{ form_widget(reject_questions_form) }}
+            </div>
+            <div class="modal-footer" style="text-align:center;">
+                <a href="{{ path('question_approve_all', { 'id': entity.id }) }}" class="btn btn-success">Approve all</a>
+                <button class="btn btn-danger" type="submit" style="width:130px;">Reject selected</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
+                </table>
+            </div>
+        </form>
+    </div>
+    
+
     <div id="saveMeasureModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-footer" style="text-align:center;">
             <p>Do you really want to save the measure model for this goal?</p>
