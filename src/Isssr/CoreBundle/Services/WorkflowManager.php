@@ -119,8 +119,15 @@ class WorkflowManager
                 {
                     $status = $gm->getRoleStatus($user, $goal, UserInGoal::ROLE_MMDM);
                     if($status != UserInGoal::STATUS_GOAL_COMPLETED)
+                    {
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_MEASURE_UNIT);
+                        if($gm->everyQuestionHasMeasureUnit($goal))
+                            $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SAVE_MEASURE_MODEL);
+                    }
                 }
+                break;
+            case Goal::STATUS_RUNNING:
+                $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MEASUREMENT);
                 break;
 		}
 		

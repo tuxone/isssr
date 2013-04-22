@@ -49,7 +49,7 @@ class UserInGoalRepository extends EntityRepository
 	{
 		return $this->getEntityManager()
 		->createQuery(
-				'SELECT r.user FROM IsssrCoreBundle:UserInGoal r '.
+				'SELECT r FROM IsssrCoreBundle:UserInGoal r '.
 				'WHERE r.goal = '.$gid.' AND r.role = '.$role)
 				->getSingleResult();
 	}

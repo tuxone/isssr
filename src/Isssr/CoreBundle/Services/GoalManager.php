@@ -53,6 +53,14 @@ class GoalManager
         $this->em->flush();
     }
 
+    public function saveMeasureModel(Goal $goal)
+    {
+        $mmdm = $this->getMMDM($goal);
+        $mmdm->setStatus(UserInGoal::STATUS_GOAL_COMPLETED);
+        $this->em->persist($mmdm);
+        $this->em->flush();
+    }
+
     public function isQuestioningClosed(Goal $goal)
     {
         return $this->getStatus($goal) >= Goal::STATUS_QUESTIONED;
@@ -168,6 +176,10 @@ class GoalManager
                 $mmdm = $role;
 		}
 
+        if($mmdm != null)
+            if($mmdm->getStatus() == UserInGoal::STATUS_GOAL_COMPLETED)
+                return Goal::STATUS_RUNNING;
+
         if(count($qss)>0)
             if($qss[0]->getStatus() == UserInGoal::STATUS_GOAL_COMPLETED)
                 return Goal::STATUS_QUESTIONED;
@@ -244,6 +256,11 @@ class GoalManager
 	{
 		return $this->getSingleUserInGoalByRole($goal, UserInGoal::ROLE_ENACTOR);
 	}
+
+    public function getMMDM(Goal $goal)
+    {
+        return $this->getSingleUserInGoalByRole($goal, UserInGoal::ROLE_MMDM);
+    }
 	
 	public function getGoals($role, $user)
 	{
@@ -253,6 +270,15 @@ class GoalManager
 		else if ($role == UserInGoal::ROLE_MMDM) return $this->getGoalsAsMmdm($user);
 		else if ($role == UserInGoal::ROLE_QS) return $this->getGoalsAsQs($user);
 	}
+
+    public function everyQuestionHasMeasureUnit(Goal $goal)
+    {
+        $quests = $goal->getAcceptedQuestions();
+        foreach($quests as $q)
+            if(!$q->getMeasure())
+                return false;
+        return true;
+    }
 	
 	private function getGoalsAsSuper(User $user) {
 		$repository = $this->em->getRepository('IsssrCoreBundle:UserInGoal');
