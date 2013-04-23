@@ -25,8 +25,11 @@ class InterpretativeModel
 	{
 		$this->checkQuestions($goal);
 		$stringParsed = $this->parseExpression($expression);
-		eval("\$result = ($stringParsed);");
-		return $result;
+		if ($stringParsed != null){
+			eval("\$result = ($stringParsed);");
+			return $result;
+		}
+		else return null;
 	}
 	
 	public function parseExpression($string)
@@ -42,7 +45,9 @@ class InterpretativeModel
 			else {
 				$pos2 = strpos($string, ']');
 				$tag = substr($string, 1, $pos2-1);
-				$modifiedString = $modifiedString.$this->evaluateTag($tag);
+				if ($this->evaluateTag($tag) != null)
+					$modifiedString = $modifiedString.$this->evaluateTag($tag);
+				else return null;
 				$string = substr($string, $pos2+1);
 			}
 		}
@@ -80,7 +85,7 @@ class InterpretativeModel
 			$value = $this->getFirst(substr($tag, 4, $length));
 		}
 		if ($value != null) return $value;
-		else return 0;
+		else return null;
 		 
 		
 	}

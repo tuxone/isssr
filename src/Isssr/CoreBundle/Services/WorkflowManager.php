@@ -90,8 +90,9 @@ class WorkflowManager
 			case Goal::STATUS_APPROVED:
 				if($roles->contains(UserInGoal::ROLE_ENACTOR))
                 {
-                    if(!$gm->getMMDM($goal))
-                        $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
+                    //if(!$roles->contains(UserInGoal::ROLE_MMDM))
+                    if($goal->getMmdm() == null)
+                    	$actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
                     if(!$gm->isQuestioningClosed($goal))
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_QS);
                     if($goal->getUnusedQuestions()->count() > 0)
@@ -144,6 +145,7 @@ class WorkflowManager
 		$owner = $goal->getOwner();
 		$enactor = $goal->getEnactor();
 		$goalStatus = $goal->getStatus();
+		$mmdm = $goal->getMmdm();
 				
 		if($role == UserInGoal::ROLE_SUPER)
 		{
@@ -181,6 +183,7 @@ class WorkflowManager
 		
 		if($goalStatus < Goal::STATUS_APPROVED)
 			return false;
+
 		
 		return true;
 		
