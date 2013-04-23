@@ -21,6 +21,7 @@
 
             <form action="{{ path('question_measureunit_select', {'qid': question.id}) }}" method="post" {{ form_enctype(form_select) }}>
                 {{ form_widget(form_select.measureunit) }}
+                {{ form_widget(form_select._token) }}
                 <p>
                     <button type="submit" class="btn btn-primary">Select</button>
                 </p>

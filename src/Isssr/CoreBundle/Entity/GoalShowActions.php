@@ -24,6 +24,7 @@ class GoalShowActions {
     const SHOW_GOAL_ACTION_SELECT_MEASURE_UNIT = 14;
     const SHOW_GOAL_ACTION_ADD_MEASUREMENT = 15;
     const SHOW_GOAL_ACTION_SAVE_MEASURE_MODEL = 16;
+    const SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL = 17;
 
 	private $actions;
 	
@@ -103,5 +104,9 @@ class GoalShowActions {
 
     public function canSaveMeasureModel() {
         return $this->actions->contains(self::SHOW_GOAL_ACTION_SAVE_MEASURE_MODEL);
+    }
+
+    public function canManageInterpretativeModel() {
+        return $this->actions->contains(self::SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL);
     }
 }

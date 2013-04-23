@@ -1,13 +1,16 @@
-{% extends 'IsssrCoreBundle::layout.html.twig' %}
+<style media="screen" type="text/css">
 
-{% block pagetitle %}Expressions for Goal {{goal.title}}{% endblock %}
- 
-{% block content %}
+    #isssr_corebundle_expressiontype_expression {
+        width:400px;
+    }
 
+</style>
+
+{% if entities.count() > 0 %}
 <table class="records_list">
     <thead>
         <tr>
-            <th>Expression</th>
+            <th>Expressions List</th>
         </tr>
     </thead>
     <tbody>
@@ -20,11 +23,34 @@
     {% endfor %}
     </tbody>
 </table>
+{% endif %}
 
-<ul>
-        <button href="{{ path('expression_new', { 'id': goal.id }) }}">
-            New
-        </button>
-</ul>
+<p>
+<b>Create a new expression</b><br>
+    {% for entity in goal.getQuestions() %}
+        {{ entity }}
+        <select style="width:90px;">
+            <option value="">Select</option>
+            <option value="[avg(question{{ entity.id }})]">Average</option>
+            <option value="[min(question{{ entity.id }})]">Minimum</option>
+            <option value="[max(question{{ entity.id }})]">Maximum</option>
+            <option value="[lst(question{{ entity.id }})]">Last In</option>
+            <option value="[fst(question{{ entity.id }})]">First In</option>
 
-{% endblock %}
+        </select>
+        <br>
+    {% endfor %}
+<form action="{{ path('expression_create', { 'id': goal.id }) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form.expression) }}
+    {{ form_widget(form._token) }}
+    <p>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </p>
+</form>
+</p>
+
+<script type="text/javascript">
+
+
+
+</script>

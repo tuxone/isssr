@@ -128,6 +128,8 @@ class WorkflowManager
                 break;
             case Goal::STATUS_RUNNING:
                 $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MEASUREMENT);
+                if($roles->contains(UserInGoal::ROLE_ENACTOR))
+                    $actions->add(GoalShowActions::SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL);
                 break;
 		}
 		

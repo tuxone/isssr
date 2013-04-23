@@ -1,10 +1,12 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+use Isssr\CoreBundle\Entity\Expression;
 use Isssr\CoreBundle\Entity\GoalShowAction;
 
 use Isssr\CoreBundle\Entity\Question;
 use Isssr\CoreBundle\Entity\RejectQuestion;
+use Isssr\CoreBundle\Form\ExpressionType;
 use Isssr\CoreBundle\Form\QuestionType;
 use Isssr\CoreBundle\Form\RejectQuestionType;
 use Isssr\CoreBundle\Form\RoleType;
@@ -97,6 +99,7 @@ class GoalController extends Controller {
 		$notifyEnactorForm = $this->createNotifyEnactorForm($id);
         $createQuestionForm = $this->createForm(new QuestionType(), new Question());
         $rejectQuestionsForm = $this->createForm(new RejectQuestionType($goal->getUnusedQuestions()), new RejectQuestion());
+        $expressionForm   = $this->createForm(new ExpressionType(), new Expression());
 
         try {
 		    $role = $gm->getFirstRole($user, $goal);
@@ -127,6 +130,7 @@ class GoalController extends Controller {
 								'accept_form' => $acceptForm->createView(),
 								'reject_form' => $rejectForm->createView(),
                                 'reject_questions_form' => $rejectQuestionsForm->createView(),
+                                'expression_form' => $expressionForm->createView(),
 								'user' => $user,
 								'role' => $role,
 						));
