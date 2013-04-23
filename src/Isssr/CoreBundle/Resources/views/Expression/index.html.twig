@@ -6,6 +6,20 @@
 
 </style>
 
+<script type="text/javascript">
+
+    function fillExpression(select) {
+        ss = select.options[select.selectedIndex].value;
+
+        $('#isssr_corebundle_expressiontype_expression').val(function(i,val) {
+            return val + ss;
+        });
+
+        select.selectedIndex = 0;
+    }
+
+</script>
+
 {% if entities.count() > 0 %}
 <table class="records_list">
     <thead>
@@ -18,6 +32,9 @@
         <tr>
             
             <td>{{ entity.expression }}</td>
+			<td>
+            	<a href="{{ path('expression_show', { 'id': entity.id }) }}">show</a>
+            </td>
 
         </tr>
     {% endfor %}
@@ -29,7 +46,7 @@
 <b>Create a new expression</b><br>
     {% for entity in goal.getQuestions() %}
         {{ entity }}
-        <select style="width:90px;">
+        <select style="width:90px;" onchange="fillExpression(this);">
             <option value="">Select</option>
             <option value="[avg(question{{ entity.id }})]">Average</option>
             <option value="[min(question{{ entity.id }})]">Minimum</option>
@@ -48,9 +65,3 @@
     </p>
 </form>
 </p>
-
-<script type="text/javascript">
-
-
-
-</script>

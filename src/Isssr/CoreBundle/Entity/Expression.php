@@ -28,7 +28,10 @@ class Expression {
 	 */
 	protected $goal;
 	
-	
+	public function __toString()
+    {
+        return $this->expression;
+    }
 
     /**
      * Get id

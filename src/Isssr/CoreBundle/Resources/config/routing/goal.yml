@@ -61,3 +61,6 @@ goal_send_to_enactor:
     pattern:  /{id}/sendtoenactor
     defaults: { _controller: "IsssrCoreBundle:Goal:sendToEnactor" }
 
+goal_evaluate_im:
+    pattern:  /{id}/evaluateim
+    defaults: { _controller: "IsssrCoreBundle:Goal:evaluate" }

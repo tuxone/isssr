@@ -25,7 +25,7 @@ class InterpretativeModel
 	{
 		$this->checkQuestions($goal);
 		$stringParsed = $this->parseExpression($expression);
-		eval("\$result = $stringParsed;");
+		eval("\$result = ($stringParsed);");
 		return $result;
 	}
 	

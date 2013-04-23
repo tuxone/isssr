@@ -1,0 +1,35 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Evaluate '{{ goal.title }}'{% endblock %}
+
+{% block content %}
+
+    <div class="paragraphs">
+        <div class="row">
+            <div class="span4">
+                <a style="float:left; margin-left:30px;" href="{{ path('goal_show', {'id': goal.getId()}) }}" class="btn btn-small">
+                    <i class="icon-circle-arrow-left"></i> Back to goal
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <table style="margin-left: 30px;">
+            {% for i in 0..expressions.count()-1 %}
+                <tr>
+
+                    <td>{{ expressions[i] }}</td>
+                    <td>
+                        {% if report[i] %}
+                            <b>OK</b>
+                        {% else %}
+                            <b>False</b>
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

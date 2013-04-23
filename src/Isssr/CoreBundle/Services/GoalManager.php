@@ -9,15 +9,18 @@ use Isssr\CoreBundle\Entity\Goal;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Isssr\CoreBundle\Entity\User;
+use Isssr\CoreBundle\Services\InterpretativeModel;
 
 class GoalManager
 {
 
 	protected $em;
+	protected $im;
 	
-	public function __construct(EntityManager $em)
+	public function __construct(EntityManager $em, InterpretativeModel $im)
 	{
 		$this->em = $em;
+		$this->im = $im;
 	}
 	
 	public function getRoles(User $user, Goal $goal)
@@ -289,6 +292,20 @@ class GoalManager
             if(!$q->getMeasure())
                 return false;
         return true;
+    }
+    
+    public function evaluateGoal(Goal $goal)
+    {
+    	$this->preRendering($goal);
+		
+		$expressions = $goal->getExpressions();
+		
+        $values = array();
+		foreach($expressions as $expression){
+			$values[] = $this->im->evaluate($expression->getExpression(), $goal);
+		}
+		
+		return $values;
     }
 	
 	private function getGoalsAsSuper(User $user) {

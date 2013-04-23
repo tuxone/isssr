@@ -569,7 +569,7 @@ class GoalController extends Controller {
 		);
 	}
 	
-	public function evaluateGoalAction($id)
+	public function evaluateAction($id)
 	{
 		
 		$user = $this->getUser();
@@ -581,24 +581,26 @@ class GoalController extends Controller {
 		if (!$goal) {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
+
+        $wm = $this->get('isssr_core.workflowmanager');
+        $actions = $wm->userGoalShowActions($user, $goal);
+
+        if(!$actions->canManageInterpretativeModel())
+            throw new HttpException(403);
 		
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
+
+		$values = $gm->evaluateGoal($goal);
+
+        return $this
+            ->render('IsssrCoreBundle:Goal:evaluate.html.twig',
+                array('expressions' => $goal->getExpressions(),
+                    'report' => $values,
+                    'user' => $user,
+                    'goal' => $goal)
+            );
 		
-		$expressions = $goal->getExpressions();
-		
-        $im = $this->get('isssr_core.interpretativemodel');
-        $values = array();
-		foreach($expressions as $expression){
-			$values[] = $im->evaluate($expression->getExpression(), $goal);
-		}
-		
-		$result = true;
-		foreach($values as $value)
-			$result = $result && $value;
-		
-		if ($result == true) die("goal raggiunto");
-		else die ("goal non raggiunto");
 	}
 	
 	private function createRoleAcceptsForm($id)
