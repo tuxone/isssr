@@ -144,6 +144,7 @@ class WorkflowManager
 		$owner = $goal->getOwner();
 		$enactor = $goal->getEnactor();
 		$goalStatus = $goal->getStatus();
+		$mmdm = $goal->getMmdm();
 				
 		if($role == UserInGoal::ROLE_SUPER)
 		{
@@ -181,6 +182,7 @@ class WorkflowManager
 		
 		if($goalStatus < Goal::STATUS_APPROVED)
 			return false;
+
 		
 		return true;
 		
