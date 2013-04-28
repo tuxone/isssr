@@ -22,11 +22,9 @@
 </table>
 
 <ul>
-    <li>
-        <a href="{{ path('expression_new') }}">
-            Create a new entry
-        </a>
-    </li>
+        <button href="{{ path('expression_new', { 'id': goal.id }) }}">
+            New
+        </button>
 </ul>
 
 {% endblock %}

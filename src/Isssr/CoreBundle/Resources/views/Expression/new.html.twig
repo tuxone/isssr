@@ -1,16 +1,14 @@
-<h1>Expression creation</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<form action="{{ path('expression_create') }}" method="post" {{ form_enctype(form) }}>
+{% block pagetitle %}Expressions for Goal {{goal.title}}{% endblock %}
+ 
+{% block content %}
+
+<form action="{{ path('expression_create', { 'id': goal.id }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
     </p>
 </form>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('expression') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% endblock %}

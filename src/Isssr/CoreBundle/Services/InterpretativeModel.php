@@ -14,34 +14,35 @@ class InterpretativeModel
 {
 	private $em;
 	private $questionsIds;
-	private $goal;
 	
-	public function __construct(EntityManager $em, Goal $goal)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->goal = $goal;
 		$this->questionsIds = array();
 	}
 	
-	public function evaluate($expression)
+	public function evaluate($expression, Goal $goal)
 	{
-		return eval($this->parseExpression($expression));
+		$this->checkQuestions($goal);
+		$stringParsed = $this->parseExpression($expression);
+		eval("\$result = $stringParsed;");
+		return $result;
 	}
 	
 	public function parseExpression($string)
 	{
 		//i tag delle question vanno inseriti in parentesi quadre
 		//esempio [avg(question2)]
-		$modifiedString = null;
+		$modifiedString = "";
 		while (strlen($string) > 0){
-			if (substr($string, 0) != '[') {
-				$modifiedString = $modifiedString.substr($string, 0);
+			if (substr($string, 0, 1) != '[') {
+				$modifiedString = $modifiedString.substr($string, 0, 1);
 				$string = substr($string, 1);
 			}
 			else {
 				$pos2 = strpos($string, ']');
 				$tag = substr($string, 1, $pos2-1);
-				$modifiedString = $modifiedString.$this->evaluate($tag);
+				$modifiedString = $modifiedString.$this->evaluateTag($tag);
 				$string = substr($string, $pos2+1);
 			}
 		}
@@ -51,30 +52,32 @@ class InterpretativeModel
 		
 	}
 	
-	public function checkQuestions()
+	public function checkQuestions($goal)
 	{
-		$questions = $this->goal->getQuestions();
+		$questions = $goal->getQuestions();
 		foreach ($questions as $question) 
 			array_push($this->questionsIds, $question->getId());
+
 	}
 	
 	private function evaluateTag($tag)
 	{
 		$value = null;
+		$length = strlen($tag)-5;
 		if (substr($tag, 0, 3) == "avg"){
-			$value = $this->getAvg(substr($tag, 4, strlen($tag)-1));
+			$value = $this->getAvg(substr($tag, 4, $length));
 		}
 		else if (substr($tag, 0, 3) == "max"){
-			$value = $this->getMax(substr($tag, 4, strlen($tag)-1));
+			$value = $this->getMax(substr($tag, 4, $length));
 		}
 		else if (substr($tag, 0, 3) == "min"){
-			$value = $this->getMin(substr($tag, 4, strlen($tag)-1));
+			$value = $this->getMin(substr($tag, 4, $length));
 		}
 		else if (substr($tag, 0, 3) == "fst"){
-			$value = $this->getLast(substr($tag, 4, strlen($tag)-1));
+			$value = $this->getLast(substr($tag, 4, $length));
 		}
 		else if (substr($tag, 0, 3) == "lst"){
-			$value = $this->getFirst(substr($tag, 4, strlen($tag)-1));
+			$value = $this->getFirst(substr($tag, 4, $length));
 		}
 		if ($value != null) return $value;
 		else return 0;
@@ -92,7 +95,7 @@ class InterpretativeModel
 			$counter++;
 			$sum += $measure;
 		}
-		return $sum/counter;
+		return $sum/$counter;
 	}
 	
 	private function getMax($question)
@@ -133,13 +136,14 @@ class InterpretativeModel
 	
 	private function getMeasures($question)
 	{
-		$idstr = str_repeat("question", "", $question);
-		$id = eval($idstr);
-		if (array_key_exists($id, $this->questionsIds)) { 
-			$q = $em->getRepository('IsssrCoreBundle:Question')->find($id);
-			$values = $q->getQuantitativeValues();
+		$idstr = str_replace("question", "", $question);
+		$id = intval($idstr);
+		if (in_array($id, $this->questionsIds)) { 
+			$values = $this->em->getRepository('IsssrCoreBundle:Measurement')->findByQuestion($id);
 			$measures = array();
-			foreach ($values as $value) array_push($measures, $value->getMeasure());
+			foreach ($values as $value) {
+				array_push($measures, floatval($value->getMeasure()));
+			}
 			return $measures;
 		}
 		else return null;
