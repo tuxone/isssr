@@ -239,4 +239,9 @@ class Question {
     {
         return $this->quantitativeValue;
     }
+
+    public function getGoal()
+    {
+        return $this->creator->getGoal();
+    }
 }

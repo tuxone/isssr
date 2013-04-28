@@ -28,7 +28,7 @@ class MeasureUnit {
     protected $unitstr;
 	
 	/**
-	 * @ORM\Column(type="string", length=256)
+	 * @ORM\Column(type="string", length=256, nullable=true)
 	 */
 	protected $notes;
 
@@ -39,7 +39,7 @@ class MeasureUnit {
     
     public function __toString()
     {
-    	return $this->name;
+    	return $this->name . ' [' . $this->unitstr . ']';
     }
 
     /**

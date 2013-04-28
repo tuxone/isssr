@@ -11,9 +11,15 @@ class MeasureUnitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('unitstr')
-            ->add('notes')
+            ->add('name', 'text', array(
+                'attr' => array('placeholder' => "eg. 'car speed'")
+            ))
+            ->add('unitstr', 'text', array(
+                'attr' => array('placeholder' => "eg. 'meters/sec'")
+            ))
+            ->add('notes', 'textarea', array(
+                'required' => false,
+            ))
         ;
     }
 

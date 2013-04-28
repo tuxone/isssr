@@ -1,14 +1,25 @@
 {% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-{% block pagetitle %}New Measure for {{ question.question}}{% endblock %}
+{% block pagetitle %}New Measure{% endblock %}
  
 {% block content %}
+<div class="paragraphs">
+    <div class="row">
+        <div class="span4">
+            <a style="float:left; margin-left:30px;" href="{{ path('goal_show', {'id': question.getGoal.getId()}) }}" class="btn btn-small">
+                <i class="icon-circle-arrow-left"></i> Back to the list
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <h3>New Measure for {{ question }}</h3>
 
-<form action="{{ path('measurement_create', { 'id': question.id }) }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Create</button>
-    </p>
-</form>
-
+        <form action="{{ path('measurement_create', { 'id': question.id }) }}" method="post" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+            <p>
+                <button type="submit">Create</button>
+            </p>
+        </form>
+    </div>
+</div>
 {% endblock %}

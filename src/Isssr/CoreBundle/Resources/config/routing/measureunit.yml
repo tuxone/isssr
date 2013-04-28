@@ -6,13 +6,18 @@ measureunit_show:
     pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:MeasureUnit:show" }
 
-measureunit_new:
-    pattern:  /new
+question_measureunit_new:
+    pattern:  /new/{qid}
     defaults: { _controller: "IsssrCoreBundle:MeasureUnit:new" }
 
-measureunit_create:
-    pattern:  /create
+question_measureunit_create:
+    pattern:  /create/{qid}
     defaults: { _controller: "IsssrCoreBundle:MeasureUnit:create" }
+    requirements: { _method: post }
+
+question_measureunit_select:
+    pattern:  /select/{qid}
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:select" }
     requirements: { _method: post }
 
 measureunit_edit:
@@ -28,3 +33,7 @@ measureunit_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "IsssrCoreBundle:MeasureUnit:delete" }
     requirements: { _method: post }
+
+measureunit_close:
+    pattern:  /{id}/close
+    defaults: { _controller: "IsssrCoreBundle:MeasureUnit:close" }

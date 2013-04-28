@@ -1,16 +1,42 @@
-<h1>MeasureUnit creation</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-<form action="{{ path('measureunit_create') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Create</button>
-    </p>
-</form>
+{% block pagetitle %}Measure Unit{% endblock %}
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('measureunit') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% block content %}
+
+    <div class="paragraphs">
+        <div class="row">
+            <div class="span4">
+                <a style="float:left; margin-left:30px;" href="{{ path('goal_show', {'id': question.getGoal.getId()}) }}" class="btn btn-small">
+                    <i class="icon-circle-arrow-left"></i> Back to the list
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Measure Unit for: "{{ question }}"</h3>
+        </div>
+
+        <div class="row">
+            <h4>Select existing Measure Unit</h4>
+
+            <form action="{{ path('question_measureunit_select', {'qid': question.id}) }}" method="post" {{ form_enctype(form_select) }}>
+                {{ form_widget(form_select.measureunit) }}
+                <p>
+                    <button type="submit" class="btn btn-primary">Select</button>
+                </p>
+            </form>
+        </div>
+
+        <div class="row">
+            <h4>or create a new one</h4>
+            <form action="{{ path('question_measureunit_create', {'qid': question.id}) }}" method="post" {{ form_enctype(form_create) }}>
+                {{ form_widget(form_create) }}
+                <p>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

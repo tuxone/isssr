@@ -73,9 +73,10 @@
                 </td>
         </tr>
         <tr>
-            <th>Measurement Model Design Manager</th>
+            <th>MMD Manager</th>
             <td>{{ entity.getMmdm() }}</td>
         </tr>
+        {% if entity.getStatus() < constant('Isssr\\CoreBundle\\Entity\\Goal::STATUS_QUESTIONED') %}
         <tr>
             <th>Questions</th>
             <td>
@@ -93,8 +94,38 @@
                 {% endif %}
             </td>
         </tr>
+        {% else %}
         <tr>
-        <a class="btn btn-small btn-primary" href="{{ path('goal_show_more', { 'id': entity.id }) }}">More Details</a>
+            <th>Questions</th>
+            <td>
+                <table>
+                    {% for q in entity.getAcceptedQuestions() %}
+                        <tr>
+                            <td>{{ q }}</td>
+                            <td>
+                                {% if q.measure %}
+                                [{{ q.measure.unitstr }}]
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if actions.canSelectMeasureUnit() %}
+                                    <a class="btn btn-small btn-primary" href="{{ path('question_measureunit_new', { 'qid': q.id}) }}" role="button" data-toggle="modal">Set Measure</a>
+                                {% endif %}
+                                {% if actions.canAddMeasurement() %}
+                                    <a class="btn btn-small btn-success" href="{{ path('measurement_new', { 'id': q.id}) }}" role="button" data-toggle="modal">Add answer</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>Actions</th>
+            <td>
+                <a class="btn btn-small btn-primary" href="{{ path('goal_show_more', { 'id': entity.id }) }}">More Details</a>
+            </td>
         </tr>
 
     </tbody>
@@ -145,8 +176,8 @@
         <a href="#createQuestion" role="button" class="btn" style="width: 120px;" data-toggle="modal">Submit a Question</a>
     {% endif %}
 
-    {% if actions.canSelectMeasureUnit() %}
-        <a href="#createQuestion" role="button" class="btn" style="width: 120px;" data-toggle="modal">Measure Model</a>
+    {% if actions.canSaveMeasureModel() %}
+        <a href="#saveMeasureModel" role="button" class="btn" style="width: 120px;" data-toggle="modal">Save Measure Model</a>
     {% endif %}
 
 	
@@ -316,21 +347,12 @@
     </div>
 
 
-    <div id="selectQuestions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-        <form action="{{ path('question_reject', { 'id': entity.id })  }}" method="post" {{ form_enctype(reject_questions_form) }}>
-            <div class="modal-header">
-                Questions added in "<b>{{ entity.title }}</b>"
-            </div>
-            <div class="modal-body">
-                {{ form_widget(reject_questions_form) }}
-            </div>
-            <div class="modal-footer" style="text-align:center;">
-                    <a href="{{ path('question_approve_all', { 'id': entity.id }) }}" class="btn btn-success">Approve all</a>
-                    <button class="btn btn-danger" type="submit" style="width:130px;">Reject selected</button>
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
-                </table>
-            </div>
-        </form>
+    <div id="saveMeasureModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-footer" style="text-align:center;">
+            <p>Do you really want to save the measure model for this goal?</p>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+            <a class="btn btn-primary" href="{{ path('measureunit_close', { 'id': entity.id }) }}">Yes</a>
+        </div>
     </div>
 
 
@@ -341,5 +363,6 @@
                 <a class="btn btn-primary" href="{{ path('question_close', { 'id': entity.id }) }}">Yes</a>
         </div>
     </div>
+
 
 {% endblock %}
