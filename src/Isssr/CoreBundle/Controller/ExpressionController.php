@@ -34,6 +34,26 @@ class ExpressionController extends Controller
         	'goal' => $goal,
         ));
     }
+    
+    public function showAction($id)
+    {
+    	$user = $this->getUser();
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$entity = $em->getRepository('IsssrCoreBundle:Expression')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Expression entity.');
+    	}
+    
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('IsssrCoreBundle:Expression:show.html.twig', array(
+    			'entity'      => $entity,
+    			'delete_form' => $deleteForm->createView(),
+    			'user' => $user,
+    	));
+    }
 
 
     /**
@@ -77,7 +97,7 @@ class ExpressionController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            return $this->redirect($this->generateUrl('expression_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('expression', array('id' => $entity->getGoal()->getId())));
         }
 
         return $this->render('IsssrCoreBundle:Expression:new.html.twig', array(
@@ -86,6 +106,37 @@ class ExpressionController extends Controller
         	'user' => $user,
         	'goal' => $goal,
         ));
+    }
+    
+    public function deleteAction(Request $request, $id) {
+    	$user = $this->getUser();
+    
+    	$form = $this->createDeleteForm($id);
+    	$form->bind($request);
+    
+    	if ($form->isValid()) {
+    		$em = $this->getDoctrine()->getManager();
+    		$expression = $em->getRepository('IsssrCoreBundle:Expression')->find($id);
+   			$goalId = $expression->getGoal()->getId();
+    		if (!$expression) {
+    			throw $this
+    			->createNotFoundException('Unable to find Expression entity.');
+    
+    		}
+    
+    		$em->remove($expression);
+    		$em->flush();
+    	}
+    
+    	return $this->redirect($this->generateUrl('expression', array('id' => $goalId)));
+    }
+    
+    private function createDeleteForm($id)
+    {
+    	return $this->createFormBuilder(array('id' => $id))
+    	->add('id', 'hidden')
+    	->getForm()
+    	;
     }
 
 }

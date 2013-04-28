@@ -582,19 +582,11 @@ class GoalController extends Controller {
 		$gm->preRendering($goal);
 		
 		$expressions = $goal->getExpressions();
+		$values = $gm->evaluateGoal($goal);
 		
-        $im = $this->get('isssr_core.interpretativemodel');
-        $values = array();
-		foreach($expressions as $expression){
-			$values[] = $im->evaluate($expression->getExpression(), $goal);
-		}
+		//TODO visualizzazione risultati
 		
-		$result = true;
-		foreach($values as $value)
-			$result = $result && $value;
 		
-		if ($result == true) die("goal raggiunto");
-		else die ("goal non raggiunto");
 	}
 	
 	private function createRoleAcceptsForm($id)

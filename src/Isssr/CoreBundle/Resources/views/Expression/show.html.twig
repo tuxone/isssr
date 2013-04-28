@@ -1,10 +1,18 @@
-<h1>Expression</h1>
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Expression{% endblock %}
+ 
+{% block content %}
 
 <table class="record_properties">
     <tbody>
         <tr>
             <th>Id</th>
             <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Goal</th>
+            <td>{{ entity.goal.getTitle() }}</td>
         </tr>
         <tr>
             <th>Expression</th>
@@ -14,20 +22,12 @@
 </table>
 
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('expression') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('expression_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
+    
         <form action="{{ path('expression_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Delete</button>
         </form>
-    </li>
+    
 </ul>
+
+{% endblock %}

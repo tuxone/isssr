@@ -13,7 +13,7 @@ services:
         
     isssr_core.goalmanager:
         class: "%isssr_gm.class%"
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@isssr_core.interpretativemodel"]
         
     isssr_core.notifiermanager:
         class: "%isssr_nm.class%"

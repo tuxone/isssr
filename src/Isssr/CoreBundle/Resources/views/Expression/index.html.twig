@@ -15,6 +15,9 @@
         <tr>
             
             <td>{{ entity.expression }}</td>
+			<td>
+            	<a href="{{ path('expression_show', { 'id': entity.id }) }}">show</a>
+            </td>
 
         </tr>
     {% endfor %}
@@ -22,9 +25,9 @@
 </table>
 
 <ul>
-        <button href="{{ path('expression_new', { 'id': goal.id }) }}">
+        <a href="{{ path('expression_new', { 'id': goal.id }) }}">
             New
-        </button>
+        </a>
 </ul>
 
 {% endblock %}

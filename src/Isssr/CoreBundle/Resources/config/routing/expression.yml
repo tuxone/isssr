@@ -2,7 +2,10 @@ expression:
     pattern:  /goal/{id}/
     defaults: { _controller: "IsssrCoreBundle:Expression:index" }
 
-
+expression_show:
+    pattern:  /{id}/
+    defaults: { _controller: "IsssrCoreBundle:Expression:show" }
+    
 expression_new:
     pattern:  /goal/{id}/new
     defaults: { _controller: "IsssrCoreBundle:Expression:new" }
@@ -10,4 +13,9 @@ expression_new:
 expression_create:
     pattern:  /goal/{id}/create
     defaults: { _controller: "IsssrCoreBundle:Expression:create" }
+    requirements: { _method: post }
+    
+expression_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Expression:delete" }
     requirements: { _method: post }
