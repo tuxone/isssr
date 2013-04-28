@@ -84,6 +84,8 @@ class MeasurementController extends Controller
             $entity->setQuestion($question);
             $entity->setUser($user);
             $entity->setDatetime(new \DateTime('now'));
+            $nm = $this->get('isssr_core.notifierManager');
+            $nm->notifyQssNewMeasure($goal);
             $em->persist($entity);
             $em->flush();
 

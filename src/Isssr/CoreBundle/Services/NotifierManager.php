@@ -72,6 +72,13 @@ class NotifierManager
         $this->sendMessage($body, $role->getUser());
     }
     
+    public function notifyQssNewMeasure(Goal $goal)
+    {
+    	$body = $this->bodyNewMeasure($goal);
+    	$qss = $goal->getQss();
+    	foreach ($qss as $qs) $this->sendMessage($body, $qs);
+    }
+    
     public function questionAccepted(Question $question)
     {
     	$goal = $question->getCreator()->getGoal();
@@ -181,5 +188,9 @@ class NotifierManager
     	return 'The set of the questions for the goal '.$goal->getTitle().' has been accepted by the goal enactor '.$goal->getEnactor()->getUsername();
     }
 
+    private function bodyNewMeasure(Goal $goal)
+    {
+    	return 'A new Measure has been provided for the goal '.$goal->getTitle();
+    }
 
 }
