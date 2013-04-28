@@ -111,7 +111,7 @@ class WorkflowManager
             case Goal::STATUS_QUESTIONED:
                 if($roles->contains(UserInGoal::ROLE_ENACTOR))
                 {
-                    if(!$roles->contains(UserInGoal::ROLE_MMDM) && !$gm->getMMDM($goal))
+                    if(!$gm->getMMDM($goal))
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_ADD_MMDM);
                 }
 
