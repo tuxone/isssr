@@ -15,11 +15,12 @@ class Node{
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	protected $id;
+	private $id;
+	
 	/**
 	 * @ORM\Column(type="integer")
 	 */
-	protected $entityId;
+    protected $entityId;
 	
 	/**
 	 * @ORM\Column(type="string", length=30, nullable=false)
@@ -36,16 +37,6 @@ class Node{
 		$successors = new ArrayCollection();
 	}
 
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set entityId
@@ -124,5 +115,15 @@ class Node{
     public function getSuccessors()
     {
         return $this->successors;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

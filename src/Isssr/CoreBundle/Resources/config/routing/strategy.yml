@@ -1,0 +1,30 @@
+strategy:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Strategy:index" }
+
+strategy_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Strategy:show" }
+
+strategy_new:
+    pattern:  /new
+    defaults: { _controller: "IsssrCoreBundle:Strategy:new" }
+
+strategy_create:
+    pattern:  /create
+    defaults: { _controller: "IsssrCoreBundle:Strategy:create" }
+    requirements: { _method: post }
+
+strategy_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "IsssrCoreBundle:Strategy:edit" }
+
+strategy_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "IsssrCoreBundle:Strategy:update" }
+    requirements: { _method: post }
+
+strategy_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "IsssrCoreBundle:Strategy:delete" }
+    requirements: { _method: post }
