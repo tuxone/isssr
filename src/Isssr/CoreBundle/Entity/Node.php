@@ -19,14 +19,12 @@ class Node{
 	
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Goal")
-	 * @ORM\JoinColumn(name="goal_id", referencedColumnName="id")
+	 * @ORM\OneToOne(targetEntity="Goal", mappedBy="node", cascade={"persist", "remove"})
 	 */
 	protected $goal;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Strategy")
-	 * @ORM\JoinColumn(name="strategy_id", referencedColumnName="id")
+	 * @ORM\OneToOne(targetEntity="Strategy", mappedBy="node", cascade={"persist", "remove"})
 	 */
 	protected $strategy;
 	

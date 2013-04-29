@@ -42,6 +42,7 @@ class StrategyController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IsssrCoreBundle:Strategy')->find($id);
+        
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Strategy entity.');
@@ -87,13 +88,11 @@ class StrategyController extends Controller
         if ($form->isValid()) {
         	$em = $this->getDoctrine()->getManager();
         	$entity->setCreator($user);
-            $em->persist($entity);
+            
             
             $node = new Node();
-            $node->setStrategy($entity);
-            $em->persist($node);
-            
-            
+            $entity->setNode($node);
+            $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('strategy_show', array('id' => $entity->getId())));
@@ -183,8 +182,6 @@ class StrategyController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Strategy entity.');
             }
-            $nodes = $em->getRepository('IsssrCoreBundle:Node')->findByStrategy($entity->getId());
-            foreach($nodes as $node) $em->remove($node);
             $em->remove($entity);
             $em->flush();
         }

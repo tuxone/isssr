@@ -272,11 +272,10 @@ class GoalController extends Controller {
 			$gm->setOwner($goal, $user);
 			
 			$em = $this->getDoctrine()->getManager();
-			$em->persist($goal);
 			$node = new Node();
-			$node->setGoal($goal);
-			$em->persist($node);
-			//$goal->setNode($node);
+// 			$node->setGoal($goal);
+			$goal->setNode($node);			
+			$em->persist($goal);
 			$em->flush();
 			return $this
 					->redirect(
@@ -470,9 +469,6 @@ class GoalController extends Controller {
 			$actions = $wm->userGoalShowActions($user, $goal);
 			if (!$actions->canDelete())
 				throw new HttpException(403);
-
-			$nodes = $em->getRepository('IsssrCoreBundle:Node')->findByGoal($goal->getId());
-			foreach($nodes as $node) $em->remove($node);
 			$em->remove($goal);
 			$em->flush();
 		}
