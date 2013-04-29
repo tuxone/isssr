@@ -1,0 +1,6 @@
+grid:
+    pattern:  /
+    defaults: { _controller: "IsssrCoreBundle:Grid:index" }
+grid_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "IsssrCoreBundle:Grid:show" }

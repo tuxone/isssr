@@ -16,13 +16,13 @@
 	<div class="navbar top">
         <div class="navbar-inner">
           	<ul class="nav">
-			  <li><a href="{{ path('isssr_core_homepage') }}">Home</a></li>
+			    <li><a href="{{ path('isssr_core_homepage') }}">Home</a></li>
+                <li><a href="{{ path('grid') }}">Grids</a></li>
 			  <li class="dropdown">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 					Goals<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu" style="text-align:left;">
-	      <!-- links -->
 	      			<li><a href="{{ path('goal') }}">All</a></li>
 	      			<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_OWNER')}) }}">as Owner</a></li>
 			  		<li><a href="{{ path('goal_as', {'role': constant('Isssr\\CoreBundle\\Entity\\UserInGoal::ROLE_SUPER')}) }}">as Super</a></li>
@@ -32,25 +32,26 @@
 				</ul>
 			</li>
 			  
-			  <li><a href="{{ path('tag') }}">Tags</a></li>
-			  <li><a href="{{ path('user_show', { 'id': user.id}) }}">Profile</a></li>
-			  <li><a href="{{ path('search') }}">Search</a></li>
-			  <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
+			    <li><a href="{{ path('tag') }}">Tags</a></li>
+			    <li><a href="{{ path('user_show', { 'id': user.id}) }}">Profile</a></li>
+			    <li><a href="{{ path('search') }}">Search</a></li>
+			    <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
 			</ul>
         </div>
     </div>
     
     <div class="container-fluid">
   <div class="row-fluid">
+   <!--
     <div class="span3" style="background-color: #bbd8e9;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; padding-top:4px;">
-      <!--Sidebar content-->
       <span class="label label-info">
    		{% block pagetitle %}{% endblock %}
    	</span>
    	<br>
       {% block sidebar %}{% endblock %}
     </div>
-    <div class="span9" style="background-color: #ffffff;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; padding: 10px;">
+    -->
+    <div class="span12" style="background-color: #ffffff;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; padding: 10px;">
       <!--Body content-->
       {% block content %}{% endblock %}
     </div>

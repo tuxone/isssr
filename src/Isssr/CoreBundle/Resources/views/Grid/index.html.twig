@@ -1,0 +1,33 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block pagetitle %}Grids{% endblock %}
+ 
+{% block content %}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Label</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.label }}</td>
+
+            <td>
+				<a class="btn btn-small btn-primary" href="{{ path('grid_show', { 'id': entity.id }) }}">show</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+        <a href="{{ path('goal_new') }}">
+            Create a new grid (by goal)
+        </a>
+
+
+{% endblock %}

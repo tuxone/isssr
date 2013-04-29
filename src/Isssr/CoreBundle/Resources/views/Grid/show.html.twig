@@ -1,0 +1,107 @@
+{% extends 'IsssrCoreBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node {
+            font: 16px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block pagetitle %}Expression{% endblock %}
+
+{% block content %}
+
+    <div id="menu" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-header">
+            Add a child
+        </div>
+        <div class="modal-body">
+            Strategy<br>
+            Goal
+        </div>
+        <div class="modal-footer" style="text-align:center;">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
+        </div>
+    </div>
+
+    <div id='grid'></div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script>
+
+            var width = 700, height = 1000;
+
+            var cluster = d3.layout.tree()
+                    .size([height, width - 200]);
+
+            var diagonal = d3.svg.diagonal()
+                    .projection(function(d) { return [d.y, d.x]; });
+
+            var svg = d3.select("#grid").append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", "translate(40,0)");
+
+            d3.json("http://172.16.92.156/Utils/D3/data.json", function(error, root) {
+                var nodes = cluster.nodes(root),
+                        links = cluster.links(nodes);
+
+                var link = svg.selectAll(".link")
+                        .data(links)
+                        .enter().append("path")
+                        .attr("class", "link")
+                        .attr("d", diagonal);
+
+                var node = svg.selectAll(".node")
+                        .data(nodes)
+                        .enter().append("g")
+                        .attr("class", "node")
+                        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+                node.append("circle")
+                        .attr("r", 10)
+                        .on("click", function(d,i) { alert('richiama node show: ' + d.name) })
+                        .on("contextmenu", function(data, index) {
+                            $('#menu').modal('show');
+                            d3.event.preventDefault();
+                        });
+
+                node.append("text")
+                        .attr("dx", 0)
+                        .attr("dy", -16)
+                        .style("text-anchor", "middle")
+                        .text(function(d) { return d.name; });
+
+
+            });
+
+            d3.select(self.frameElement).style("height", height + "px");
+
+        </script>
+{% endblock %}

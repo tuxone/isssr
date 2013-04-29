@@ -11,7 +11,7 @@ class ExpressionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('expression')
+            ->add('expression', 'textarea')
             
         ;
     }

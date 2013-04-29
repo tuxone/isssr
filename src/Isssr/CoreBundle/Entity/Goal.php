@@ -108,10 +108,10 @@ class Goal {
 	/**
 	 * @ORM\OneToMany(targetEntity="Expression", mappedBy="goal")
 	 */
-	protected $expressions;
-
+	protected $expressions;	
+	
 	/**
-	 * @ORM\OneToOne(targetEntity="Node", inversedBy="goal", cascade={"persist", "remove"})
+	 * @ORM\OneToOne(targetEntity="Node", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $node;
 
