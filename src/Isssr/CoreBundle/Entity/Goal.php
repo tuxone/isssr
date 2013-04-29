@@ -3,13 +3,13 @@
 namespace Isssr\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Isssr\CoreBundle\Entity\EnactorInGoal;
+use Isssr\CoreBundle\Entity\Node;
 
 /**
  * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\GoalRepository")
  * @ORM\Table(name="Goal")
  */
-class Goal {
+class Goal extends Node{
 
 	const STATUS_NOTEDITABLE = 0;
 	const STATUS_EDITABLE = 1;
