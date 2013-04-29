@@ -34,7 +34,7 @@ class Strategy{
 	protected $creator;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Node")
+	 * @ORM\OneToOne(targetEntity="Node", mappedBy="strategy", cascade={"persist", "remove"})
 	 */
 	protected $node;
 	

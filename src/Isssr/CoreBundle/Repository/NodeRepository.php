@@ -12,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class NodeRepository extends EntityRepository
 {
+	
+	public function findByGoal($gid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT n FROM IsssrCoreBundle:Node n '.
+				'WHERE n.goal = '.$gid)
+				->getResult();
+	}
+	
+	public function findByStrategy($sid)
+	{
+		return $this->getEntityManager()
+		->createQuery(
+				'SELECT n FROM IsssrCoreBundle:Node n '.
+				'WHERE n.strategy = '.$sid)
+				->getResult();
+	}
 }

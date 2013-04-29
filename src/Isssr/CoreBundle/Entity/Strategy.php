@@ -33,10 +33,6 @@ class Strategy{
 	 */
 	protected $creator;
 
-	/**
-	 * @ORM\OneToOne(targetEntity="Node", cascade={"persist", "remove"})
-	 */
-	protected $node;
 	
 	public function __construct()
 	{
@@ -123,26 +119,4 @@ class Strategy{
         return $this->creator;
     }
 
-    /**
-     * Set node
-     *
-     * @param \Isssr\CoreBundle\Entity\Node $node
-     * @return Strategy
-     */
-    public function setNode(\Isssr\CoreBundle\Entity\Node $node = null)
-    {
-        $this->node = $node;
-    
-        return $this;
-    }
-
-    /**
-     * Get node
-     *
-     * @return \Isssr\CoreBundle\Entity\Node 
-     */
-    public function getNode()
-    {
-        return $this->node;
-    }
 }

@@ -108,10 +108,6 @@ class Goal{
 	 */
 	protected $expressions;
 	
-	/**
-	 * @ORM\OneToOne(targetEntity="Node", cascade={"persist", "remove"})
-	 */
-	protected $node;
 	
 	/**
 	 * Rendering Facilities
@@ -654,28 +650,5 @@ class Goal{
     {
         return $this->expressions;
     }
-    
 
-    /**
-     * Set node
-     *
-     * @param \Isssr\CoreBundle\Entity\Node $node
-     * @return Goal
-     */
-    public function setNode(\Isssr\CoreBundle\Entity\Node $node = null)
-    {
-        $this->node = $node;
-    
-        return $this;
-    }
-
-    /**
-     * Get node
-     *
-     * @return \Isssr\CoreBundle\Entity\Node 
-     */
-    public function getNode()
-    {
-        return $this->node;
-    }
 }

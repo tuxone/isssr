@@ -109,7 +109,7 @@ class Goal{
 	protected $expressions;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Node")
+	 * @ORM\OneToOne(targetEntity="Node", mappedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $node;
 	

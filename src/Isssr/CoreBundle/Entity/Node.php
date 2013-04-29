@@ -17,15 +17,18 @@ class Node{
 	 */
 	private $id;
 	
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-    protected $entityId;
 	
 	/**
-	 * @ORM\Column(type="string", length=30, nullable=false)
+	 * @ORM\OneToOne(targetEntity="Goal")
+	 * @ORM\JoinColumn(name="goal_id", referencedColumnName="id")
 	 */
-	protected $entityType;
+	protected $goal;
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="Strategy")
+	 * @ORM\JoinColumn(name="strategy_id", referencedColumnName="id")
+	 */
+	protected $strategy;
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="Node", mappedBy="id")
@@ -35,53 +38,67 @@ class Node{
 	public function __construct()
 	{
 		$successors = new ArrayCollection();
+		$goal = null;
+		$strategy = null;
 	}
 
 
-    /**
-     * Set entityId
-     *
-     * @param integer $entityId
-     * @return Node
-     */
-    public function setEntityId($entityId)
-    {
-        $this->entityId = $entityId;
     
-        return $this;
-    }
 
     /**
-     * Get entityId
+     * Get id
      *
      * @return integer 
      */
-    public function getEntityId()
+    public function getId()
     {
-        return $this->entityId;
+        return $this->id;
     }
 
     /**
-     * Set entityType
+     * Set goal
      *
-     * @param string $entityType
+     * @param \Isssr\CoreBundle\Entity\Goal $goal
      * @return Node
      */
-    public function setEntityType($entityType)
+    public function setGoal(\Isssr\CoreBundle\Entity\Goal $goal = null)
     {
-        $this->entityType = $entityType;
+        $this->goal = $goal;
     
         return $this;
     }
 
     /**
-     * Get entityType
+     * Get goal
      *
-     * @return string 
+     * @return \Isssr\CoreBundle\Entity\Goal 
      */
-    public function getEntityType()
+    public function getGoal()
     {
-        return $this->entityType;
+        return $this->goal;
+    }
+
+    /**
+     * Set strategy
+     *
+     * @param \Isssr\CoreBundle\Entity\Strategy $strategy
+     * @return Node
+     */
+    public function setStrategy(\Isssr\CoreBundle\Entity\Strategy $strategy = null)
+    {
+        $this->strategy = $strategy;
+    
+        return $this;
+    }
+
+    /**
+     * Get strategy
+     *
+     * @return \Isssr\CoreBundle\Entity\Strategy 
+     */
+    public function getStrategy()
+    {
+        return $this->strategy;
     }
 
     /**
@@ -116,14 +133,11 @@ class Node{
     {
         return $this->successors;
     }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
+    
+    public function getValue()
     {
-        return $this->id;
+    	if ($this->goal != null) return $goal;
+    	else if ($this->strategy != null) return $goal;
+    	else return null;
     }
 }

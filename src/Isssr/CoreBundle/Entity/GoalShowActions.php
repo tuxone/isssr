@@ -25,6 +25,8 @@ class GoalShowActions {
     const SHOW_GOAL_ACTION_ADD_MEASUREMENT = 15;
     const SHOW_GOAL_ACTION_SAVE_MEASURE_MODEL = 16;
     const SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL = 17;
+    const SHOW_GOAL_ACTION_DERIVE_STRATEGY = 18;
+    const SHOW_GOAL_ACTION_DERIVE_GOAL = 19;
 
 	private $actions;
 	
@@ -108,5 +110,13 @@ class GoalShowActions {
 
     public function canManageInterpretativeModel() {
         return $this->actions->contains(self::SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL);
+    }
+    
+    public function canDeriveANewStrategy() {
+    	return $this->actions->contains(self::SHOW_GOAL_ACTION_DERIVE_STRATEGY);
+    }
+    
+    public function canDeriveANewGoal() {
+    	return $this->actions->contains(self::SHOW_GOAL_ACTION_DERIVE_GOAL);
     }
 }
