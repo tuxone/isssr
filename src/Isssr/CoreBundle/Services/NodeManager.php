@@ -10,8 +10,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Isssr\CoreBundle\Entity\User;
 
-class WorkflowManager
+class NodeManager
 {	
+	private $goalRouting = 'goal_show';
+	private $strategyRouting = 'strategy_show';
+	private $defaultRouting = 'isssr_core_homepage';
+	
 	public function __construct(EntityManager $em){
 		$this->em = $em;
 	}
@@ -24,5 +28,12 @@ class WorkflowManager
 	public function isStrategy(Node $node)
 	{
 		return ($node->getStrategy() != null);
+	}
+	
+	public function getShowRouting(Node $node)
+	{
+		if ($this->isGoal($node)) return $this->goalrouting;
+		if ($this->isStrategy($node)) return $this->strategyrouting;
+		return $this->defaultRouting;
 	}
 }
