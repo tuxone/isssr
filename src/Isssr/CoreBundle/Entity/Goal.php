@@ -8,19 +8,21 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\GoalRepository")
  * @ORM\Table(name="Goal")
  */
-class Goal{
+class Goal {
 
 	const STATUS_NOTEDITABLE = 0;
 	const STATUS_EDITABLE = 1;
 	const STATUS_ACCEPTED = 2; // accepted by Goal Super Owners
 	const STATUS_SOFTEDITABLE = 3;
 	const STATUS_APPROVED = 4;
-    const STATUS_QUESTIONED = 5;
-    const STATUS_MEASURED = 6;
-    const STATUS_RUNNING = 7;
-    const STATUS_COMPLETED = 8;
-	
-	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable', 'Accepted by GSOs', 'Soft Editable', 'Approved', 'Questioned', 'Measured', 'Running', 'Completed');
+	const STATUS_QUESTIONED = 5;
+	const STATUS_MEASURED = 6;
+	const STATUS_RUNNING = 7;
+	const STATUS_COMPLETED = 8;
+
+	private static $STATUSSTR = array('Not Editable (Waiting)', 'Editable',
+			'Accepted by GSOs', 'Soft Editable', 'Approved', 'Questioned',
+			'Measured', 'Running', 'Completed');
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -102,34 +104,33 @@ class Goal{
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	protected $assumptions;
-	
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Expression", mappedBy="goal")
 	 */
 	protected $expressions;
-	
+
 	/**
 	 * @ORM\OneToOne(targetEntity="Node", inversedBy="goal", cascade={"persist", "remove"})
 	 */
 	protected $node;
-	
-	
+
 	/**
 	 * Rendering Facilities
 	 */
 	private $owner = null;
-	
+
 	private $enactor = null;
-	
+
 	private $supers = null;
-	
+
 	private $qss = null;
-	
+
 	private $mmdm = null;
-	
+
 	private $status = null;
 
-    private $questions = null;
+	private $questions = null;
 
 	/**
 	 * Constructor
@@ -138,11 +139,11 @@ class Goal{
 		$this->tags = new ArrayCollection();
 		$this->users = new ArrayCollection();
 	}
-	
+
 	public function initPreRendering() {
 		$this->supers = new ArrayCollection();
 		$this->qss = new ArrayCollection();
-        $this->questions = new ArrayCollection();
+		$this->questions = new ArrayCollection();
 	}
 
 	/**
@@ -480,203 +481,194 @@ class Goal{
 		return $this->rejections;
 	}
 
+	/**
+	 * Add users
+	 *
+	 * @param \Isssr\CoreBundle\Entity\UserInGoal $users
+	 * @return Goal
+	 */
+	public function addRole(\Isssr\CoreBundle\Entity\UserInGoal $roles) {
+		$this->roles[] = $roles;
 
-    /**
-     * Add users
-     *
-     * @param \Isssr\CoreBundle\Entity\UserInGoal $users
-     * @return Goal
-     */
-    public function addRole(\Isssr\CoreBundle\Entity\UserInGoal $roles)
-    {
-        $this->roles[] = $roles;
-    
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Remove users
-     *
-     * @param \Isssr\CoreBundle\Entity\UserInGoal $users
-     */
-    public function removeRole(\Isssr\CoreBundle\Entity\UserInGoal $roles)
-    {
-        $this->roles->removeElement($roles);
-    }
+	/**
+	 * Remove users
+	 *
+	 * @param \Isssr\CoreBundle\Entity\UserInGoal $users
+	 */
+	public function removeRole(\Isssr\CoreBundle\Entity\UserInGoal $roles) {
+		$this->roles->removeElement($roles);
+	}
 
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
-    
-    /**
-     * Get supersInGoal
-     * serve per le baundary
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSupersInGoal()
-    {
-    	$ret = new ArrayCollection();
-    	foreach ($this->roles as $role)
-    		if($role->getRole() == UserInGoal::ROLE_SUPER)
-    			$ret->add($role);
-    	return $ret;
-    }
-    
-    public function setOwner(User $owner){
-    	$this->owner = $owner;
-    }
-    
-    public function getOwner(){
-    	return $this->owner;
-    }
-    
-    public function setEnactor(User $enactor){
-    	$this->enactor = $enactor;
-    }
-    
-    public function getEnactor(){
-    	return $this->enactor;
-    }
-    
-    public function setMmdm(User $mmdm){
-    	$this->mmdm = $mmdm;
-    }
-    
-    public function getMmdm(){
-    	return $this->mmdm;
-    }
-    
-    public function addSuper(User $super){
-    	$this->supers[] = $super;
-    	
-    	return $this;
-    }
-    
-    public function removeSuper(User $super){
-    	$this->supers->removeElement($super);
-    }
-    
-    public function getSupers(){
-    	return $this->supers;
-    }
-    
-    public function addQs(User $qs){
-    	$this->qss[] = $qs;
-    	
-    	return $this;
-    }
-    
-    public function removeQs(User $qs){
-    	$this->qss->removeElement($qs);
-    }
-    
-    public function getQss(){
-    	return $this->qss;
-    }
-    
-    public function getStatus() {
-    	return $this->status;
-    }
-    
-    public function getStatusString() {
-    	return self::$STATUSSTR[$this->status];
-    }
-    
-    public function setStatus($status){
-    	$this->status = $status;
-    }
+	/**
+	 * Get users
+	 *
+	 * @return \Doctrine\Common\Collections\Collection 
+	 */
+	public function getRoles() {
+		return $this->roles;
+	}
 
-    public function addQuestion(Question $qs){
-        $this->questions[] = $qs;
+	/**
+	 * Get supersInGoal
+	 * serve per le baundary
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getSupersInGoal() {
+		$ret = new ArrayCollection();
+		foreach ($this->roles as $role)
+			if ($role->getRole() == UserInGoal::ROLE_SUPER)
+				$ret->add($role);
+		return $ret;
+	}
 
-        return $this;
-    }
+	public function setOwner(User $owner) {
+		$this->owner = $owner;
+	}
 
-    public function removeQuestion(Question $qs){
-        $this->questions->removeElement($qs);
-    }
+	public function getOwner() {
+		return $this->owner;
+	}
 
-    public function getQuestions(){
-        return $this->questions;
-    }
+	public function setEnactor(User $enactor) {
+		$this->enactor = $enactor;
+	}
 
-    public function getAcceptedQuestions(){
-        $ret = new ArrayCollection();
-        foreach($this->questions as $question)
-            if($question->isAccepted())
-                $ret->add($question);
-        return $ret;
-    }
+	public function getEnactor() {
+		return $this->enactor;
+	}
 
-    public function getUnusedQuestions(){
-        $ret = new ArrayCollection();
-        foreach($this->questions as $question)
-            if($question->isUnused())
-                $ret->add($question);
-        return $ret;
-    }
+	public function setMmdm(User $mmdm) {
+		$this->mmdm = $mmdm;
+	}
 
-    /**
-     * Add expressions
-     *
-     * @param \Isssr\CoreBundle\Entity\Expression $expressions
-     * @return Goal
-     */
-    public function addExpression(\Isssr\CoreBundle\Entity\Expression $expressions)
-    {
-        $this->expressions[] = $expressions;
-    
-        return $this;
-    }
+	public function getMmdm() {
+		return $this->mmdm;
+	}
 
-    /**
-     * Remove expressions
-     *
-     * @param \Isssr\CoreBundle\Entity\Expression $expressions
-     */
-    public function removeExpression(\Isssr\CoreBundle\Entity\Expression $expressions)
-    {
-        $this->expressions->removeElement($expressions);
-    }
+	public function addSuper(User $super) {
+		$this->supers[] = $super;
 
-    /**
-     * Get expressions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getExpressions()
-    {
-        return $this->expressions;
-    }
+		return $this;
+	}
 
+	public function removeSuper(User $super) {
+		$this->supers->removeElement($super);
+	}
 
-    /**
-     * Set node
-     *
-     * @param \Isssr\CoreBundle\Entity\Node $node
-     * @return Goal
-     */
-    public function setNode(\Isssr\CoreBundle\Entity\Node $node = null)
-    {
-        $this->node = $node;
-    
-        return $this;
-    }
+	public function getSupers() {
+		return $this->supers;
+	}
 
-    /**
-     * Get node
-     *
-     * @return \Isssr\CoreBundle\Entity\Node 
-     */
-    public function getNode()
-    {
-        return $this->node;
-    }
+	public function addQs(User $qs) {
+		$this->qss[] = $qs;
+
+		return $this;
+	}
+
+	public function removeQs(User $qs) {
+		$this->qss->removeElement($qs);
+	}
+
+	public function getQss() {
+		return $this->qss;
+	}
+
+	public function getStatus() {
+		return $this->status;
+	}
+
+	public function getStatusString() {
+		return self::$STATUSSTR[$this->status];
+	}
+
+	public function setStatus($status) {
+		$this->status = $status;
+	}
+
+	public function addQuestion(Question $qs) {
+		$this->questions[] = $qs;
+
+		return $this;
+	}
+
+	public function removeQuestion(Question $qs) {
+		$this->questions->removeElement($qs);
+	}
+
+	public function getQuestions() {
+		return $this->questions;
+	}
+
+	public function getAcceptedQuestions() {
+		$ret = new ArrayCollection();
+		foreach ($this->questions as $question)
+			if ($question->isAccepted())
+				$ret->add($question);
+		return $ret;
+	}
+
+	public function getUnusedQuestions() {
+		$ret = new ArrayCollection();
+		foreach ($this->questions as $question)
+			if ($question->isUnused())
+				$ret->add($question);
+		return $ret;
+	}
+
+	/**
+	 * Add expressions
+	 *
+	 * @param \Isssr\CoreBundle\Entity\Expression $expressions
+	 * @return Goal
+	 */
+	public function addExpression(
+			\Isssr\CoreBundle\Entity\Expression $expressions) {
+		$this->expressions[] = $expressions;
+
+		return $this;
+	}
+
+	/**
+	 * Remove expressions
+	 *
+	 * @param \Isssr\CoreBundle\Entity\Expression $expressions
+	 */
+	public function removeExpression(
+			\Isssr\CoreBundle\Entity\Expression $expressions) {
+		$this->expressions->removeElement($expressions);
+	}
+
+	/**
+	 * Get expressions
+	 *
+	 * @return \Doctrine\Common\Collections\Collection 
+	 */
+	public function getExpressions() {
+		return $this->expressions;
+	}
+
+	/**
+	 * Set node
+	 *
+	 * @param \Isssr\CoreBundle\Entity\Node $node
+	 * @return Goal
+	 */
+	public function setNode(\Isssr\CoreBundle\Entity\Node $node = null) {
+		$this->node = $node;
+
+		return $this;
+	}
+
+	/**
+	 * Get node
+	 *
+	 * @return \Isssr\CoreBundle\Entity\Node 
+	 */
+	public function getNode() {
+		return $this->node;
+	}
 }
