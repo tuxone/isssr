@@ -5,6 +5,7 @@ parameters:
     isssr_wm.class: Isssr\CoreBundle\Services\WorkflowManager
     isssr_im.class: Isssr\CoreBundle\Services\InterpretativeModel
     isssr_no.class: Isssr\CoreBundle\Services\NodeManager
+    isssr_gridm.class: Isssr\CoreBundle\Services\GridManager
 
 services:
 
@@ -31,4 +32,7 @@ services:
     isssr_core.nodemanager:
         class: "%isssr_no.class%"
         arguments: ["@doctrine.orm.entity_manager"]
-    
+
+    isssr_core.gridmanager:
+            class: "%isssr_gridm.class%"
+            arguments: ["@doctrine.orm.entity_manager"]

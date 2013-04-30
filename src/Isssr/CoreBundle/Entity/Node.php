@@ -29,19 +29,21 @@ class Node{
 	protected $strategy;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Node", mappedBy="id")
+	 * @ORM\OneToMany(targetEntity="Node", mappedBy="father")
 	 */
 	protected $successors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Node", inversedBy="successors")
+     */
+    protected $father;
 	
 	public function __construct()
 	{
-		$successors = new ArrayCollection();
+		$this->successors = new ArrayCollection();
 		$goal = null;
 		$strategy = null;
 	}
-
-
-    
 
     /**
      * Get id
@@ -134,8 +136,34 @@ class Node{
     
     public function getValue()
     {
-    	if ($this->goal != null) return $goal;
-    	else if ($this->strategy != null) return $goal;
-    	else return null;
+    	if ($this->goal != null)
+            return $this->goal;
+    	else if ($this->strategy != null)
+            return $this->strategy;
+    	else
+            return null;
+    }
+
+    /**
+     * Set father
+     *
+     * @param \Isssr\CoreBundle\Entity\Node $father
+     * @return Node
+     */
+    public function setFather(\Isssr\CoreBundle\Entity\Node $father = null)
+    {
+        $this->father = $father;
+    
+        return $this;
+    }
+
+    /**
+     * Get father
+     *
+     * @return \Isssr\CoreBundle\Entity\Node 
+     */
+    public function getFather()
+    {
+        return $this->father;
     }
 }

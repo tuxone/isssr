@@ -48,9 +48,11 @@ class GridController extends Controller {
             throw $this->createNotFoundException('Unable to find Grid entity.');
         }
 
-        $gridmanager = "";
+        $gridmanager = $this->get('isssr_core.gridmanager');;
 
-        //$json = $gridmanager->getJson($grid);
+        $json = $gridmanager->getJson($grid);
+
+        die($json);
 
         $json = file_get_contents('/home/cyberalex/Apache/Utils/D3/data.json');
         $response = new Response($json);
