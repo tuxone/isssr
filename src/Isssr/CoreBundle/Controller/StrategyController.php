@@ -63,15 +63,33 @@ class StrategyController extends Controller
      */
     public function newAction()
     {
+    	$this->generateNew(null);
+    }
+    
+    public function newChildAction($id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	
+    	$node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+    	
+    	if (!$node) {
+    		throw $this->createNotFoundException('Unable to find Node entity.');
+    	}
+    	
+    	$this->generateNew($node);
+    }
+    
+    private function generateNew(Node $node)
+    {
     	$user = $this->getUser();
-        $entity = new Strategy();
-        $form   = $this->createForm(new StrategyType(), $entity);
-
-        return $this->render('IsssrCoreBundle:Strategy:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        	'user' => $user,
-        ));
+    	$entity = new Strategy();
+    	$form   = $this->createForm(new StrategyType(), $entity);
+    	
+    	return $this->render('IsssrCoreBundle:Strategy:new.html.twig', array(
+    			'entity' => $entity,
+    			'form'   => $form->createView(),
+    			'user' => $user,
+    	));
     }
 
     /**

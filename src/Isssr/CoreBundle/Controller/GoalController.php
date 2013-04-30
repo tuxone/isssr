@@ -281,36 +281,63 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function createAction(Request $request) {
+		$this->createNew($request, null);
+	}
+	
+	public function createChildAction(Request $request, $id) 
+	{
+		$em = $this->getDoctrine()->getManager();
+		
+		$node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+		
+		if (!$node) {
+			throw $this->createNotFoundException('Unable to find Node entity.');
+		}
+		
+		$this->createNew($request, $node);
+	}
+	
+	private function createNew(Request $request, Node $father)
+	{
 		$user = $this->getUser();
-
+		
 		$goal = new Goal();
 		$form = $this->createForm(new GoalType(false), $goal);
 		$form->bind($request);
-
+		
 		if ($form->isValid()) {
-
+		
 			$gm = $this->get('isssr_core.goalmanager');
 			$gm->setOwner($goal, $user);
-			
+				
 			$em = $this->getDoctrine()->getManager();
 			$node = new Node();
-            $node->setGoal($goal);
-            $grid = new Grid();
-            $grid->setRoot($node);
-            $grid->setLabel($goal->getTitle());
-
-			$em->persist($grid);
+			$node->setGoal($goal);
+			if (!$father){
+				
+				$grid = new Grid();
+				$grid->setRoot($node);
+				$grid->setLabel($goal->getTitle());
+				$em->persist($grid);
+			}
+			else {
+				$em->persist($node);
+				$father->addSuccessor($node);
+				$em->persist($node);
+				
+			}
+		
 			$em->flush();
 			return $this->redirect(
-						$this->generateUrl('goal_show',
-						array('id' => $goal->getId()))
-            );
+					$this->generateUrl('goal_show',
+							array('id' => $goal->getId()))
+			);
 		}
-
+		
 		return $this
-				->render('IsssrCoreBundle:Goal:new.html.twig',
-						array('entity' => $goal,
-								'form' => $form->createView(), 'user' => $user,));
+		->render('IsssrCoreBundle:Goal:new.html.twig',
+				array('entity' => $goal,
+						'form' => $form->createView(), 'user' => $user,));
 	}
 
 	/**

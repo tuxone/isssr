@@ -23,6 +23,16 @@ goal_create:
     defaults: { _controller: "IsssrCoreBundle:Goal:create" }
     requirements: { _method: post }
 
+goal_newSon:
+    pattern:  /new/{id}
+    defaults: { _controller: "IsssrCoreBundle:Goal:newChild" }
+
+goal_createSon:
+    pattern:  /create/{id}
+    defaults: { _controller: "IsssrCoreBundle:Goal:createChild" }
+    requirements: { _method: post }
+
+
 goal_edit:
     pattern:  /{id}/edit
     defaults: { _controller: "IsssrCoreBundle:Goal:edit" }
