@@ -3,7 +3,8 @@
 namespace Isssr\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
- 
+use Symfony\Component\HttpFoundation\Response;
+
 class GridController extends Controller {
 
     /**
@@ -27,7 +28,7 @@ class GridController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
 
-        $grid = $em->getRepository('IsssrCoreBundle:Grid')->findById($id);
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->find($id);
 
         if (!$grid) {
             throw $this->createNotFoundException('Unable to find Grid entity.');
@@ -37,4 +38,23 @@ class GridController extends Controller {
 				->render('IsssrCoreBundle:Grid:show.html.twig',
 						array('grid' => $grid, 'user' => $user));
 	}
+
+    public function jsonAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->find($id);
+
+        if (!$grid) {
+            throw $this->createNotFoundException('Unable to find Grid entity.');
+        }
+
+        $gridmanager = "";
+
+        //$json = $gridmanager->getJson($grid);
+
+        $json = file_get_contents('/home/cyberalex/Apache/Utils/D3/data.json');
+        $response = new Response($json);
+
+        return $response;
+    }
 }

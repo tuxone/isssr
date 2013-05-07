@@ -240,21 +240,41 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function newAction() {
-		$scontext = $this->container->get('security.context');
-		$token = $scontext->getToken();
-		$user = $token->getUser();
-
-		$hierarchymanager = $this->get('isssr_core.hierarchymanager');
-		$supers = $hierarchymanager->getSupers($user);
-
-		$entity = new Goal();
-		$form = $this->createForm(new GoalType(false), $entity);
-
-		return $this
-				->render('IsssrCoreBundle:Goal:new.html.twig',
-						array('entity' => $entity,
-								'form' => $form->createView(), 'user' => $user,));
+		$this->generateNew(null);
 	}
+
+    public function newChildAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+
+        if (!$node) {
+            throw $this->createNotFoundException('Unable to find Node entity.');
+        }
+
+        $this->generateNew($node);
+    }
+
+    private function generateNew(Node $father)
+    {
+        $scontext = $this->container->get('security.context');
+        $token = $scontext->getToken();
+        $user = $token->getUser();
+
+        //$hierarchymanager = $this->get('isssr_core.hierarchymanager');
+        //$supers = $hierarchymanager->getSupers($user);
+
+        $entity = new Goal();
+        $form = $this->createForm(new GoalType(false), $entity);
+
+        return $this
+            ->render('IsssrCoreBundle:Goal:new.html.twig',
+                array('
+                    entity' => $entity,
+                    'form' => $form->createView(),
+                    'user' => $user,
+                    'father' => $father));
+    }
 
 	/**
 	 * Creates a new Goal entity.
