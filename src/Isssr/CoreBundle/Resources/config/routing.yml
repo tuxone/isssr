@@ -42,3 +42,8 @@ IsssrCoreBundle_expression:
         resource: "@IsssrCoreBundle/Resources/config/routing/expression.yml"
         prefix:   /expression
         
+IsssrCoreBundle_strategy:
+        resource: "@IsssrCoreBundle/Resources/config/routing/strategy.yml"
+        prefix:   /strategy
+
+        

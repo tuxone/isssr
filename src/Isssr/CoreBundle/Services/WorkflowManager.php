@@ -99,6 +99,8 @@ class WorkflowManager
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_SELECT_QUESTIONS);
                     if($goal->getAcceptedQuestions()->count() > 0 && !$gm->isQuestioningClosed($goal))
                         $actions->add(GoalShowActions::SHOW_GOAL_ACTION_CLOSE_QUESTIONING);
+                    
+                    
                 }
 
                 if($roles->contains(UserInGoal::ROLE_QS))
@@ -133,7 +135,10 @@ class WorkflowManager
                     $actions->add(GoalShowActions::SHOW_GOAL_ACTION_MANAGE_INTERPRETATIVE_MODEL);
                 break;
 		}
-		
+// 		if ($roles_constains(UserInGoal::ROLE_ENACTOR) && $gm->getStatus($goal) >= Goal::STATUS_APPROVED && $gm->getStatus($goal) < Goal::STATUS_COMPLETED){
+// 			$actions->add(GoalShowActions::SHOW_GOAL_ACTION_DERIVE_STRATEGY);
+// 			$actions->add(GoalShowActions::SHOW_GOAL_ACTION_DERIVE_GOAL);
+// 		}
 		return $actions;
 	}
 	

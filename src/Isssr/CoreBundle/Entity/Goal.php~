@@ -3,13 +3,12 @@
 namespace Isssr\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Isssr\CoreBundle\Entity\EnactorInGoal;
 
 /**
  * @ORM\Entity(repositoryClass="Isssr\CoreBundle\Repository\GoalRepository")
  * @ORM\Table(name="Goal")
  */
-class Goal {
+class Goal{
 
 	const STATUS_NOTEDITABLE = 0;
 	const STATUS_EDITABLE = 1;
@@ -108,6 +107,12 @@ class Goal {
 	 * @ORM\OneToMany(targetEntity="Expression", mappedBy="goal")
 	 */
 	protected $expressions;
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="Node", mappedBy="goal", cascade={"persist", "remove"})
+	 */
+	protected $node;
+	
 	
 	/**
 	 * Rendering Facilities
@@ -650,4 +655,5 @@ class Goal {
     {
         return $this->expressions;
     }
+
 }

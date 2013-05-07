@@ -55,6 +55,11 @@ class User extends BaseUser {
 	 * @ORM\OneToMany(targetEntity="Measurement", mappedBy="id")
 	 */
 	protected $measures;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Strategy", mappedBy="id")
+	 */
+	protected $strategiesOwned;
 
     /**
      * Get id
@@ -247,5 +252,38 @@ class User extends BaseUser {
     public function getMeasures()
     {
         return $this->measures;
+    }
+
+    /**
+     * Add strategiesOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Strategy $strategiesOwned
+     * @return User
+     */
+    public function addStrategiesOwned(\Isssr\CoreBundle\Entity\Strategy $strategiesOwned)
+    {
+        $this->strategiesOwned[] = $strategiesOwned;
+    
+        return $this;
+    }
+
+    /**
+     * Remove strategiesOwned
+     *
+     * @param \Isssr\CoreBundle\Entity\Strategy $strategiesOwned
+     */
+    public function removeStrategiesOwned(\Isssr\CoreBundle\Entity\Strategy $strategiesOwned)
+    {
+        $this->strategiesOwned->removeElement($strategiesOwned);
+    }
+
+    /**
+     * Get strategiesOwned
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStrategiesOwned()
+    {
+        return $this->strategiesOwned;
     }
 }

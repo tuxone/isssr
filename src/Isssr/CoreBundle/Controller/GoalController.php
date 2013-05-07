@@ -1,6 +1,8 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+use Isssr\CoreBundle\Entity\Node;
+
 use Isssr\CoreBundle\Entity\Expression;
 use Isssr\CoreBundle\Entity\GoalShowAction;
 
@@ -268,11 +270,13 @@ class GoalController extends Controller {
 
 			$gm = $this->get('isssr_core.goalmanager');
 			$gm->setOwner($goal, $user);
-
+			
 			$em = $this->getDoctrine()->getManager();
+			$node = new Node();
+// 			$node->setGoal($goal);
+			$goal->setNode($node);			
 			$em->persist($goal);
 			$em->flush();
-
 			return $this
 					->redirect(
 							$this
@@ -465,7 +469,6 @@ class GoalController extends Controller {
 			$actions = $wm->userGoalShowActions($user, $goal);
 			if (!$actions->canDelete())
 				throw new HttpException(403);
-
 			$em->remove($goal);
 			$em->flush();
 		}
