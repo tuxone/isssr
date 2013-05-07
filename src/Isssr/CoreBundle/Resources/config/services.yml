@@ -4,6 +4,7 @@ parameters:
     isssr_nm.class: Isssr\CoreBundle\Services\NotifierManager
     isssr_wm.class: Isssr\CoreBundle\Services\WorkflowManager
     isssr_im.class: Isssr\CoreBundle\Services\InterpretativeModel
+    isssr_no.class: Isssr\CoreBundle\Services\NodeManager
 
 services:
 
@@ -26,3 +27,8 @@ services:
     isssr_core.interpretativemodel:
         class: "%isssr_im.class%"
         arguments: ["@doctrine.orm.entity_manager"]
+        
+    isssr_core.nodemanager:
+        class: "%isssr_no.class%"
+        arguments: ["@doctrine.orm.entity_manager"]
+    
