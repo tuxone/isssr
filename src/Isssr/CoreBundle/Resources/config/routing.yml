@@ -46,4 +46,6 @@ IsssrCoreBundle_strategy:
         resource: "@IsssrCoreBundle/Resources/config/routing/strategy.yml"
         prefix:   /strategy
 
-        
+IsssrCoreBundle_grid:
+        resource: "@IsssrCoreBundle/Resources/config/routing/grid.yml"
+        prefix:   /grid

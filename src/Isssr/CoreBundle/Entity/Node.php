@@ -19,12 +19,12 @@ class Node{
 	
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Goal", mappedBy="node", cascade={"persist", "remove"})
+	 * @ORM\OneToOne(targetEntity="Goal", inversedBy="node", cascade={"persist", "remove"})
 	 */
 	protected $goal;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Strategy", mappedBy="node", cascade={"persist", "remove"})
+	 * @ORM\OneToOne(targetEntity="Strategy", inversedBy="node", cascade={"persist", "remove"})
 	 */
 	protected $strategy;
 	

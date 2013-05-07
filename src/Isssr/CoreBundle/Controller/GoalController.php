@@ -1,6 +1,7 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+use Isssr\CoreBundle\Entity\Grid;
 use Isssr\CoreBundle\Entity\Node;
 
 use Isssr\CoreBundle\Entity\Expression;
@@ -273,20 +274,22 @@ class GoalController extends Controller {
 			
 			$em = $this->getDoctrine()->getManager();
 			$node = new Node();
-// 			$node->setGoal($goal);
-			$goal->setNode($node);			
-			$em->persist($goal);
+            $node->setGoal($goal);
+            $grid = new Grid();
+            $grid->setRoot($node);
+            $grid->setLabel($goal->getTitle());
+
+			$em->persist($grid);
 			$em->flush();
-			return $this
-					->redirect(
-							$this
-									->generateUrl('goal_show',
-											array('id' => $goal->getId())));
+			return $this->redirect(
+						$this->generateUrl('goal_show',
+						array('id' => $goal->getId()))
+            );
 		}
 
 		return $this
 				->render('IsssrCoreBundle:Goal:new.html.twig',
-						array('entity' => $entity,
+						array('entity' => $goal,
 								'form' => $form->createView(), 'user' => $user,));
 	}
 

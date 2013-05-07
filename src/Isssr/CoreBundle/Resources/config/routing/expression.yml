@@ -3,7 +3,7 @@ expression:
     defaults: { _controller: "IsssrCoreBundle:Expression:index" }
 
 expression_show:
-    pattern:  /{id}/
+    pattern:  /{id}/show
     defaults: { _controller: "IsssrCoreBundle:Expression:show" }
     
 expression_new:
