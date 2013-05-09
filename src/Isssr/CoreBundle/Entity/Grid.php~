@@ -16,7 +16,6 @@ class Grid {
 	 */
 	private $id;
 	
-	
 	/**
 	 * @ORM\ManyToOne(targetEntity="Node", cascade={"persist", "remove"})
 	 */
@@ -27,6 +26,64 @@ class Grid {
      */
 	protected $label;
 
-	
+    public function __toString()
+    {
+        return $this->label;
+    }
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Grid
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set root
+     *
+     * @param \Isssr\CoreBundle\Entity\Node $root
+     * @return Grid
+     */
+    public function setRoot(\Isssr\CoreBundle\Entity\Node $root = null)
+    {
+        $this->root = $root;
+    
+        return $this;
+    }
+
+    /**
+     * Get root
+     *
+     * @return \Isssr\CoreBundle\Entity\Node 
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
 }
