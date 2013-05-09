@@ -37,8 +37,8 @@
             Add a child
         </div>
         <div class="modal-body">
-            Strategy<br>
-            Goal
+            <a class="button" id="newstrategy" href='#'>New Strategy Child</a><br>
+            <a class="button" id="newgoal" href='#'>New Goal Child</a>
         </div>
         <div class="modal-footer" style="text-align:center;">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
@@ -92,8 +92,23 @@
 
                 node.append("circle")
                         .attr("r", 12)
-                        .on("click", function(d,i) { alert('richiama node show: ' + d.name) })
-                        .on("contextmenu", function(data, index) {
+                        .on("click", function(d,i) {
+                            url = "{{ path("node_show", {'id': 'ID'}) }}";
+
+                            url = url.replace("ID", d.id);
+
+                            location.href = url;
+                        })
+                        .on("contextmenu", function(d, i) {
+                            newgoalurl = "{{ path('goal_newSon', {'id': 'ID'}) }}";
+                            newstretegyurl = "{{ path('strategy_new', {'id': 'ID'}) }}";
+
+                            newgoalurl = newgoalurl.replace("ID", d.id);
+                            newstretegyurl = newstretegyurl.replace("ID", d.id);
+
+                            $("#newgoal").attr("href", newgoalurl);
+                            $("#newstrategy").attr("href", newstretegyurl);
+
                             $('#menu').modal('show');
                             d3.event.preventDefault();
                         })

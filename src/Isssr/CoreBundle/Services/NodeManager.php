@@ -32,8 +32,8 @@ class NodeManager
 	
 	public function getShowRouting(Node $node)
 	{
-		if ($this->isGoal($node)) return $this->goalrouting;
-		if ($this->isStrategy($node)) return $this->strategyrouting;
+		if ($this->isGoal($node)) return $this->goalRouting;
+		if ($this->isStrategy($node)) return $this->strategyRouting;
 		return $this->defaultRouting;
 	}
 }
