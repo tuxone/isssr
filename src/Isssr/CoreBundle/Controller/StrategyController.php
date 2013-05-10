@@ -63,7 +63,7 @@ class StrategyController extends Controller
      */
     public function newAction()
     {
-    	$this->generateNew(null);
+    	return $this->generateNew(null);
     }
     
     public function newChildAction($id)
@@ -76,10 +76,10 @@ class StrategyController extends Controller
     		throw $this->createNotFoundException('Unable to find Node entity.');
     	}
     	
-    	$this->generateNew($node);
+    	return $this->generateNew($node);
     }
     
-    private function generateNew(Node $node)
+    private function generateNew(Node $father = null)
     {
     	$user = $this->getUser();
     	$entity = new Strategy();
@@ -89,6 +89,7 @@ class StrategyController extends Controller
     			'entity' => $entity,
     			'form'   => $form->createView(),
     			'user' => $user,
+    			'father' => $father,
     	));
     }
 
@@ -98,29 +99,58 @@ class StrategyController extends Controller
      */
     public function createAction(Request $request)
     {
+    	return $this->createNew($request, null);
+    }
+    
+    public function createChildAction(Request $request, $id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	
+    	$father = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+    	
+    	if (!$father) {
+    		throw $this->createNotFoundException('Unable to find Node entity.');
+    	}
+    	
+    	return $this->createNew($request, $father);
+    }
+    
+    private function createNew(Request $request, Node $father = null)
+    {
     	$user = $this->getUser();
-        $entity  = new Strategy();
-        $form = $this->createForm(new StrategyType(), $entity);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-        	$em = $this->getDoctrine()->getManager();
-        	$entity->setCreator($user);
-            
-            
-            $node = new Node();
-            $entity->setNode($node);
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('strategy_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('IsssrCoreBundle:Strategy:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        	'user' => $user,
-        ));
+    	$entity  = new Strategy();
+    	$form = $this->createForm(new StrategyType(), $entity);
+    	$form->bind($request);
+    	
+    	if ($form->isValid()) {
+    		$em = $this->getDoctrine()->getManager();
+    		$entity->setCreator($user);
+    	
+    		$node = new Node();
+    		$entity->setNode($node);
+    		
+    		if (!$father){
+	    		
+	    		$em->persist($entity);
+    		}
+    		else {
+    			$em->persist($node);
+    			$father->addSuccessor($node);
+    			$node->setFather($father);
+    			$em->persist($father);
+    			$em->persist($node);
+    			$em->persist($entity);
+    		}
+    		$em->flush();
+    	
+    		return $this->redirect($this->generateUrl('strategy_show', array('id' => $entity->getId())));
+    	}
+    	
+    	return $this->render('IsssrCoreBundle:Strategy:new.html.twig', array(
+    			'entity' => $entity,
+    			'form'   => $form->createView(),
+    			'user' => $user,
+    	));
     }
 
     /**

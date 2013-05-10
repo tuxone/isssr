@@ -15,11 +15,11 @@ strategy_create:
     defaults: { _controller: "IsssrCoreBundle:Strategy:create" }
     requirements: { _method: post }
     
-strategy_new:
+strategy_newSon:
     pattern:  /new/{id}
     defaults: { _controller: "IsssrCoreBundle:Strategy:newChild" }
 
-strategy_create:
+strategy_createSon:
     pattern:  /create/{id}
     defaults: { _controller: "IsssrCoreBundle:Strategy:createChild" }
     requirements: { _method: post }

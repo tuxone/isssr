@@ -4,19 +4,19 @@
  
 {% block content %}
 
+{% if father == null %}
 <form action="{{ path('strategy_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit">Create</button>
     </p>
 </form>
-
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('strategy') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
-
+{% else %}
+<form action="{{ path('strategy_createSon', { 'id': father.id }) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
+{% endif %}
 {% endblock %}

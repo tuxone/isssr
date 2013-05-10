@@ -240,22 +240,23 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function newAction() {
-		$this->generateNew(null);
+		return $this->generateNew(null);
 	}
 
     public function newChildAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+        $father = $em->getRepository('IsssrCoreBundle:Node')->find($id);
 
-        if (!$node) {
+        if (!$father) {
             throw $this->createNotFoundException('Unable to find Node entity.');
         }
 
-        $this->generateNew($node);
+        return $this->generateNew($father);
+       
     }
 
-    private function generateNew(Node $father)
+    private function generateNew(Node $father = null)
     {
         $scontext = $this->container->get('security.context');
         $token = $scontext->getToken();
@@ -269,8 +270,7 @@ class GoalController extends Controller {
 
         return $this
             ->render('IsssrCoreBundle:Goal:new.html.twig',
-                array('
-                    entity' => $entity,
+                array('entity' => $entity,
                     'form' => $form->createView(),
                     'user' => $user,
                     'father' => $father));
@@ -281,23 +281,25 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function createAction(Request $request) {
-		$this->createNew($request, null);
+		return $this->createNew($request, null);
+		
 	}
 	
 	public function createChildAction(Request $request, $id) 
 	{
 		$em = $this->getDoctrine()->getManager();
 		
-		$node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
+		$father = $em->getRepository('IsssrCoreBundle:Node')->find($id);
 		
-		if (!$node) {
+		if (!$father) {
 			throw $this->createNotFoundException('Unable to find Node entity.');
 		}
 		
-		$this->createNew($request, $node);
+		return $this->createNew($request, $father);
+		
 	}
 	
-	private function createNew(Request $request, Node $father)
+	private function createNew(Request $request, Node $father = null)
 	{
 		$user = $this->getUser();
 		
@@ -323,10 +325,10 @@ class GoalController extends Controller {
 			else {
 				$em->persist($node);
 				$father->addSuccessor($node);
+				$node->setFather($father);
+				$em->persist($father);
 				$em->persist($node);
-				
 			}
-		
 			$em->flush();
 			return $this->redirect(
 					$this->generateUrl('goal_show',
@@ -519,6 +521,9 @@ class GoalController extends Controller {
 			$actions = $wm->userGoalShowActions($user, $goal);
 			if (!$actions->canDelete())
 				throw new HttpException(403);
+			$grids = $em->getRepository('IsssrCoreBundle:Grid')->findByRoot($goal->getNode()->getId());
+			foreach ($grids as $grid) $em->remove($grid);
+			$em->remove($goal->getNode());
 			$em->remove($goal);
 			$em->flush();
 		}

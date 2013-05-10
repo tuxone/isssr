@@ -101,7 +101,7 @@
                         })
                         .on("contextmenu", function(d, i) {
                             newgoalurl = "{{ path('goal_newSon', {'id': 'ID'}) }}";
-                            newstretegyurl = "{{ path('strategy_new', {'id': 'ID'}) }}";
+                            newstretegyurl = "{{ path('strategy_newSon', {'id': 'ID'}) }}";
 
                             newgoalurl = newgoalurl.replace("ID", d.id);
                             newstretegyurl = newstretegyurl.replace("ID", d.id);
