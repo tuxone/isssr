@@ -661,6 +661,46 @@ class GoalController extends Controller {
 		
 	}
 	
+	public function evaluateGridAction($id)
+	{
+	
+		$user = $this->getUser();
+	
+		$em = $this->getDoctrine()->getManager();
+	
+		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+	
+		if (!$goal) {
+			throw $this->createNotFoundException('Unable to find Goal entity.');
+		}
+	
+		$wm = $this->get('isssr_core.workflowmanager');
+		$actions = $wm->userGoalShowActions($user, $goal);
+	
+		if(!$actions->canManageInterpretativeModel())
+			throw new HttpException(403);
+	
+		$gm = $this->get('isssr_core.goalmanager');
+		$gm->preRendering($goal);
+	
+		$values = $gm->evaluateGrid($goal);
+		
+		$result = true;
+		foreach($values as $value) $result = $result && $value;
+		
+		if ($result==true) die("True");
+		else die("false");
+	
+		return $this
+		->render('IsssrCoreBundle:Goal:evaluate.html.twig',
+				array('expressions' => $goal->getExpressions(),
+						'report' => $values,
+						'user' => $user,
+						'goal' => $goal)
+		);
+	
+	}
+	
 	private function createRoleAcceptsForm($id)
 	{
 		return $this->createFormBuilder(array('id' => $id))

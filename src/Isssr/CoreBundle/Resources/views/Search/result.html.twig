@@ -12,6 +12,7 @@
 	            <th>Title</th>
 	            <th>Description</th>
 	            <th>Tags</th>
+	            <th>Actions</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -26,6 +27,7 @@
 							<ul>{{ tag }}</ul>
 						{% endfor %}
 		            </td>
+		            <td><a class="btn btn-small btn-primary" href="{{ path('goal_show', { 'id': goal.id }) }}">show</a></td>
 		        </tr>
 		    {% endfor %}
 		</tbody>

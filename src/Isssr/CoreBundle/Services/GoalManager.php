@@ -5,6 +5,7 @@ namespace Isssr\CoreBundle\Services;
 use Isssr\CoreBundle\Entity\UserInGoal;
 use Isssr\CoreBundle\Entity\Question;
 use Isssr\CoreBundle\Entity\Goal;
+use Isssr\CoreBundle\Entity\Node;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -294,6 +295,11 @@ class GoalManager
         return true;
     }
     
+    /**
+     * This method evaluate every single expression of a goal
+     * @param Goal $goal
+     * @return multitype:NULL
+     */
     public function evaluateGoal(Goal $goal)
     {
     	$this->preRendering($goal);
@@ -306,6 +312,39 @@ class GoalManager
 		}
 		
 		return $values;
+    }
+
+    /**
+     * This method evaluate every goal of a grid
+     * @param Goal $goal
+     */
+    public function evaluateGrid(Goal $goal)
+    {
+    	$goalsToBeEvaluated = $this->getGoalSons($goal->getNode());
+    	$values = array();
+    	foreach($goalsToBeEvaluated as $goalToBeEvaluated) {
+    		$goalValues = $this->evaluateGoal($goalToBeEvaluated);
+    		$result = true;
+    		foreach($goalValues as $value) $result = $result && $value;
+    		$values[] = $result;
+    	}
+    	return $values;
+    }
+    
+    
+    
+    public function getGoalSons(Node $node)
+    {
+// 		$this->preRendering($goal);
+		$goalsToBeEvaluated = array();
+		if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
+		foreach($node->getSuccessors() as $successor)
+			if ($successor->getValue() instanceof Goal) $goalsToBeEvaluated[] = $successor->getValue();
+		foreach($node->getSuccessors() as $successor){
+			$results = $this->getGoalSons($successor);
+			foreach($results as $result) $goalsToBeEvaluated[] = $result;
+		}
+    	return $goalsToBeEvaluated;
     }
 	
 	private function getGoalsAsSuper(User $user) {

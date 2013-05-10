@@ -128,7 +128,7 @@ class StrategyController extends Controller
     	
     		$node = new Node();
     		$entity->setNode($node);
-    		
+    		$node->setStrategy($entity);
     		if (!$father){
 	    		
 	    		$em->persist($entity);

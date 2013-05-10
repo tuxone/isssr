@@ -74,3 +74,7 @@ goal_send_to_enactor:
 goal_evaluate_im:
     pattern:  /{id}/evaluateim
     defaults: { _controller: "IsssrCoreBundle:Goal:evaluate" }
+    
+goal_evaluate_grid:
+    pattern:  /{id}/evaluategrid
+    defaults: { _controller: "IsssrCoreBundle:Goal:evaluateGrid" }

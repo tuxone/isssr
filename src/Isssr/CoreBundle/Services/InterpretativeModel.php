@@ -78,10 +78,10 @@ class InterpretativeModel
 		else if (substr($tag, 0, 3) == "min"){
 			$value = $this->getMin(substr($tag, 4, $length));
 		}
-		else if (substr($tag, 0, 3) == "fst"){
+		else if (substr($tag, 0, 3) == "lst"){
 			$value = $this->getLast(substr($tag, 4, $length));
 		}
-		else if (substr($tag, 0, 3) == "lst"){
+		else if (substr($tag, 0, 3) == "fst"){
 			$value = $this->getFirst(substr($tag, 4, $length));
 		}
 		if ($value != null) return $value;

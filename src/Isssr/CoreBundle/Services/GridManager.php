@@ -6,6 +6,8 @@ namespace Isssr\CoreBundle\Services;
 use Doctrine\ORM\EntityManager;
 use Isssr\CoreBundle\Entity\Grid;
 use Isssr\CoreBundle\Entity\Node;
+use Isssr\CoreBundle\Entity\Goal;
+use Isssr\CoreBundle\Entity\Strategy;
 
 class GridManager
 {
@@ -41,7 +43,8 @@ class GridManager
     {
         $obj = new \stdClass();
         $obj->name = $node->getValue()->getTitle();
-        $obj->type = "Goal";
+        if ($node->getValue() instanceof Goal) $obj->type = "Goal";
+        else if ($node->getValue() instanceof Strategy) $obj->type = "Strategy";
         $obj->id = $node->getId();
 
         return $obj;
