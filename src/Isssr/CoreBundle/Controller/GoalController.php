@@ -687,17 +687,16 @@ class GoalController extends Controller {
 		$gm->preRendering($goal);
 	
 		$values = $gm->evaluateGrid($goal);
-		
-		$result = true;
-		foreach($values as $value) $result = $result && $value;
-		
-		if ($result==true) die("True");
-		else die("false");
-	
+		$goals = new ArrayCollection();
+		$reports = new ArrayCollection();
+		foreach($values as $value){
+			$goals[] = $value[0];
+			$reports[] = $value[1];
+		}
 		return $this
-		->render('IsssrCoreBundle:Goal:evaluate.html.twig',
-				array('expressions' => $goal->getExpressions(),
-						'report' => $values,
+		->render('IsssrCoreBundle:Goal:evaluateGrid.html.twig',
+				array(	'reports' => $reports,
+						'goals' => $goals,
 						'user' => $user,
 						'goal' => $goal)
 		);

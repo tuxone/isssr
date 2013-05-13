@@ -320,13 +320,17 @@ class GoalManager
      */
     public function evaluateGrid(Goal $goal)
     {
-    	$goalsToBeEvaluated = $this->getGoalSons($goal->getNode());
+    	$goalsToBeEvaluated = array();
+    	$goalsToBeEvaluated[] = $goal;
+//     	$goalsToBeEvaluated[] = $this->getGoalSons($goal->getNode());
+		foreach($this->getGoalSons($goal->getNode()) as $son)
+			$goalsToBeEvaluated[] = $son;
     	$values = array();
     	foreach($goalsToBeEvaluated as $goalToBeEvaluated) {
     		$goalValues = $this->evaluateGoal($goalToBeEvaluated);
     		$result = true;
     		foreach($goalValues as $value) $result = $result && $value;
-    		$values[] = $result;
+    		$values[] = array($goalToBeEvaluated, $result);
     	}
     	return $values;
     }
@@ -337,7 +341,7 @@ class GoalManager
     {
 // 		$this->preRendering($goal);
 		$goalsToBeEvaluated = array();
-		if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
+// 		if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
 		foreach($node->getSuccessors() as $successor)
 			if ($successor->getValue() instanceof Goal) $goalsToBeEvaluated[] = $successor->getValue();
 		foreach($node->getSuccessors() as $successor){
