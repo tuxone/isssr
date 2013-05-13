@@ -315,8 +315,9 @@ class GoalController extends Controller {
 			$em = $this->getDoctrine()->getManager();
 			$node = new Node();
 			$node->setGoal($goal);
-			if (!$father){
-				
+            $goal->setNode($node);
+
+            if (!$father){
 				$grid = new Grid();
 				$grid->setRoot($node);
 				$grid->setLabel($goal->getTitle());
@@ -330,9 +331,11 @@ class GoalController extends Controller {
 				$em->persist($node);
 			}
 			$em->flush();
+
+            $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($goal->getNode()->getRoot()->getId());
 			return $this->redirect(
-					$this->generateUrl('goal_show',
-							array('id' => $goal->getId()))
+					$this->generateUrl('grid_show',
+							array('id' => $grid->getId()))
 			);
 		}
 		

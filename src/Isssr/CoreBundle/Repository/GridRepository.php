@@ -21,5 +21,15 @@ class GridRepositoy extends EntityRepository
 				'WHERE n.root = '.$rid)
 				->getResult();
 	}
+
+    // versione corretta
+    public function findOneByRoot($rid)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT n FROM IsssrCoreBundle:Grid n '.
+                    'WHERE n.root = '.$rid)
+            ->getOneOrNullResult();
+    }
 	
 }

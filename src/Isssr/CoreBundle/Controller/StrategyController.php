@@ -142,8 +142,13 @@ class StrategyController extends Controller
     			$em->persist($entity);
     		}
     		$em->flush();
-    	
-    		return $this->redirect($this->generateUrl('strategy_show', array('id' => $entity->getId())));
+
+            $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($entity->getNode()->getRoot()->getId());
+
+            return $this->redirect(
+                $this->generateUrl('grid_show',
+                    array('id' => $grid->getId()))
+            );
     	}
     	
     	return $this->render('IsssrCoreBundle:Strategy:new.html.twig', array(

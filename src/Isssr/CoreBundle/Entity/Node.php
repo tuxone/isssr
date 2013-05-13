@@ -166,4 +166,12 @@ class Node{
     {
         return $this->father;
     }
+
+    public function getRoot()
+    {
+        $tmp = $this;
+        while($tmp->getFather() != null)
+            $tmp = $tmp->getFather();
+        return $tmp;
+    }
 }

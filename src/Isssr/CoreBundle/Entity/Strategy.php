@@ -18,7 +18,7 @@ class Strategy{
 	protected $id;
 	
 	/**
-	 * @ORM\Column(type="string", length=64, nullable=false, unique=true)
+	 * @ORM\Column(type="string", length=64, nullable=false)
 	 */
 	protected $title;
 	
