@@ -4,9 +4,10 @@
  
 {% block content %}
 
-    <button style="float:left; margin-bottom: 12px;" class="btn btn-small" onClick="javascript:history.back()">
+    <a style="float:left; margin-bottom: 12px;" class="btn btn-small" href="{{ path('grid_show', {'id': grid.id}) }}">
         <i class="icon-circle-arrow-left"></i> Back
-    </button>
+    </a>
+
 <table class="table">
     <tbody>
         <tr>

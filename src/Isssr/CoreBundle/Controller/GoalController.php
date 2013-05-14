@@ -88,6 +88,8 @@ class GoalController extends Controller {
 			throw $this->createNotFoundException('Unable to find Goal entity.');
 		}
 
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($goal->getNode()->getRoot()->getId());
+
 		$gm = $this->get('isssr_core.goalmanager');
 		$gm->preRendering($goal);
 		
@@ -138,6 +140,7 @@ class GoalController extends Controller {
                                 'expression_form' => $expressionForm->createView(),
 								'user' => $user,
 								'role' => $role,
+                                'grid' => $grid,
 						));
 	}
 

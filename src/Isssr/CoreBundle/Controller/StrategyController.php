@@ -50,6 +50,8 @@ class StrategyController extends Controller
             throw $this->createNotFoundException('Unable to find Strategy entity.');
         }
 
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($entity->getNode()->getRoot()->getId());
+
         $iseditable = $entity->isEditable($user);
 
         $deleteForm = $this->createDeleteForm($id);
@@ -59,6 +61,7 @@ class StrategyController extends Controller
             'delete_form' => $deleteForm->createView(),        
             'user' => $user,
             'iseditable' => $iseditable,
+            'grid' => $grid,
         ));
     }
 
