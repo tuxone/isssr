@@ -20,18 +20,21 @@
             <th>Description</th>
             <td>{{ entity.description }}</td>
         </tr>
+        {% if iseditable %}
         <tr>
         	<th>Actions</th>
         	<td>
-        		<a role="button" class="btn" href="{{ path('strategy_edit', { 'id': entity.id }) }}">
-            		Edit
-        		</a>
         		<form action="{{ path('strategy_delete', { 'id': entity.id }) }}" method="post">
+
             	{{ form_widget(delete_form) }}
+                    <a role="button" class="btn btn-primary" href="{{ path('strategy_edit', { 'id': entity.id }) }}">
+                        Edit
+                    </a>
             		<button class="btn btn-danger" type="submit">Delete</button>
         		</form>
         	</td>
         </tr>
+        {% endif %}
     </tbody>
 </table>
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Isssr\CoreBundle\Controller;
+
 use Isssr\CoreBundle\Entity\Grid;
 use Isssr\CoreBundle\Entity\Node;
 
@@ -23,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Isssr\CoreBundle\Entity\Goal;
 use Isssr\CoreBundle\Form\GoalType;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Goal controller.
@@ -281,12 +283,13 @@ class GoalController extends Controller {
 	 *
 	 */
 	public function createAction(Request $request) {
-		return $this->createNew($request, null);
+		return $this->createNew($request);
 		
 	}
 	
 	public function createChildAction(Request $request, $id) 
 	{
+        $user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
 		
 		$father = $em->getRepository('IsssrCoreBundle:Node')->find($id);
@@ -294,6 +297,22 @@ class GoalController extends Controller {
 		if (!$father) {
 			throw $this->createNotFoundException('Unable to find Node entity.');
 		}
+
+        // check user can create subgoal
+        $nm = $this->get('isssr_core.nodemanager');
+        $supergoal = $nm->getNearestGoal($father);
+
+        $gm = $this->get('isssr_core.goalmanager');
+
+        //goal is approved
+        if($gm->getStatus($supergoal) < Goal::STATUS_APPROVED)
+            throw new HttpException(403);
+
+        $superenactor = $gm->getEnactor($supergoal);
+
+        // user manages goal
+        if($superenactor != $user)
+            throw new HttpException(403);
 		
 		return $this->createNew($request, $father);
 		
@@ -676,16 +695,9 @@ class GoalController extends Controller {
 		if (!$node) {
 			throw $this->createNotFoundException('Unable to find Node entity.');
 		}
-		$goalRoot = $node->getRoot()->getValue();
-		$wm = $this->get('isssr_core.workflowmanager');
-		$actions = $wm->userGoalShowActions($user, $goalRoot);
-	
-		if(!$actions->canManageInterpretativeModel())
-			throw new HttpException(403);
 	
 		$gm = $this->get('isssr_core.goalmanager');
-// 		$gm->preRendering($goal);
-	
+
 		$values = $gm->evaluateGrid($node);
 		$goals = new ArrayCollection();
 		$reports = new ArrayCollection();
@@ -693,12 +705,12 @@ class GoalController extends Controller {
 			$goals[] = $value[0];
 			$reports[] = $value[1];
 		}
+
 		return $this
 		->render('IsssrCoreBundle:Goal:evaluateGrid.html.twig',
 				array(	'reports' => $reports,
 						'goals' => $goals,
 						'user' => $user)
-// 						'goal' => $goal)
 		);
 	
 	}

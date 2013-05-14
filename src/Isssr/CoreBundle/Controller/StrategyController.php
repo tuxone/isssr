@@ -2,12 +2,14 @@
 
 namespace Isssr\CoreBundle\Controller;
 
+use Isssr\CoreBundle\Entity\Goal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Isssr\CoreBundle\Entity\Strategy;
 use Isssr\CoreBundle\Form\StrategyType;
 use Isssr\CoreBundle\Entity\Node;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Strategy controller.
@@ -48,12 +50,15 @@ class StrategyController extends Controller
             throw $this->createNotFoundException('Unable to find Strategy entity.');
         }
 
+        $iseditable = $entity->isEditable($user);
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('IsssrCoreBundle:Strategy:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),        
             'user' => $user,
+            'iseditable' => $iseditable,
         ));
     }
 
@@ -104,6 +109,8 @@ class StrategyController extends Controller
     
     public function createChildAction(Request $request, $id)
     {
+        $user = $this->getUser();
+
     	$em = $this->getDoctrine()->getManager();
     	
     	$father = $em->getRepository('IsssrCoreBundle:Node')->find($id);
@@ -111,7 +118,23 @@ class StrategyController extends Controller
     	if (!$father) {
     		throw $this->createNotFoundException('Unable to find Node entity.');
     	}
-    	
+
+        // check user can create subgoal
+        $nm = $this->get('isssr_core.nodemanager');
+        $supergoal = $nm->getNearestGoal($father);
+
+        $gm = $this->get('isssr_core.goalmanager');
+
+        //goal is approved
+        if($gm->getStatus($supergoal) < Goal::STATUS_APPROVED)
+            throw new HttpException(403);
+
+        $superenactor = $gm->getEnactor($supergoal);
+
+        // user manages goal
+        if($superenactor != $user)
+            throw new HttpException(403);
+
     	return $this->createNew($request, $father);
     }
     
@@ -199,6 +222,9 @@ class StrategyController extends Controller
             throw $this->createNotFoundException('Unable to find Strategy entity.');
         }
 
+        if(!$entity->isEditable($user))
+            throw new HttpException(403);
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new StrategyType(), $entity);
         $editForm->bind($request);
@@ -225,6 +251,20 @@ class StrategyController extends Controller
     public function deleteAction(Request $request, $id)
     {
     	$user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('IsssrCoreBundle:Strategy')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Strategy entity.');
+        }
+
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($entity->getNode()->getRoot()->getId());
+
+        if(!$entity->isEditable($user))
+            throw new HttpException(403);
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -239,7 +279,10 @@ class StrategyController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('strategy'));
+        return $this->redirect(
+            $this->generateUrl('grid_show',
+                array('id' => $grid->getId()))
+        );
     }
 
     private function createDeleteForm($id)

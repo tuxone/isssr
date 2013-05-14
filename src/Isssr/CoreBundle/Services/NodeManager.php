@@ -36,4 +36,12 @@ class NodeManager
 		if ($this->isStrategy($node)) return $this->strategyRouting;
 		return $this->defaultRouting;
 	}
+
+    public function getNearestGoal(Node $node)
+    {
+        $value = $node->getValue();
+        if($value instanceof Goal)
+            return $value;
+        return $this->getNearestGoal($node->getFather());
+    }
 }

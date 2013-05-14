@@ -43,6 +43,7 @@ class GridManager
     {
         $obj = new \stdClass();
         $obj->name = $node->getValue()->getTitle();
+        $obj->nodeid = $node->getId();
         if ($node->getValue() instanceof Goal) $obj->type = "Goal";
         else if ($node->getValue() instanceof Strategy) $obj->type = "Strategy";
         $obj->id = $node->getId();

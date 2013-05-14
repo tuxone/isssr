@@ -147,4 +147,9 @@ class Strategy{
     {
         return $this->node;
     }
+
+    public function isEditable(User $user)
+    {
+        return $this->getNode()->getSuccessors()->count() == 0 && $this->getCreator() == $user;
+    }
 }

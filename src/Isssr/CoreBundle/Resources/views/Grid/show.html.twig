@@ -43,15 +43,12 @@
 {% block pagetitle %}Expression{% endblock %}
 
 {% block content %}
-
-	<a href="{{ path('goal_evaluate_grid', {'id': grid.getRoot().getGoal().getId()}) }}" role="button" class="btn" style="width: 120px;" data-toggle="modal">Evaluate Grid</a>
-	
     <div id="menu" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-body">
             <a style="width:140px; margin:5px;" class="btn btn-primary" id="shownode" href='#'>Show Element</a><br>
             <a style="width:140px; margin:5px;" class="btn btn-success" id="newstrategy" href='#'>New Strategy Child</a><br>
             <a style="width:140px; margin:5px;" class="btn btn-success" id="newgoal" href='#'>New Goal Child</a><br>
-            <a style="width:140px; margin:5px;" class="btn btn-warning" id="newgoal" href='#'>Evaluate SubTree</a>
+            <a style="width:140px; margin:5px;" class="btn btn-warning" id="evaluate" href='#'>Evaluate SubTree</a>
         </div>
         <div class="modal-footer" style="text-align:center;">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
@@ -109,15 +106,17 @@
                             showurl = "{{ path("node_show", {'id': 'ID'}) }}";
                             newgoalurl = "{{ path('goal_newSon', {'id': 'ID'}) }}";
                             newstretegyurl = "{{ path('strategy_newSon', {'id': 'ID'}) }}";
+                            evaluateurl = "{{ path('goal_evaluate_grid', {'id': 'ID'}) }}";
 
                             showurl = showurl.replace("ID", d.id);
                             newgoalurl = newgoalurl.replace("ID", d.id);
                             newstretegyurl = newstretegyurl.replace("ID", d.id);
+                            evaluateurl = evaluateurl.replace("ID", d.nodeid);
 
                             $("#shownode").attr("href", showurl);
                             $("#newgoal").attr("href", newgoalurl);
                             $("#newstrategy").attr("href", newstretegyurl);
-
+                            $("#evaluate").attr("href", evaluateurl);
 
                             $('#menu').modal('show');
                             d3.event.preventDefault();
