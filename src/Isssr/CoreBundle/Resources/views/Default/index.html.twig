@@ -5,5 +5,17 @@
 {% block pagetitle %}HomePage{% endblock %}
  
 {% block content %}
-	
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6">
+                <p>
+                    <b>Total number of Goals: {{ ngoals }}</b><br>
+                    <b>Total number of reached Goals: {{ nreached }}</b>
+                </p>
+            </div>
+            <div class="span6">
+                <!--Body content-->
+            </div>
+        </div>
+    </div>
 {% endblock %}
