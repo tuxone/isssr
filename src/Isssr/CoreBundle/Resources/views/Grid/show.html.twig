@@ -44,6 +44,8 @@
 
 {% block content %}
 
+	<a href="{{ path('goal_evaluate_grid', {'id': grid.getRoot().getGoal().getId()}) }}" role="button" class="btn" style="width: 120px;" data-toggle="modal">Evaluate Grid</a>
+	
     <div id="menu" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-body">
             <a style="width:140px; margin:5px;" class="btn btn-primary" id="shownode" href='#'>Show Element</a><br>

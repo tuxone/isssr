@@ -671,35 +671,34 @@ class GoalController extends Controller {
 	
 		$em = $this->getDoctrine()->getManager();
 	
-		$goal = $em->getRepository('IsssrCoreBundle:Goal')->find($id);
+		$node = $em->getRepository('IsssrCoreBundle:Node')->find($id);
 	
-		if (!$goal) {
-			throw $this->createNotFoundException('Unable to find Goal entity.');
+		if (!$node) {
+			throw $this->createNotFoundException('Unable to find Node entity.');
 		}
-	
+		$goalRoot = $node->getRoot()->getValue();
 		$wm = $this->get('isssr_core.workflowmanager');
-		$actions = $wm->userGoalShowActions($user, $goal);
+		$actions = $wm->userGoalShowActions($user, $goalRoot);
 	
 		if(!$actions->canManageInterpretativeModel())
 			throw new HttpException(403);
 	
 		$gm = $this->get('isssr_core.goalmanager');
-		$gm->preRendering($goal);
+// 		$gm->preRendering($goal);
 	
-		$values = $gm->evaluateGrid($goal);
-		
-		$result = true;
-		foreach($values as $value) $result = $result && $value;
-		
-		if ($result==true) die("True");
-		else die("false");
-	
+		$values = $gm->evaluateGrid($node);
+		$goals = new ArrayCollection();
+		$reports = new ArrayCollection();
+		foreach($values as $value){
+			$goals[] = $value[0];
+			$reports[] = $value[1];
+		}
 		return $this
-		->render('IsssrCoreBundle:Goal:evaluate.html.twig',
-				array('expressions' => $goal->getExpressions(),
-						'report' => $values,
-						'user' => $user,
-						'goal' => $goal)
+		->render('IsssrCoreBundle:Goal:evaluateGrid.html.twig',
+				array(	'reports' => $reports,
+						'goals' => $goals,
+						'user' => $user)
+// 						'goal' => $goal)
 		);
 	
 	}

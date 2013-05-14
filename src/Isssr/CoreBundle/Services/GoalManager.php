@@ -18,6 +18,10 @@ class GoalManager
 	protected $em;
 	protected $im;
 	
+	const STATUS_REACHED = 0;
+	const STATUS_NOT_REACHED = 1;
+	const STATUS_NOT_RUNNING = 2;
+	
 	public function __construct(EntityManager $em, InterpretativeModel $im)
 	{
 		$this->em = $em;
@@ -318,15 +322,26 @@ class GoalManager
      * This method evaluate every goal of a grid
      * @param Goal $goal
      */
-    public function evaluateGrid(Goal $goal)
+    public function evaluateGrid(Node $node)
     {
-    	$goalsToBeEvaluated = $this->getGoalSons($goal->getNode());
+    	$goalsToBeEvaluated = $this->getGoalSons($node);
+//     	if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
+//     	$goalsToBeEvaluated[] = $this->getGoalSons($goal->getNode());
+// 		foreach($this->getGoalSons($node) as $son)
+// 			$goalsToBeEvaluated[] = $son;
     	$values = array();
     	foreach($goalsToBeEvaluated as $goalToBeEvaluated) {
     		$goalValues = $this->evaluateGoal($goalToBeEvaluated);
     		$result = true;
     		foreach($goalValues as $value) $result = $result && $value;
-    		$values[] = $result;
+    		
+//     		$integer = self::STATUS_REACHED;
+//     		if ($result == false) $integer = self::STATUS_NOT_REACHED;
+//     		else if ($value == null) $integer = self::STATUS_NOT_RUNNING;
+    		
+    		if ($goalValues == null) $integer = self::STATUS_NOT_RUNNING;
+    		else $integer = ($result)?self::STATUS_REACHED:self::STATUS_NOT_REACHED;
+    		$values[] = array($goalToBeEvaluated, $integer);
     	}
     	return $values;
     }
@@ -335,16 +350,22 @@ class GoalManager
     
     public function getGoalSons(Node $node)
     {
-// 		$this->preRendering($goal);
+// // 		$this->preRendering($goal);
+// 		$goalsToBeEvaluated = array();
+// // 		if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
+// 		foreach($node->getSuccessors() as $successor)
+// 			if ($successor->getValue() instanceof Goal) $goalsToBeEvaluated[] = $successor->getValue();
+// 		foreach($node->getSuccessors() as $successor){
+// 			$results = $this->getGoalSons($successor);
+// 			foreach($results as $result) $goalsToBeEvaluated[] = $result;
+// 		}
+//     	return $goalsToBeEvaluated;
 		$goalsToBeEvaluated = array();
-		if ($node->getValue() instanceof Goal) $goalsToBeEvaluated[] = $node->getValue();
-		foreach($node->getSuccessors() as $successor)
-			if ($successor->getValue() instanceof Goal) $goalsToBeEvaluated[] = $successor->getValue();
-		foreach($node->getSuccessors() as $successor){
-			$results = $this->getGoalSons($successor);
-			foreach($results as $result) $goalsToBeEvaluated[] = $result;
-		}
-    	return $goalsToBeEvaluated;
+    	if($node->getValue() instanceof Goal)
+    		$goalsToBeEvaluated[] = $node->getValue();
+		foreach($node->getSuccessors() as $son)
+			$goalsToBeEvaluated = array_merge($goalsToBeEvaluated, $this->getGoalSons($son));	
+		return $goalsToBeEvaluated;
     }
 	
 	private function getGoalsAsSuper(User $user) {
