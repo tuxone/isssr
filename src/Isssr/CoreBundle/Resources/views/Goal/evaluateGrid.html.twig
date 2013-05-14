@@ -23,11 +23,11 @@
 	                    <td> <a href="{{ path('goal_show', { 'id': goals[i].getId() }) }}">{{ goals[i].getTitle() }} </a> </td>
 	                    <td>
 	                        {% if reports[i] == 0%}
-	                            <p class="text-success">Reached</p>
+	                            <p style="color:#3a87ad;">Reached</p>
 	                        {% elseif reports[i] == 1%}
-	                        	<p class="text-error">Not Reached</p>
+	                        	<p style="color:#b94a48;">Not Reached</p>
 	                        {% elseif reports[i] == 2%}
-	                        	<p class="text-warning">Not Evaluable</p>
+	                        	<p style="color:#c09853;">Not Evaluable</p>
 	                        {% endif %}
 	                    </td>
 	                </tr>
