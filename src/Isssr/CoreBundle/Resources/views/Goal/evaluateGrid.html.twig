@@ -9,30 +9,34 @@
      		<i class="icon-circle-arrow-left"></i> Back
     	</button>
         <div class="row">
-            <table class="table" style="margin-left: 30px;">
-            <thead>
-        		<tr>
-            		<th>Goal Title</th>
-            		<th>Result</th>
-        		</tr>
-    		</thead>
-    		<tbody>
-			{% for i in 0..goals.count()-1 %}
-                <tr>
-                    <td> <a href="{{ path('goal_show', { 'id': goals[i].getId() }) }}">{{ goals[i].getTitle() }} </a> </td>
-                    <td>
-                        {% if reports[i] == 0%}
-                            <p class="text-success">Reached</p>
-                        {% elseif reports[i] == 1%}
-                        	<p class="text-error">Not Reached</p>
-                        {% elseif reports[i] == 2%}
-                        	<p class="text-warning">Not Running</p>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            </table>
+            {% if goals.count() > 0 %}
+	            <table class="table" style="margin-left: 30px;">
+	            <thead>
+	        		<tr>
+	            		<th>Goal Title</th>
+	            		<th>Result</th>
+	        		</tr>
+	    		</thead>
+	    		<tbody>
+	    		{% for i in 0..goals.count()-1 %}
+	                <tr>
+	                    <td> <a href="{{ path('goal_show', { 'id': goals[i].getId() }) }}">{{ goals[i].getTitle() }} </a> </td>
+	                    <td>
+	                        {% if reports[i] == 0%}
+	                            <p class="text-success">Reached</p>
+	                        {% elseif reports[i] == 1%}
+	                        	<p class="text-error">Not Reached</p>
+	                        {% elseif reports[i] == 2%}
+	                        	<p class="text-warning">Not Running</p>
+	                        {% endif %}
+	                    </td>
+	                </tr>
+	            {% endfor %}
+	            </tbody>
+	            </table>
+	    	{% else %}
+	    		<b>No Goals Found</b>
+	    	{% endif %}
         </div>
     </div>
 

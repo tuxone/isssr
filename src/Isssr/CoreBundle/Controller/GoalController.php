@@ -719,7 +719,7 @@ class GoalController extends Controller {
 			$goals[] = $value[0];
 			$reports[] = $value[1];
 		}
-
+	
 		return $this
 		->render('IsssrCoreBundle:Goal:evaluateGrid.html.twig',
 				array(	'reports' => $reports,
