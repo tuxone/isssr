@@ -39,8 +39,15 @@
 			</ul>
         </div>
     </div>
-    
-    <div class="container-fluid">
+
+    {% if app.request.get('message') %}
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ app.request.get('message') }}</strong>
+        </div>
+    {% endif %}
+
+<div class="container-fluid">
   <div class="row-fluid">
    <!--
     <div class="span3" style="background-color: #bbd8e9;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; padding-top:4px;">
