@@ -15,6 +15,18 @@
             stroke-width: 1.5px;
         }
 
+        .nodeGoal:hover circle {
+            fill: steelblue;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .nodeStrategy:hover circle {
+            fill: orangered;
+            stroke: orangered;
+            stroke-width: 1.5px;
+        }
+
         .node {
             font: 16px sans-serif;
         }
@@ -35,8 +47,9 @@
     <div id="menu" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-body">
             <a style="width:140px; margin:5px;" class="btn btn-primary" id="shownode" href='#'>Show Element</a><br>
-            <a style="width:140px; margin:5px;" class="btn" id="newstrategy" href='#'>New Strategy Child</a><br>
-            <a style="width:140px; margin:5px;" class="btn" id="newgoal" href='#'>New Goal Child</a>
+            <a style="width:140px; margin:5px;" class="btn btn-success" id="newstrategy" href='#'>New Strategy Child</a><br>
+            <a style="width:140px; margin:5px;" class="btn btn-success" id="newgoal" href='#'>New Goal Child</a><br>
+            <a style="width:140px; margin:5px;" class="btn btn-warning" id="newgoal" href='#'>Evaluate SubTree</a>
         </div>
         <div class="modal-footer" style="text-align:center;">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
@@ -52,7 +65,7 @@
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script>
 
-            var width = 700, height = 1000;
+            var width = 700, height = 500;
 
             var cluster = d3.layout.tree()
                     .size([height, width - 200]);
@@ -108,13 +121,9 @@
                             d3.event.preventDefault();
                         })
                         .on("mouseover", function() {
-                            d3.select(this)
-                                .style("fill", "#EEE");
                             document.body.style.cursor = "pointer";
                         })
                         .on("mouseout", function() {
-                            d3.select(this)
-                                .style("fill", "#fff");
                             document.body.style.cursor = "auto";
                         });
 
