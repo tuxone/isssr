@@ -127,7 +127,7 @@ class StrategyController extends Controller
 
         $gm = $this->get('isssr_core.goalmanager');
 
-        //goal is approved
+        //strategy is approved
         if($gm->getStatus($supergoal) < Goal::STATUS_APPROVED)
             return $this->redirect(
                 $this->generateUrl('grid_show',
@@ -137,7 +137,7 @@ class StrategyController extends Controller
                     ))
             );
 
-        $superenactor = $gm->getEnactor($supergoal);
+        $superenactor = $gm->getEnactor($supergoal)->getUser();
 
         // user manages goal
         if($superenactor != $user)

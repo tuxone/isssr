@@ -298,22 +298,36 @@ class GoalController extends Controller {
 			throw $this->createNotFoundException('Unable to find Node entity.');
 		}
 
+        $grid = $em->getRepository('IsssrCoreBundle:Grid')->findOneByRoot($father->getRoot()->getId());
+
         // check user can create subgoal
         $nm = $this->get('isssr_core.nodemanager');
         $supergoal = $nm->getNearestGoal($father);
 
         $gm = $this->get('isssr_core.goalmanager');
 
-        //goal is approved
-        if($gm->getStatus($supergoal) < Goal::STATUS_APPROVED)
-            throw new HttpException(403);
+        // check goal approved
+		if($gm->getStatus($supergoal) < Goal::STATUS_APPROVED)
+            return $this->redirect(
+                $this->generateUrl('grid_show',
+                    array(
+                        'id' => $grid->getId(),
+                        'message' => 'Super Node must be approved by enactor.'
+                    ))
+            );
 
-        $superenactor = $gm->getEnactor($supergoal);
+        $superenactor = $gm->getEnactor($supergoal)->getUser();
 
-        // user manages goal
+        // user manages goal?
         if($superenactor != $user)
-            throw new HttpException(403);
-		
+            return $this->redirect(
+                $this->generateUrl('grid_show',
+                    array(
+                        'id' => $grid->getId(),
+                        'message' => 'You are not the enactor of the super node.'
+                    ))
+            );
+
 		return $this->createNew($request, $father);
 		
 	}
