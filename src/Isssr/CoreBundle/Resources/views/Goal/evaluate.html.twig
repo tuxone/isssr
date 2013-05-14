@@ -12,24 +12,28 @@
                 </a>
             </div>
         </div>
-        <div class="row">
-            <table style="margin-left: 30px;">
-            {% for i in 0..expressions.count()-1 %}
-                <tr>
-
-                    <td>{{ expressions[i] }}</td>
-                    <td>
-                        {% if report[i] %}
-                            <b>OK</b>
-                        {% else %}
-                            <b>False</b>
-                        {% endif %}
-                    </td>
-
-                </tr>
-            {% endfor %}
-            </table>
-        </div>
+        {% if expressions.count() > 0 %}
+	        <div class="row">
+	            <table style="margin-left: 30px;">
+	            {% for i in 0..expressions.count()-1 %}
+	                <tr>
+	
+	                    <td>{{ expressions[i] }}</td>
+	                    <td>
+	                        {% if report[i] %}
+	                            <b>OK</b>
+	                        {% else %}
+	                            <b>False</b>
+	                        {% endif %}
+	                    </td>
+	
+	                </tr>
+	            {% endfor %}
+	            </table>
+	        </div>
+	    {% else %}
+	    	<b>No expressions found</b>
+	    {% endif %}
     </div>
 
 {% endblock %}
