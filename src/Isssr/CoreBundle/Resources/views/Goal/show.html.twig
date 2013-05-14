@@ -186,7 +186,6 @@
     {% if actions.canManageInterpretativeModel() %}
         <a href="#manageIModel" role="button" class="btn" style="width: 120px;" data-toggle="modal">Manage IM</a>
         <a href="{{ path('goal_evaluate_im', {'id': entity.id}) }}" role="button" class="btn" style="width: 120px;" data-toggle="modal">Evaluate IM</a>
-        <a href="{{ path('goal_evaluate_grid', {'id': entity.id}) }}" role="button" class="btn" style="width: 120px;" data-toggle="modal">Evaluate Grid</a>
     {% endif %}
 
 	

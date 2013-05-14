@@ -1,17 +1,13 @@
 {% extends 'IsssrCoreBundle::layout.html.twig' %}
 
-{% block pagetitle %}Evaluate grid of '{{ goal.title }}'{% endblock %}
+{% block pagetitle %}Evaluate grid{% endblock %}
 
 {% block content %}
 
     <div class="paragraphs">
-        <div class="row">
-            <div class="span4">
-                <a style="float:left; margin-left:30px;" href="{{ path('goal_show', {'id': goal.getId()}) }}" class="btn btn-small">
-                    <i class="icon-circle-arrow-left"></i> Back to goal
-                </a>
-            </div>
-        </div>
+        <button style="float:left; margin-bottom: 12px;" class="btn btn-small" onClick="javascript:history.back()">
+     		<i class="icon-circle-arrow-left"></i> Back
+    	</button>
         <div class="row">
             <table class="table" style="margin-left: 30px;">
             <thead>
@@ -23,12 +19,14 @@
     		<tbody>
 			{% for i in 0..goals.count()-1 %}
                 <tr>
-                    <td>{{ goals[i].getTitle() }}</td>
+                    <td> <a href="{{ path('goal_show', { 'id': goals[i].getId() }) }}">{{ goals[i].getTitle() }} </a> </td>
                     <td>
-                        {% if reports[i] %}
-                            <b style="color:green">Reached</b>
-                        {% else %}
-                            <b style="color:red">Not Reached</b>
+                        {% if reports[i] == 0%}
+                            <p class="text-success">Reached</p>
+                        {% elseif reports[i] == 1%}
+                        	<p class="text-error">Not Reached</p>
+                        {% elseif reports[i] == 2%}
+                        	<p class="text-warning">Not Running</p>
                         {% endif %}
                     </td>
                 </tr>
