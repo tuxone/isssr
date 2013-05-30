@@ -3,19 +3,85 @@
 {% block title %}HomePage{% endblock %}
 
 {% block pagetitle %}HomePage{% endblock %}
- 
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("css/jquery.jqplot.min.css") }}">
+{% endblock %}
+
 {% block content %}
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span12">
+                <h1>Overview</h1>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6" style="padding-top: 20px;">
                 <p>
-                    <b>Total number of Goals: {{ ngoals }}</b><br>
-                    <b>Total number of reached Goals: {{ nreached }}</b>
+                    <table>
+                        <tr>
+                            <td style="text-align: right;">Total number of Users:</td>
+                            <td style="text-align: left;"><b>{{ nusers }}</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Total number of Grids:</td>
+                            <td style="text-align: left;"><b>{{ ngrids }}</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Total number of Goals:</td>
+                            <td style="text-align: left;"><b>{{ ngoals }}</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Total number of reached Goals:</td>
+                            <td style="text-align: left;"><b>{{ nreached }}</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Total number of reached Goals:</td>
+                            <td style="text-align: left;"><b>{{ avggoalspergrid }}</b></td>
+                        </tr>
+                    </table>
                 </p>
             </div>
             <div class="span6">
-                <!--Body content-->
+                <div class="row">
+                    <div id='graph1' style="height: 240px; width:360px;" ></div>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.jqplot.min.js')}}"></script>
+    <script src="{{ asset('js/plugins/jqplot.pieRenderer.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.jqplot.config.enablePlugins = true;
+            var data = [
+                ['Goals Reached', {{ nreached }}],['Goals Running', {{ ngoals - nreached }}]
+            ];
+            var plot1 = jQuery.jqplot ('graph1', [data],
+                    {
+                        grid: {
+                            drawBorder: false,
+                            shadow: false,
+                            background: '#ffffff'
+                        },
+                        seriesDefaults: {
+                            // Make this a pie chart.
+                            renderer: $.jqplot.PieRenderer,
+                            rendererOptions: {
+                                // Put data labels on the pie slices.
+                                // By default, labels show the percentage of the slice.
+                                showDataLabels: true,
+                                startAngle: -90
+                            }
+                        },
+                        legend: { show:true, location: 'e' }
+                    }
+            );
+        });
+    </script>
+
 {% endblock %}
