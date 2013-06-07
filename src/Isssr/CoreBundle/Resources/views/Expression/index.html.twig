@@ -43,8 +43,9 @@
 {% endif %}
 
 <p>
+    <br>
 <b>Create a new expression</b><br>
-    {% for entity in goal.getQuestions() %}
+    {% for entity in goal.getAcceptedQuestions() %}
         {{ entity }}
         <select style="width:90px;" onchange="fillExpression(this);">
             <option value="">Select</option>

@@ -101,6 +101,12 @@ class MeasureUnitController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $gm = $this->get('isssr_core.goalmanager');
+            $nm = $this->get('isssr_core.notifiermanager');
+
+            $gm->preRendering($goal);
+            $nm->notifyQssNewMeasure($goal);
+
             return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
         }
 
@@ -134,6 +140,12 @@ class MeasureUnitController extends Controller
 
         $em->persist($qid);
         $em->flush();
+
+        $gm = $this->get('isssr_core.goalmanager');
+        $nm = $this->get('isssr_core.notifiermanager');
+
+        $gm->preRendering($goal);
+        $nm->notifyQssNewMeasure($goal);
 
         return $this->redirect($this->generateUrl('goal_show', array('id' => $goal->getId())));
 
