@@ -826,8 +826,6 @@ class GoalController extends Controller {
             if($key = array_search($qs, $users)) unset($users[$key]);
         }
 
-
-
         $role = new UserInGoal();
         $role->setStatus(UserInGoal::STATUS_GOAL_ASSIGNED);
         $role->setRole(UserInGoal::ROLE_QS);

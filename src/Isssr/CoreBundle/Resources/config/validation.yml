@@ -1,0 +1,22 @@
+Isssr\CoreBundle\Entity\User:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+    
+Isssr\CoreBundle\Entity\Goal:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: title
+
+Isssr\CoreBundle\Entity\Strategy:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: title
+
+Isssr\CoreBundle\Entity\Tag:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: title
+
+Isssr\CoreBundle\Entity\MeasureUnit:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+
+
