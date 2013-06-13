@@ -51,7 +51,7 @@
             		<ul>
 					    {% for super in entity.getSupersInGoal() %}
 					        <li>
-					        	{{ super.user }} -
+					        	{{ super.user }}
                                 <!--
 					        	<a href="{{ path('roles_delete', { 'id': super.id }) }}">remove</a>
 					        	-->
@@ -67,7 +67,7 @@
                     <ul>
                         {% for qs in entity.getQss() %}
                             <li>
-                                {{ qs }} -
+                                {{ qs }}
                                 <!--
                                 <a href="{{ path('roles_delete', { 'id': qs.id }) }}">remove</a>
                                 -->
