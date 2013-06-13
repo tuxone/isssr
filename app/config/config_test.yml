@@ -15,4 +15,4 @@ swiftmailer:
 
 doctrine:
     dbal:
-        password: ~
+        password: null
