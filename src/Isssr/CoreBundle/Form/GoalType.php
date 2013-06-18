@@ -35,7 +35,7 @@ class GoalType extends AbstractType
             ->add('organizationalScope')
             ->add('constraints')
             ->add('relations')
-            ->add('contest')
+            ->add('contest', null, array('label'=> 'Context'))
             ->add('assumptions')
         ;
         
