@@ -27,7 +27,9 @@ class DefaultController extends Controller {
                 $reached++;
         }
 
-        $avggoalspergrid = round(count($goals) / count($grids), 2);
+        $avggoalspergrid = 0;
+        if(count($grids) > 0)
+            $avggoalspergrid = round(count($goals) / count($grids), 2);
 
 
 		return $this
